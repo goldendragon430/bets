@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import styled from 'styled-components';
 
@@ -30,6 +32,7 @@ const AppRouter = () => (
         <Route element={<Home />} path="/" />
       </Routes>
     </Content>
+    <ToastContainer />
   </Container>
 );
 

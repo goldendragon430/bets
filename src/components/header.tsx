@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LogoIcon from '../assets/images/logo.png';
+import WalletButton from './wallet_button';
 
 const Container = styled.div`
   position: relative;
@@ -35,6 +36,8 @@ const Header: React.FC = () => (
     <StyledLink to="/">
       <Logo alt="" src={LogoIcon} />
     </StyledLink>
+
+    <WalletButton />
   </Container>
 );
 

@@ -5,7 +5,7 @@ import Button from './button';
 import { Typography, TypographyType } from './typography';
 
 const Container = styled.div`
-  border-radius: 12px;
+  border-radius: 0.75rem;
   border: 1px solid ${({ theme }) => theme.colors.black};
   display: flex;
   align-items: center;

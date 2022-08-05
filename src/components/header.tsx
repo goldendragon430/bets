@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { Typography, TypographyType } from './common/typography';
+import LogoIcon from '../assets/images/logo.png';
 
 const Container = styled.div`
   position: relative;
@@ -26,10 +26,14 @@ const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.text1};
 `;
 
+const Logo = styled.img`
+  height: 2rem;
+`;
+
 const Header: React.FC = () => (
   <Container>
     <StyledLink to="/">
-      <Typography type={TypographyType.BOLD_TITLE}>Honorous Bet</Typography>
+      <Logo alt="" src={LogoIcon} />
     </StyledLink>
   </Container>
 );

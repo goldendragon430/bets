@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
 import Header from '../components/header';
-import Home from './home';
+import Featured from './featured';
 
 const Container = styled.div`
   position: relative;
@@ -17,11 +17,10 @@ const Container = styled.div`
 
 const Content = styled.div`
   position: relative;
-  padding: 4rem;
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    padding: 2rem;
-  }`}
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const AppRouter = () => (
@@ -29,7 +28,7 @@ const AppRouter = () => (
     <Header />
     <Content>
       <Routes>
-        <Route element={<Home />} path="/" />
+        <Route element={<Featured />} path="/" />
       </Routes>
     </Content>
     <ToastContainer />

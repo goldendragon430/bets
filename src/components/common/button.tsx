@@ -12,8 +12,8 @@ const Button = styled.button<{ color?: string }>`
   font-size: ${({ theme }) => theme.typography.regular.fontSize};
   line-height: ${({ theme }) => theme.typography.regular.fontSize};
   text-transform: uppercase;
-  text-shadow: 0px 0px 11px ${({ theme, color }) => color || theme.colors.white};
-  filter: drop-shadow(0px 0px 11px ${({ theme, color }) => color || theme.colors.white});
+  text-shadow: 0px 0px 0.6875rem ${({ theme, color }) => color || theme.colors.white};
+  filter: drop-shadow(0px 0px 0.6875rem ${({ theme, color }) => color || theme.colors.white});
   cursor: pointer;
 
   &:hover {

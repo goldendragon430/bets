@@ -26,7 +26,7 @@ const StyledText = styled.p<{
   ${({ theme, color, shadow }) =>
     shadow &&
     `
-    text-shadow: 0px 0px 11px ${color || theme.colors.text1};
+    text-shadow: 0px 0px 0.6875rem ${color || theme.colors.text1};
   `}
 `;
 

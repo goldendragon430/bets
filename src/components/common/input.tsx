@@ -6,7 +6,7 @@ import { Typography, TypographyType } from './typography';
 
 const Container = styled.div`
   border-radius: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.black};
   display: flex;
   align-items: center;
 `;
@@ -17,7 +17,11 @@ const CustomInput = styled.input`
   background: transparent;
   outline: none;
   border: none;
-  font-size: ${({ theme }) => theme.typography.regular.fontSize};
+  font-family: ${({ theme }) => theme.typography.boldSubTitle.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.boldSubTitle.fontWeight};
+  font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};
+  font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
+  line-height: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
   padding: 1rem;
 `;
 

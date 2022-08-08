@@ -7,44 +7,52 @@ import { FontStyle } from '../../themes/typography';
 
 const StyledText = styled.p<{
   fontStyle: FontStyle;
+  color?: string;
+  shadow?: boolean;
 }>`
+  font-family: ${({ fontStyle }) => fontStyle.fontFamily};
   font-weight: ${({ fontStyle }) => fontStyle.fontWeight};
+  font-style: ${({ fontStyle }) => fontStyle.fontStyle};
   font-size: ${({ fontStyle }) => fontStyle.fontSize};
   line-height: ${({ fontStyle }) => fontStyle.lineHeight};
   ${({ fontStyle }) => fontStyle.uppercase && `text-transform: uppercase;`}
   padding: 0;
   margin: 0;
+  ${({ color }) =>
+    color &&
+    `
+    color: ${color};
+  `}
+  ${({ theme, color, shadow }) =>
+    shadow &&
+    `
+    text-shadow: 0px 0px 11px ${color || theme.colors.text1};
+  `}
 `;
 
 export enum TypographyType {
   REGULAR = 'regular',
-  REGULAR_SMALL = 'regularSmall',
+  REGULAR_TITLE = 'regularTitle',
+  REGULAR_BODY = 'regularBody',
+  REGULAR_BODY2 = 'regularBody2',
+  BOLD_HEADING = 'boldHeading',
   BOLD_TITLE = 'boldTitle',
   BOLD_SUBTITLE = 'boldSubTitle',
 }
 
 interface ITypography extends React.HTMLAttributes<HTMLDivElement> {
   type: TypographyType;
+  color?: string;
+  shadow?: boolean;
 }
 
-export const Typography: React.FC<ITypography> = ({ type, children, ...props }) => {
+export const Typography: React.FC<ITypography> = ({ type, children, color, shadow, ...props }) => {
   const { theme } = useTheme();
 
-  const getFontStyle = () => {
-    if (type === TypographyType.REGULAR_SMALL) {
-      return theme.typography.regularSmall;
-    }
-    if (type === TypographyType.BOLD_TITLE) {
-      return theme.typography.boldTitle;
-    }
-    if (type === TypographyType.BOLD_SUBTITLE) {
-      return theme.typography.boldSubTitle;
-    }
-    return theme.typography.regular;
-  };
+  const getFontStyle = () => theme.typography[type];
 
   return (
-    <StyledText fontStyle={getFontStyle()} {...props}>
+    <StyledText color={color} fontStyle={getFontStyle()} shadow={shadow} {...props}>
       {children}
     </StyledText>
   );

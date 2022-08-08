@@ -1,13 +1,11 @@
-import styled from 'styled-components';
-
+import { useTheme } from '../contexts/theme_context';
 import { useWallet } from '../contexts/wallet_context';
 import { getShortWalletAddress } from '../utils';
 import Button from './common/button';
 
-const StyledButton = styled(Button)``;
-
 const WalletButton = () => {
   const { account, connect, disconnect } = useWallet();
+  const { theme } = useTheme();
 
   const handleConnect = () => {
     if (!account) {
@@ -18,7 +16,9 @@ const WalletButton = () => {
   };
 
   return (
-    <StyledButton onClick={handleConnect}>{account ? getShortWalletAddress(account) : 'Connect Wallet'}</StyledButton>
+    <Button color={theme.colors.purple1} onClick={handleConnect}>
+      {account ? getShortWalletAddress(account) : 'Connect Wallet'}
+    </Button>
   );
 };
 

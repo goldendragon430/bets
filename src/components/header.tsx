@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import LogoIcon from '../assets/images/logo.png';
+import LogoIcon from '../assets/images/logo.svg';
+import { Typography, TypographyType } from './common/typography';
 import WalletButton from './wallet_button';
 
 const Container = styled.div`
@@ -22,22 +23,73 @@ const Container = styled.div`
   }`}
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const LinkWrapper = styled(Wrapper)`
+  margin-left: 1rem;
+`;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.colors.text1};
+  padding: 1rem;
+
+  &:active,
+  &:hover {
+    color: ${({ theme }) => theme.colors.text1};
+  }
 `;
 
 const Logo = styled.img`
-  height: 2rem;
+  height: 3rem;
 `;
+
+const ROUTES = [
+  {
+    name: 'How it works',
+    route: '/guide',
+  },
+  {
+    name: 'Upcoming',
+    route: '/upcoming',
+  },
+  {
+    name: 'Featured Fight',
+    route: '/',
+  },
+];
 
 const Header: React.FC = () => (
   <Container>
-    <StyledLink to="/">
-      <Logo alt="" src={LogoIcon} />
-    </StyledLink>
+    <Wrapper>
+      <Link to="/">
+        <Logo alt="" src={LogoIcon} />
+      </Link>
 
-    <WalletButton />
+      <LinkWrapper>
+        {ROUTES.map((link, key) => (
+          <>
+            {key > 0 && (
+              <Typography key={`split_${key}`} shadow type={TypographyType.REGULAR}>
+                /
+              </Typography>
+            )}
+            <StyledLink key={key} to={link.route}>
+              <Typography shadow type={TypographyType.REGULAR}>
+                {link.name}
+              </Typography>
+            </StyledLink>
+          </>
+        ))}
+      </LinkWrapper>
+    </Wrapper>
+
+    <Wrapper>
+      <WalletButton />
+    </Wrapper>
   </Container>
 );
 

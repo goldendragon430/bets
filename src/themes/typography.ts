@@ -1,5 +1,7 @@
 export interface FontStyle {
+  fontFamily: string;
   fontWeight: number;
+  fontStyle: string;
   fontSize: string;
   lineHeight: string;
   uppercase?: boolean;
@@ -7,32 +9,66 @@ export interface FontStyle {
 
 export interface Typography {
   regular: FontStyle;
-  regularSmall: FontStyle;
+  regularTitle: FontStyle;
+  regularBody: FontStyle;
+  regularBody2: FontStyle;
+  boldHeading: FontStyle;
   boldTitle: FontStyle;
   boldSubTitle: FontStyle;
 }
 
 export const MainTypography: Typography = {
   regular: {
-    fontWeight: 400,
-    fontSize: '1.2rem',
-    lineHeight: '2rem',
+    fontFamily: 'Enter Sansman',
+    fontWeight: 700,
+    fontStyle: 'italic',
+    fontSize: '1.25rem',
+    lineHeight: '2.25rem',
   },
-  regularSmall: {
-    fontWeight: 400,
-    fontSize: '1rem',
-    lineHeight: '1.125rem',
+  regularTitle: {
+    fontFamily: 'Enter Sansman',
+    fontWeight: 700,
+    fontStyle: 'italic',
+    fontSize: '1.875rem',
+    lineHeight: '2.75rem',
+    uppercase: true,
+  },
+  regularBody: {
+    fontFamily: 'Enter Sansman',
+    fontWeight: 700,
+    fontStyle: 'normal',
+    fontSize: '1.5rem',
+    lineHeight: '2.25rem',
+  },
+  regularBody2: {
+    fontFamily: 'Enter Sansman',
+    fontWeight: 700,
+    fontStyle: 'italic',
+    fontSize: '0.9375rem',
+    lineHeight: '2.25rem',
+  },
+  boldHeading: {
+    fontFamily: 'Conthrax',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontSize: '5rem',
+    lineHeight: '4.5rem',
+    uppercase: true,
   },
   boldTitle: {
-    fontWeight: 500,
-    fontSize: '2.5rem',
-    lineHeight: '4rem',
+    fontFamily: 'Conthrax',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontSize: '3rem',
+    lineHeight: '4.5rem',
     uppercase: true,
   },
   boldSubTitle: {
-    fontWeight: 500,
-    fontSize: '1.5rem',
-    lineHeight: '4rem',
+    fontFamily: 'Conthrax',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontSize: '2.5rem',
+    lineHeight: '4.5rem',
     uppercase: true,
   },
 };

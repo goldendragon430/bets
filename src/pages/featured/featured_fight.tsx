@@ -43,6 +43,18 @@ const Wrapper = styled.div`
   padding: 1.5rem 0;
 `;
 
+const ChanceWrapper = styled(Wrapper)`
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.red1} 5%,
+    rgba(0, 0, 0, 0) 50%,
+    ${({ theme }) => theme.colors.blue1} 95%
+  );
+  width: calc(100% + 5rem);
+  transform: translateX(-2.5rem);
+  padding: 1.5rem 2.5rem;
+`;
+
 const TeamLogo = styled.img<{ firstTeam?: boolean; color: string }>`
   width: 4rem;
   height: 4rem;
@@ -103,6 +115,7 @@ const FeaturedFight: React.FC = () => {
     setSelectA(teamA);
     setShowStakeModal(true);
   };
+
   return (
     <Container>
       <TeamSection
@@ -145,7 +158,7 @@ const FeaturedFight: React.FC = () => {
           </RightTeam>
         </Wrapper>
 
-        <Wrapper>
+        <ChanceWrapper>
           <LeftTeam>
             <Typography type={TypographyType.REGULAR_TITLE}>73%</Typography>
           </LeftTeam>
@@ -155,7 +168,7 @@ const FeaturedFight: React.FC = () => {
           <RightTeam>
             <Typography type={TypographyType.REGULAR_TITLE}>27%</Typography>
           </RightTeam>
-        </Wrapper>
+        </ChanceWrapper>
 
         <Wrapper>
           <LeftTeam>

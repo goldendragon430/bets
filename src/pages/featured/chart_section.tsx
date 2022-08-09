@@ -17,6 +17,11 @@ const Container = styled.div`
     rgba(0, 0, 0, 0) 50%,
     ${({ theme }) => `${theme.colors.blue1}40`} 100%
   );
+  margin: 1rem 0;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    margin: 5rem 0;
+  }`}
 `;
 
 const ChartContainer = styled.div`

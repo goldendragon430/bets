@@ -23,6 +23,12 @@ const CustomInput = styled.input`
   font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
   line-height: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
   padding: 1rem 2rem;
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 const MaxButton = styled(Button)`

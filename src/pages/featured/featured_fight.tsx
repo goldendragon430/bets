@@ -11,7 +11,9 @@ import TeamImg1 from '../../assets/images/team1.png';
 import TeamImg2 from '../../assets/images/team2.png';
 import { Typography, TypographyType } from '../../components/common/typography';
 import BetModal from '../../components/modals/bet_modal';
+import StakeModal from '../../components/modals/stake_modal';
 import { useTheme } from '../../contexts/theme_context';
+import { NFT_LIST1, NFT_LIST2 } from '../../mocks/nfts';
 import TeamSection from './team_section';
 
 const Container = styled.div`
@@ -90,6 +92,7 @@ const FeaturedFight: React.FC = () => {
 
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
+  const [showStakeModal, setShowStakeModal] = useState(false);
 
   const handleBet = (teamA: boolean) => {
     setSelectA(teamA);
@@ -98,7 +101,7 @@ const FeaturedFight: React.FC = () => {
 
   const handleStake = (teamA: boolean) => {
     setSelectA(teamA);
-    setShowBetModal(true);
+    setShowStakeModal(true);
   };
   return (
     <Container>
@@ -204,6 +207,13 @@ const FeaturedFight: React.FC = () => {
         onClose={() => setShowBetModal(false)}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
         visible={showBetModal}
+      />
+
+      <StakeModal
+        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        nfts={selectA ? NFT_LIST1 : NFT_LIST2}
+        onClose={() => setShowStakeModal(false)}
+        visible={showStakeModal}
       />
     </Container>
   );

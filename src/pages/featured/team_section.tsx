@@ -48,9 +48,11 @@ interface ITeamSection {
   color: string;
   teamName: string;
   teamImg: string;
+  onBet: () => void;
+  onStake: () => void;
 }
 
-const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, teamName, teamImg }) => (
+const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, teamName, teamImg, onBet, onStake }) => (
   <TeamWrapper>
     <Typography
       color={color}
@@ -66,8 +68,12 @@ const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, teamName, teamI
     </TeamImageWrapper>
 
     <ButtonWrapper>
-      <Button color={color}>Stake</Button>
-      <Button color={color}>Bet</Button>
+      <Button color={color} onClick={onStake}>
+        Stake
+      </Button>
+      <Button color={color} onClick={onBet}>
+        Bet
+      </Button>
     </ButtonWrapper>
   </TeamWrapper>
 );

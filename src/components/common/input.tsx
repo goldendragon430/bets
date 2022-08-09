@@ -22,26 +22,39 @@ const CustomInput = styled.input`
   font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};
   font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
   line-height: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
-  padding: 1rem;
+  padding: 1rem 2rem;
 `;
 
 const MaxButton = styled(Button)`
   background: transparent;
-  color: ${({ theme }) => theme.colors.red1};
   padding-left: 1rem;
+  filter: none;
+  border: none;
+  font-family: ${({ theme }) => theme.typography.boldSubTitle.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.boldSubTitle.fontWeight};
+  font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};
+  font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
+  text-transform: none;
+  text-shadow: none;
 `;
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  point?: number;
   onMax?: () => void;
 }
 
-const Input: React.FC<InputProps> = ({ style, className, onMax, ...props }) => (
+const Input: React.FC<InputProps> = ({ style, className, point, onMax, ...props }) => (
   <Container className={className} style={style}>
     <CustomInput {...props} />
+    {point && (
+      <Typography style={{ marginRight: '1rem' }} type={TypographyType.REGULAR_TITLE}>
+        {point.toLocaleString()}
+      </Typography>
+    )}
     {onMax && (
       <>
         <Typography type={TypographyType.BOLD_TITLE}>|</Typography>
-        <MaxButton onClick={onMax}>MAX</MaxButton>
+        <MaxButton onClick={onMax}>max</MaxButton>
       </>
     )}
   </Container>

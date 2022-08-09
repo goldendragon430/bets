@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -10,6 +10,7 @@ import TeamLogo2 from '../../assets/images/team_logo2.jpeg';
 import TeamImg1 from '../../assets/images/team1.png';
 import TeamImg2 from '../../assets/images/team2.png';
 import { Typography, TypographyType } from '../../components/common/typography';
+import BetModal from '../../components/modals/bet_modal';
 import { useTheme } from '../../contexts/theme_context';
 import TeamSection from './team_section';
 
@@ -87,9 +88,28 @@ const Stats = styled.div<{ firstTeam?: boolean; color: string }>`
 const FeaturedFight: React.FC = () => {
   const { theme } = useTheme();
 
+  const [selectA, setSelectA] = useState(true);
+  const [showBetModal, setShowBetModal] = useState(false);
+
+  const handleBet = (teamA: boolean) => {
+    setSelectA(teamA);
+    setShowBetModal(true);
+  };
+
+  const handleStake = (teamA: boolean) => {
+    setSelectA(teamA);
+    setShowBetModal(true);
+  };
   return (
     <Container>
-      <TeamSection color={theme.colors.red1} firstTeam teamImg={TeamImg1} teamName="MAYC" />
+      <TeamSection
+        color={theme.colors.red1}
+        firstTeam
+        onBet={() => handleBet(true)}
+        onStake={() => handleStake(true)}
+        teamImg={TeamImg1}
+        teamName="MAYC"
+      />
 
       <InfoWrapper>
         <Wrapper>
@@ -171,7 +191,20 @@ const FeaturedFight: React.FC = () => {
         </Wrapper>
       </InfoWrapper>
 
-      <TeamSection color={theme.colors.blue1} teamImg={TeamImg2} teamName="AZUKI" />
+      <TeamSection
+        color={theme.colors.blue1}
+        onBet={() => handleBet(false)}
+        onStake={() => handleStake(false)}
+        teamImg={TeamImg2}
+        teamName="AZUKI"
+      />
+
+      <BetModal
+        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        onClose={() => setShowBetModal(false)}
+        teamLogo={selectA ? TeamLogo1 : TeamLogo2}
+        visible={showBetModal}
+      />
     </Container>
   );
 };

@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import BattleRemaining from './battle_remaining';
+import ChartSection from './chart_section';
 import FeaturedFight from './featured_fight';
 import TweetSection from './tweet_section';
 
@@ -16,6 +17,7 @@ const Featured: React.FC = () => (
   <Container>
     <BattleRemaining />
     <FeaturedFight />
+    <ChartSection />
     <TweetSection />
   </Container>
 );

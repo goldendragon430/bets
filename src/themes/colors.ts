@@ -7,6 +7,8 @@ export interface Colors {
   blue1: string;
   blue2: string;
   purple1: string;
+  purple2: string;
+  purple3: string;
 }
 
 export const DARK_COLORS: Colors = {
@@ -18,4 +20,6 @@ export const DARK_COLORS: Colors = {
   blue1: '#02F0FF',
   blue2: '#3861FB',
   purple1: '#B013E8',
+  purple2: '#530071',
+  purple3: '#76169E',
 };

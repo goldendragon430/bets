@@ -9,6 +9,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 3rem;
+  background: ${({ theme }) => theme.colors.black};
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     flex-direction: column;

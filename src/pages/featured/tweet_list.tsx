@@ -91,10 +91,8 @@ const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
           <ContentText type={TypographyType.REGULAR}>
             {parts.map((word, index) =>
               word.startsWith('https://') || word.startsWith('http://') ? (
-                <a href={word} rel="noreferrer" target="_blank">
-                  <FilteredText key={index} style={{ textDecoration: 'underline' }}>
-                    {word}{' '}
-                  </FilteredText>
+                <a href={word} key={index} rel="noreferrer" target="_blank">
+                  <FilteredText style={{ textDecoration: 'underline' }}>{word} </FilteredText>
                 </a>
               ) : (
                 <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>

@@ -6,21 +6,20 @@ export const bnToDec = (bn: BigNumber, decimals = 18) => bn.dividedBy(new BigNum
 
 export const decToBn = (dec: number, decimals = 18) => new BigNumber(dec).multipliedBy(new BigNumber(10).pow(decimals));
 
-export function formatTime(value: number) {
-  const mins = Math.round(value / 60);
+export function formatTime(date: Date) {
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+
+  const mins = Math.round(diff / 60);
   const hours = Math.round(mins / 60);
   const days = Math.round(hours / 24);
   if (days > 0) {
-    return `${days} day(s)`;
+    return `${days}d`;
   }
   if (hours > 0) {
-    return `${hours} hour(s)`;
+    return `${hours}h`;
   }
   if (mins > 0) {
-    return `${mins} min(s)`;
+    return `${mins}m`;
   }
-  if (value > 0) {
-    return `${value} sec(s)`;
-  }
-  return 'Available';
+  return `${diff}s`;
 }

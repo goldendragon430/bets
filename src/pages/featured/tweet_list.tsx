@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Typography, TypographyType } from '../../components/common/typography';
 import { TwitterFeed } from '../../types';
+import { formatTime } from '../../utils';
 
 const Container = styled.div<{ color: string }>`
   width: 100%;
@@ -77,22 +78,30 @@ const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
       return (
         <TweetItem color={color} key={key}>
           <UserContent>
-            <UserImage />
+            <UserImage userImg={item.profileImg} />
             <div>
               <NameContent>
                 <Typography type={TypographyType.REGULAR}>{item.name}</Typography>
                 &nbsp;
-                <UsernameText type={TypographyType.REGULAR_BODY2}> · {item.createdAt}</UsernameText>
+                <UsernameText type={TypographyType.REGULAR_BODY2}> · {formatTime(item.createdAt)}</UsernameText>
               </NameContent>
               <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.username}</UsernameText>
             </div>
           </UserContent>
           <ContentText type={TypographyType.REGULAR}>
-            {parts.map((word, index) => (
-              <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
-                {word}{' '}
-              </FilteredText>
-            ))}
+            {parts.map((word, index) =>
+              word.startsWith('https://') || word.startsWith('http://') ? (
+                <a href={word} rel="noreferrer" target="_blank">
+                  <FilteredText key={index} style={{ textDecoration: 'underline' }}>
+                    {word}{' '}
+                  </FilteredText>
+                </a>
+              ) : (
+                <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
+                  {word}{' '}
+                </FilteredText>
+              )
+            )}
           </ContentText>
         </TweetItem>
       );

@@ -11,6 +11,11 @@ const Container = styled.div<{ color: string }>`
   padding: 1rem;
   display: flex;
   flex-wrap: wrap;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
 `;
 
 const NftItem = styled.div`

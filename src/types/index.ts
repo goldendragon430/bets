@@ -1,7 +1,8 @@
 export interface TwitterFeed {
   id: string;
   text: string;
-  createdAt: string;
+  createdAt: Date;
   name: string;
   username: string;
+  profileImg: string;
 }

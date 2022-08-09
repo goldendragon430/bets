@@ -92,7 +92,7 @@ const StyledLabel = styled(Typography)`
   font-size: 1rem;
 
   ${({ theme }) => `${theme.media_width.upToExtraLarge} {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }`}
 
   ${({ theme }) => `${theme.media_width.upToMedium} {

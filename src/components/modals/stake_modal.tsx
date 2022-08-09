@@ -111,7 +111,7 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts }) =>
         </HeaderWrapper>
       }
       visible={visible}
-      width="55rem"
+      width="53rem"
     >
       <NftList color={color} nfts={nfts} onSelect={handleSelect} selectedNfts={selectedNfts} />
       <ButtonWrapper>

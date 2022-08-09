@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import BattleRemaining from './battle_remaining';
 import FeaturedFight from './featured_fight';
+import TweetSection from './tweet_section';
 
 const Container = styled.div`
   width: 100%;
@@ -15,6 +16,7 @@ const Featured: React.FC = () => (
   <Container>
     <BattleRemaining />
     <FeaturedFight />
+    <TweetSection />
   </Container>
 );
 

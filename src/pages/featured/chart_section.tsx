@@ -53,8 +53,18 @@ const ChartFrame1 = styled(Circle)`
 `;
 
 const ChartWrapper = styled(Circle)`
+  @keyframes rotating {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
   width: 70%;
   height: 70%;
+  animation: rotating 20s linear infinite;
 `;
 
 const PiePiece = styled(Circle)<{ color: string; index: number }>`

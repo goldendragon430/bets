@@ -8,7 +8,7 @@ import Input from '../../components/common/input';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 
-const PIECE_COUNT = 100;
+const PIECE_COUNT = 50;
 
 const Container = styled.div`
   position: relative;

@@ -1,12 +1,17 @@
 /* eslint-disable react/no-array-index-key */
+import { useState } from 'react';
+
 import styled from 'styled-components';
 
-import CrossIcon from '../../assets/images/cross.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
+import Input from '../../components/common/input';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 
+const PIECE_COUNT = 20;
+
 const Container = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,14 +48,8 @@ const Circle = styled.div`
 const ChartFrame1 = styled(Circle)`
   width: 80%;
   height: 80%;
-  background: ${({ theme }) => theme.colors.purple2};
+  background: ${({ theme }) => theme.colors.black};
   box-shadow: 0px 0px 44px ${({ theme }) => theme.colors.purple1};
-`;
-
-const ChartFrame2 = styled(Circle)`
-  width: 75%;
-  height: 75%;
-  background: ${({ theme }) => theme.colors.purple1};
 `;
 
 const ChartWrapper = styled(Circle)`
@@ -63,8 +62,8 @@ const PiePiece = styled(Circle)<{ color: string; index: number }>`
   height: 100%;
   background: ${({ color }) => color};
   box-shadow: inset 0px 4px 33px ${({ theme }) => theme.colors.grey1};
-  clip-path: polygon(50% 50%, 50% 0%, ${50 + 50 * Math.tan((36 * Math.PI) / 180)}% 0%);
-  transform: translate(-50%, -50%) rotate(${({ index }) => 36 * index - 72}deg);
+  clip-path: polygon(50% 50%, 50% 0%, ${50 + 50 * Math.tan(((360 / PIECE_COUNT) * Math.PI) / 180)}% 0%);
+  transform: translate(-50%, -50%) rotate(${({ index }) => (360 / PIECE_COUNT) * (index - 1.5)}deg);
 `;
 
 const PieLine = styled.div<{ index: number }>`
@@ -75,89 +74,49 @@ const PieLine = styled.div<{ index: number }>`
   background: ${({ theme }) => `${theme.colors.grey1}10`};
   border: 1px solid ${({ theme }) => `${theme.colors.grey1}20`};
   box-shadow: 0px 0px 11px ${({ theme }) => theme.colors.grey1}, inset 0px 0px 11px ${({ theme }) => theme.colors.grey1};
-  transform: rotate(${({ index }) => 36 * index - 72}deg);
-`;
-
-const PieLabelWrapper = styled.div<{ index: number }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(${({ index }) => 36 * index - 54}deg);
-`;
-
-const StyledLabel = styled(Typography)`
-  color: ${({ theme }) => theme.colors.black};
-  position: absolute;
-  top: 7.5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-transform: none;
-  font-size: 1rem;
-
-  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
-    font-size: 1.1rem;
-  }`}
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    font-size: 0.9rem;
-  }`}
-
-  ${({ theme }) => `${theme.media_width.upToSmall} {
-    font-size: 0.6rem;
-  }`}
-
-  ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 0.5rem;
-  }`}
+  transform: rotate(${({ index }) => (360 / PIECE_COUNT) * (index - 1.5)}deg);
 `;
 
 const ChartFrame3 = styled(Circle)`
   width: 50%;
   height: 50%;
-  background: ${({ theme }) => theme.colors.purple3};
-`;
-
-const ChartFrame4 = styled(Circle)`
-  width: 30%;
-  height: 30%;
-  background: ${({ theme }) => theme.colors.purple2};
-  box-shadow: 0px 0px 44px #ee2dff;
-`;
-
-const CrossImg = styled.img`
-  position: absolute;
-  width: 36%;
-  height: 36%;
-  top: 32%;
-  left: 32%;
-`;
-
-const ChartFrame5 = styled(Circle)`
-  width: 10%;
-  height: 10%;
-  background: ${({ theme }) => theme.colors.purple1};
-  box-shadow: 0px 0px 22px #ee2dff;
+  background: ${({ theme }) => theme.colors.black};
 `;
 
 const EthImg = styled.img`
   position: absolute;
-  width: 14%;
-  height: 14%;
-  top: 43%;
-  left: 43%;
+  width: 20%;
+  height: 20%;
+  top: 25%;
+  left: 40%;
 `;
 
 const BoldText = styled(Typography)`
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2rem;
+`;
 
-  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
+const ValueText = styled(BoldText)`
+  top: 50%;
+  font-size: 3rem;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
     font-size: 2.5rem;
   }`}
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    font-size: 1.5rem;
+  }`}
+
+  ${({ theme }) => `${theme.media_width.upToExtraSmall} {
+    font-size: 1rem;
+  }`}
+`;
+
+const PrizeText = styled(BoldText)`
+  top: 62%;
+  font-size: 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     font-size: 1.5rem;
@@ -168,41 +127,53 @@ const BoldText = styled(Typography)`
   }`}
 
   ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }`}
 `;
 
-const PrizeText = styled(BoldText)`
-  top: 40%;
+const RedInput = styled(Input)`
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  border: 1px solid ${({ theme }) => theme.colors.white};
 `;
-
-const ValueText = styled(BoldText)`
-  top: 60%;
-`;
-
-const BLUE_COUNT = 3;
 
 const ChartSection: React.FC = () => {
   const { theme } = useTheme();
 
-  const getDataByIndex = (index: number) => {
-    const colorA = BLUE_COUNT < 5 ? theme.colors.blue1 : theme.colors.red1;
-    const colorB = BLUE_COUNT < 5 ? theme.colors.red1 : theme.colors.blue1;
-    // eslint-disable-next-line no-nested-ternary
-    const isBlue = index >= BLUE_COUNT * 2 ? false : index % 2 === 0;
-    const color = isBlue ? colorA : colorB;
+  const [value, setValue] = useState('50');
 
-    return { value: 1, color, title: isBlue ? '4.07x' : '1.18x' };
+  const getDataByIndex = (index: number) => {
+    const redValue = Math.max(Math.min(Number(value) || 0, 100), 0);
+    const redCount = Math.round((redValue / 100) * PIECE_COUNT);
+    const blueCount = PIECE_COUNT - redCount;
+
+    const smallCount = Math.min(redCount, blueCount);
+    const colorA = redCount < blueCount ? theme.colors.red1 : theme.colors.blue1;
+    const colorB = redCount < blueCount ? theme.colors.blue1 : theme.colors.red1;
+
+    // eslint-disable-next-line no-nested-ternary
+    const color = index < smallCount * 2 && index % 2 === 0 ? colorA : colorB;
+
+    return { value: 1, color };
   };
 
-  const data = new Array(10).fill(0).map((_, index) => getDataByIndex(index));
+  const data = new Array(PIECE_COUNT).fill(0).map((_, index) => getDataByIndex(index));
+
+  const handleChangeValue = (e: any) => {
+    const res = e.target.value;
+    if (res.length === 0) {
+      setValue(res);
+    } else {
+      setValue(Math.max(Math.min(res, 100), 0).toString());
+    }
+  };
 
   return (
     <Container>
       <ChartContainer>
         <div style={{ padding: '50%' }} />
         <ChartFrame1 />
-        <ChartFrame2 />
 
         <ChartWrapper>
           {data.map((item, index) => (
@@ -211,27 +182,19 @@ const ChartSection: React.FC = () => {
           {data.map((_, index) => (
             <PieLine index={index} key={index} />
           ))}
-          {data.map((item, index) => (
-            <PieLabelWrapper index={index} key={index}>
-              <StyledLabel shadow type={TypographyType.BOLD_SUBTITLE}>
-                {item.title}
-              </StyledLabel>
-            </PieLabelWrapper>
-          ))}
         </ChartWrapper>
 
         <ChartFrame3 />
-        <ChartFrame4 />
-        <CrossImg alt="" src={CrossIcon} />
-        <ChartFrame5 />
         <EthImg alt="" src={EthIcon} />
         <PrizeText shadow type={TypographyType.BOLD_SUBTITLE}>
           Prize
         </PrizeText>
         <ValueText shadow type={TypographyType.BOLD_SUBTITLE}>
-          1080
+          1,080
         </ValueText>
       </ChartContainer>
+
+      <RedInput max={100} min={0} onChange={handleChangeValue} type="number" value={value} />
     </Container>
   );
 };

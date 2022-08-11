@@ -8,7 +8,7 @@ import Input from '../../components/common/input';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 
-const PIECE_COUNT = 50;
+const PIECE_COUNT = 10;
 
 const Container = styled.div`
   position: relative;
@@ -67,16 +67,16 @@ const ChartWrapper = styled(Circle)`
   animation: rotating 20s linear infinite;
 `;
 
-const PiePiece = styled(Circle)<{ color: string; index: number }>`
+const PiePiece = styled(Circle)<{ color: string; value: number; angle: number }>`
   width: 100%;
   height: 100%;
   background: ${({ color }) => color};
   box-shadow: inset 0px 4px 33px ${({ theme }) => theme.colors.grey1};
-  clip-path: polygon(50% 50%, 50% 0%, ${50 + 50 * Math.tan(((360 / PIECE_COUNT) * Math.PI) / 180)}% 0%);
-  transform: translate(-50%, -50%) rotate(${({ index }) => (360 / PIECE_COUNT) * (index - 1.5)}deg);
+  clip-path: polygon(50% 50%, 50% 0%, ${({ value }) => 50 + 50 * Math.tan((value * Math.PI) / 180)}% 0%);
+  transform: translate(-50%, -50%) rotate(${({ angle }) => `${angle}deg`});
 `;
 
-const PieLine = styled.div<{ index: number }>`
+const PieLine = styled.div<{ angle: number }>`
   position: absolute;
   top: 0;
   left: 50%;
@@ -84,7 +84,7 @@ const PieLine = styled.div<{ index: number }>`
   background: ${({ theme }) => `${theme.colors.grey1}10`};
   border: 1px solid ${({ theme }) => `${theme.colors.grey1}20`};
   box-shadow: 0px 0px 11px ${({ theme }) => theme.colors.grey1}, inset 0px 0px 11px ${({ theme }) => theme.colors.grey1};
-  transform: rotate(${({ index }) => (360 / PIECE_COUNT) * (index - 1.5)}deg);
+  transform: rotate(${({ angle }) => `${angle}deg`});
 `;
 
 const ChartFrame3 = styled(Circle)`
@@ -155,20 +155,26 @@ const ChartSection: React.FC = () => {
 
   const getDataByIndex = (index: number) => {
     const redValue = Math.max(Math.min(Number(value) || 0, 100), 0);
-    const redCount = Math.round((redValue / 100) * PIECE_COUNT);
-    const blueCount = PIECE_COUNT - redCount;
+    const pieceAngle = 360 / PIECE_COUNT;
 
-    const smallCount = Math.min(redCount, blueCount);
-    const colorA = redCount < blueCount ? theme.colors.red1 : theme.colors.blue1;
-    const colorB = redCount < blueCount ? theme.colors.blue1 : theme.colors.red1;
+    // const redCount = Math.round((redValue / 100) * PIECE_COUNT);
+    // const blueCount = PIECE_COUNT - redCount;
 
-    // eslint-disable-next-line no-nested-ternary
-    const color = index < smallCount * 2 && index % 2 === 0 ? colorA : colorB;
+    // const smallCount = Math.min(redCount, blueCount);
+    // const colorA = redCount < blueCount ? theme.colors.red1 : theme.colors.blue1;
+    // const colorB = redCount < blueCount ? theme.colors.blue1 : theme.colors.red1;
 
-    return { value: 1, color };
+    // // eslint-disable-next-line no-nested-ternary
+    // const color = index < smallCount * 2 && index % 2 === 0 ? colorA : colorB;
+
+    return {
+      value: index % 2 === 0 ? (pieceAngle / 100) * redValue : (pieceAngle / 100) * (100 - redValue),
+      color: index % 2 === 0 ? theme.colors.red1 : theme.colors.blue1,
+      angle: pieceAngle * Math.floor(index / 2) + (index % 2 === 0 ? 0 : (pieceAngle / 100) * redValue),
+    };
   };
 
-  const data = new Array(PIECE_COUNT).fill(0).map((_, index) => getDataByIndex(index));
+  const data = new Array(PIECE_COUNT * 2).fill(0).map((_, index) => getDataByIndex(index));
 
   const handleChangeValue = (e: any) => {
     const res = e.target.value;
@@ -187,10 +193,10 @@ const ChartSection: React.FC = () => {
 
         <ChartWrapper>
           {data.map((item, index) => (
-            <PiePiece color={item.color} index={index} key={index} />
+            <PiePiece angle={item.angle} color={item.color} key={index} value={item.value} />
           ))}
-          {data.map((_, index) => (
-            <PieLine index={index} key={index} />
+          {data.map((item, index) => (
+            <PieLine angle={item.angle} key={index} />
           ))}
         </ChartWrapper>
 

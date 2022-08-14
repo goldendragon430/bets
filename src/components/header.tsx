@@ -20,10 +20,11 @@ const Container = styled.div`
   height: 6.25rem;
   box-sizing: border-box;
   color: ${({ theme }) => theme.colors.text1};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white};
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     padding: 1rem 2rem;
-  }`}
+  }`};
 `;
 
 const Flex = styled.div`

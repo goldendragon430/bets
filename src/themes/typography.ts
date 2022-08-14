@@ -21,14 +21,14 @@ export const MainTypography: Typography = {
   regular: {
     fontFamily: 'Enter Sansman',
     fontWeight: 700,
-    fontStyle: 'normal',
+    fontStyle: 'italic',
     fontSize: '1.25rem',
     lineHeight: '2.25rem',
   },
   regularTitle: {
     fontFamily: 'Enter Sansman',
     fontWeight: 700,
-    fontStyle: 'normal',
+    fontStyle: 'italic',
     fontSize: '1.875rem',
     lineHeight: '2.75rem',
     uppercase: true,
@@ -43,7 +43,7 @@ export const MainTypography: Typography = {
   regularBody2: {
     fontFamily: 'Enter Sansman',
     fontWeight: 700,
-    fontStyle: 'normal',
+    fontStyle: 'italic',
     fontSize: '0.9375rem',
     lineHeight: '2.25rem',
   },

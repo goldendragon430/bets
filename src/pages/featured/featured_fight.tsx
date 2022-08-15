@@ -72,13 +72,16 @@ const FeaturedFight: React.FC = () => {
 
       <BetModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        fontColor={selectA ? theme.colors.white : theme.colors.black}
         onClose={() => setShowBetModal(false)}
+        rewardPotential={selectA ? 1.18 : 4.07}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
         visible={showBetModal}
       />
 
       <StakeModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        fontColor={selectA ? theme.colors.white : theme.colors.black}
         nfts={selectA ? NFT_LIST1 : NFT_LIST2}
         onClose={() => setShowStakeModal(false)}
         visible={showStakeModal}

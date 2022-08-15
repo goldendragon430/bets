@@ -36,6 +36,7 @@ const MaxButton = styled(Button)`
   padding-left: 1rem;
   filter: none;
   border: none;
+  color: ${({ theme }) => theme.colors.white};
   font-family: ${({ theme }) => theme.typography.boldSubTitle.fontFamily};
   font-weight: ${({ theme }) => theme.typography.boldSubTitle.fontWeight};
   font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};

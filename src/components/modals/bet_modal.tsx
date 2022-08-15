@@ -95,14 +95,25 @@ const BetButton = styled(Button)`
   width: 70%;
 `;
 
+const StatsWrapper = styled.div`
+  width: 100%;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.white};
+`;
+
 interface IBetModal {
   visible: boolean;
   onClose: () => void;
   teamLogo: string;
   color: string;
+  fontColor: string;
+  rewardPotential: number;
 }
 
-const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color }) => (
+const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential }) => (
   <ModalWrapper
     centered
     color={color}
@@ -132,7 +143,14 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color }) =>
 
     <Input onMax={() => {}} placeholder="5,393.76" point={8303.24} style={{ width: '100%' }} type="number" />
 
-    <BetButton color={color}>Bet</BetButton>
+    <StatsWrapper>
+      <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
+      <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
+    </StatsWrapper>
+
+    <BetButton color={color} fontColor={fontColor}>
+      Bet
+    </BetButton>
 
     <Typography color={color} type={TypographyType.REGULAR_TITLE}>
       if you lose you will earn 3000 BP

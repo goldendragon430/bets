@@ -75,10 +75,11 @@ interface IStakeModal {
   visible: boolean;
   onClose: () => void;
   color: string;
+  fontColor: string;
   nfts: any[];
 }
 
-const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts }) => {
+const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor }) => {
   const [selectedNfts, setSelectedNfts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -95,7 +96,11 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts }) =>
   };
 
   const handleSelectAll = () => {
-    setSelectedNfts(nfts);
+    if (nfts.length === selectedNfts.length) {
+      setSelectedNfts([]);
+    } else {
+      setSelectedNfts(nfts);
+    }
   };
 
   return (
@@ -115,11 +120,13 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts }) =>
     >
       <NftList color={color} nfts={nfts} onSelect={handleSelect} selectedNfts={selectedNfts} />
       <ButtonWrapper>
-        <Button color={color} onClick={handleSelectAll}>
+        <Button color={color} fontColor={fontColor} onClick={handleSelectAll}>
           Select All
         </Button>
         <div style={{ minWidth: '2rem' }} />
-        <Button color={color}>Stake</Button>
+        <Button color={color} fontColor={fontColor}>
+          Stake
+        </Button>
       </ButtonWrapper>
     </ModalWrapper>
   );

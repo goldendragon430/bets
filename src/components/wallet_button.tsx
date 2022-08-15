@@ -43,7 +43,7 @@ const WalletButton = () => {
   return (
     <Container>
       <Button color={theme.colors.white} onClick={handleConnect} shadow>
-        {account ? `${balance.toLocaleString()} ETH` : 'Connect Wallet'}
+        {account ? `${balance.toLocaleString()} ETH` : 'Connect'}
       </Button>
 
       {showModal && (

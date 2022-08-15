@@ -137,7 +137,7 @@ const Header: React.FC = () => {
   };
 
   const getSocialIcons = () => (
-    <Flex style={{ padding: '0 2rem' }}>
+    <Flex style={{ padding: '2rem' }}>
       <SocialIcon alt="" src={TwitterIcon} />
       <SocialIcon alt="" src={DiscordIcon} />
       <SocialIcon alt="" src={WalletIcon} />

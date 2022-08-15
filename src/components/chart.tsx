@@ -1,38 +1,17 @@
 /* eslint-disable react/no-array-index-key */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import styled from 'styled-components';
 
-import EthIcon from '../../assets/images/eth_icon.svg';
-import Input from '../../components/common/input';
-import { Typography, TypographyType } from '../../components/common/typography';
-import { useTheme } from '../../contexts/theme_context';
-
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => `${theme.colors.red1}40`} 0%,
-    rgba(0, 0, 0, 0) 50%,
-    ${({ theme }) => `${theme.colors.blue1}40`} 100%
-  );
-  margin: 1rem 0;
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    margin: 5rem 0;
-  }`}
-`;
+import EthIcon from '../assets/images/eth_icon.svg';
+import { useTheme } from '../contexts/theme_context';
+import { Typography, TypographyType } from './common/typography';
 
 const ChartContainer = styled.div`
   position: relative;
-  width: 30%;
+  width: 100%;
   background: ${({ theme }) => theme.colors.black};
   border-radius: 50%;
-  transform: scale(1.5);
 `;
 
 const Circle = styled.div`
@@ -47,7 +26,7 @@ const ChartFrame1 = styled(Circle)`
   width: 80%;
   height: 80%;
   background: ${({ theme }) => theme.colors.black};
-  box-shadow: 0px 0px 44px ${({ theme }) => theme.colors.purple1};
+  // box-shadow: 0px 0px 44px ${({ theme }) => theme.colors.purple1};
 `;
 
 const ChartWrapper = styled(Circle)`
@@ -122,15 +101,11 @@ const ValueText = styled(BoldText)`
   font-size: 3rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
-    font-size: 2.5rem;
-  }`}
-
-  ${({ theme }) => `${theme.media_width.upToSmall} {
-    font-size: 1.5rem;
+    font-size: 5rem;
   }`}
 
   ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 1rem;
+    font-size: 4rem;
   }`}
 `;
 
@@ -139,29 +114,18 @@ const PrizeText = styled(BoldText)`
   font-size: 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
-    font-size: 1.5rem;
-  }`}
-
-  ${({ theme }) => `${theme.media_width.upToSmall} {
-    font-size: 1rem;
+    font-size: 3.5rem;
   }`}
 
   ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 0.7rem;
+    font-size: 3rem;
   }`}
 `;
 
-const RedInput = styled(Input)`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  border: 1px solid ${({ theme }) => theme.colors.white};
-`;
-
-const ChartSection: React.FC = () => {
+const Chart: React.FC = () => {
   const { theme } = useTheme();
 
-  const [value, setValue] = useState('50');
+  const value = '55';
 
   const getPieceCount = useCallback(() => {
     const redValue = Math.max(Math.min(Number(value) || 0, 100), 0);
@@ -204,45 +168,32 @@ const ChartSection: React.FC = () => {
     [getPieceCount, getDataByIndex]
   );
 
-  const handleChangeValue = (e: any) => {
-    const res = e.target.value;
-    if (res.length === 0) {
-      setValue(res);
-    } else {
-      setValue(Math.max(Math.min(res, 100), 0).toString());
-    }
-  };
-
   return (
-    <Container>
-      <ChartContainer>
-        <div style={{ padding: '50%' }} />
-        <ChartFrame1 />
+    <ChartContainer>
+      <div style={{ padding: '50%' }} />
+      <ChartFrame1 />
 
-        <ChartWrapper>
-          <PieBg color={Number(value) > 50 ? theme.colors.red1 : theme.colors.blue1} />
-          {data.map((item, index) => (
-            <PiePiece angle={item.angle} color={item.color} key={index} value={item.value} />
-          ))}
-          {data.map((item, index) => (
-            <PieLine angle={item.angle} key={index} />
-          ))}
-          <PieShadow />
-        </ChartWrapper>
+      <ChartWrapper>
+        <PieBg color={Number(value) > 50 ? theme.colors.red1 : theme.colors.blue1} />
+        {data.map((item, index) => (
+          <PiePiece angle={item.angle} color={item.color} key={index} value={item.value} />
+        ))}
+        {data.map((item, index) => (
+          <PieLine angle={item.angle} key={index} />
+        ))}
+        <PieShadow />
+      </ChartWrapper>
 
-        <ChartFrame3 />
-        <EthImg alt="" src={EthIcon} />
-        <PrizeText shadow type={TypographyType.BOLD_SUBTITLE}>
-          Prize
-        </PrizeText>
-        <ValueText shadow type={TypographyType.BOLD_SUBTITLE}>
-          1,080
-        </ValueText>
-      </ChartContainer>
-
-      <RedInput max={100} min={0} onChange={handleChangeValue} type="number" value={value} />
-    </Container>
+      <ChartFrame3 />
+      <EthImg alt="" src={EthIcon} />
+      <PrizeText shadow type={TypographyType.BOLD_SUBTITLE}>
+        Prize
+      </PrizeText>
+      <ValueText shadow type={TypographyType.BOLD_SUBTITLE}>
+        1,080
+      </ValueText>
+    </ChartContainer>
   );
 };
 
-export default ChartSection;
+export default Chart;

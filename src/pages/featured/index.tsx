@@ -3,7 +3,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import ChartSection from './chart_section';
 import FeaturedFight from './featured_fight';
 import TweetSection from './tweet_section';
 
@@ -15,7 +14,6 @@ const Container = styled.div`
 const Featured: React.FC = () => (
   <Container>
     <FeaturedFight />
-    <ChartSection />
     <TweetSection />
   </Container>
 );

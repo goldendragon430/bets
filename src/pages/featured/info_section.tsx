@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import Chart from '../../components/chart';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 
@@ -113,6 +114,10 @@ const InfoSection = () => {
           <Typography type={TypographyType.BOLD_SUBTITLE}>27%</Typography>
         </RightTeam>
       </ChanceWrapper>
+
+      <Wrapper>
+        <Chart />
+      </Wrapper>
     </InfoWrapper>
   );
 };

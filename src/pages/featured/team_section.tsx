@@ -14,7 +14,6 @@ import { useTheme } from '../../contexts/theme_context';
 const TeamWrapper = styled.div`
   flex: 1;
   overflow: hidden;
-  padding: 1.5rem 0;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     width: 60%;
@@ -25,6 +24,7 @@ const StatsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: 1rem;
 `;
 
 const StatsItem = styled.div`

@@ -107,9 +107,10 @@ interface IBetModal {
   color: string;
   fontColor: string;
   rewardPotential: number;
+  onBet: () => void;
 }
 
-const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential }) => {
+const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential, onBet }) => {
   const { balance } = useWallet();
 
   return (
@@ -146,7 +147,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
         <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
       </StatsWrapper>
 
-      <BetButton color={color} fontColor={fontColor}>
+      <BetButton color={color} fontColor={fontColor} onClick={onBet}>
         Bet
       </BetButton>
 

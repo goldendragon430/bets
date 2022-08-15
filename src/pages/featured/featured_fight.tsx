@@ -9,6 +9,7 @@ import TeamImg1 from '../../assets/images/team1.png';
 import TeamImg2 from '../../assets/images/team2.png';
 import BetModal from '../../components/modals/bet_modal';
 import StakeModal from '../../components/modals/stake_modal';
+import SuccessModal from '../../components/modals/success_modal';
 import { useTheme } from '../../contexts/theme_context';
 import { NFT_LIST1, NFT_LIST2 } from '../../mocks/nfts';
 import InfoSection from './info_section';
@@ -32,6 +33,7 @@ const FeaturedFight: React.FC = () => {
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleBet = (teamA: boolean) => {
     setSelectA(teamA);
@@ -73,6 +75,10 @@ const FeaturedFight: React.FC = () => {
       <BetModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
         fontColor={selectA ? theme.colors.white : theme.colors.black}
+        onBet={() => {
+          setShowBetModal(false);
+          setShowSuccessModal(true);
+        }}
         onClose={() => setShowBetModal(false)}
         rewardPotential={selectA ? 1.18 : 4.07}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
@@ -84,7 +90,20 @@ const FeaturedFight: React.FC = () => {
         fontColor={selectA ? theme.colors.white : theme.colors.black}
         nfts={selectA ? NFT_LIST1 : NFT_LIST2}
         onClose={() => setShowStakeModal(false)}
+        onStake={() => {
+          setShowStakeModal(false);
+          setShowSuccessModal(true);
+        }}
         visible={showStakeModal}
+      />
+
+      <SuccessModal
+        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        ethStaked={3.25}
+        nftStaked={2}
+        onClose={() => setShowSuccessModal(false)}
+        teamLogo={selectA ? TeamLogo1 : TeamLogo2}
+        visible={showSuccessModal}
       />
     </Container>
   );

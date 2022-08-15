@@ -71,9 +71,10 @@ interface IStakeModal {
   color: string;
   fontColor: string;
   nfts: any[];
+  onStake: () => void;
 }
 
-const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor }) => {
+const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, onStake }) => {
   const [selectedNfts, setSelectedNfts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
           Select All
         </Button>
         <div style={{ minWidth: '2rem' }} />
-        <Button color={color} fontColor={fontColor}>
+        <Button color={color} fontColor={fontColor} onClick={onStake}>
           Stake
         </Button>
       </ButtonWrapper>

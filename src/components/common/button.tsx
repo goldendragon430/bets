@@ -16,6 +16,7 @@ const Button = styled.button<{ shadow?: boolean; color?: string; fontColor?: str
   ${({ theme, color, shadow }) => shadow && `filter: drop-shadow(0px 0px 0.6875rem ${color || theme.colors.white});`}
 
   &:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
   }
 `;

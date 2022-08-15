@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
 import LogoIcon from '../../assets/images/logo.svg';
+import { useWallet } from '../../contexts/wallet_context';
 import Button from '../common/button';
 import Input from '../common/input';
 import { Typography, TypographyType } from '../common/typography';
@@ -113,52 +114,56 @@ interface IBetModal {
   rewardPotential: number;
 }
 
-const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential }) => (
-  <ModalWrapper
-    centered
-    color={color}
-    footer={null}
-    onCancel={onClose}
-    title={
-      <HeaderWrapper>
-        <Logo alt="" src={LogoIcon} />
-        <Typography type={TypographyType.REGULAR_TITLE}>BET</Typography>
-      </HeaderWrapper>
-    }
-    visible={visible}
-    width="55rem"
-  >
-    <Wrapper>
-      <TeamLogo alt="" color={color} src={teamLogo} />
-      <BalanceWrapper color={color}>
-        <BalanceImg alt="" src={EthIcon} />
-        <div style={{ marginRight: '2rem' }}>
-          <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
-            3.25 ETH
-          </Typography>
-          <Typography type={TypographyType.REGULAR}>in-wallet balance</Typography>
-        </div>
-      </BalanceWrapper>
-    </Wrapper>
+const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential }) => {
+  const { balance } = useWallet();
 
-    <Input onMax={() => {}} placeholder="5,393.76" point={8303.24} style={{ width: '100%' }} type="number" />
+  return (
+    <ModalWrapper
+      centered
+      color={color}
+      footer={null}
+      onCancel={onClose}
+      title={
+        <HeaderWrapper>
+          <Logo alt="" src={LogoIcon} />
+          <Typography type={TypographyType.REGULAR_TITLE}>BET</Typography>
+        </HeaderWrapper>
+      }
+      visible={visible}
+      width="55rem"
+    >
+      <Wrapper>
+        <TeamLogo alt="" color={color} src={teamLogo} />
+        <BalanceWrapper color={color}>
+          <BalanceImg alt="" src={EthIcon} />
+          <div style={{ marginRight: '2rem' }}>
+            <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
+              {balance.toLocaleString()} ETH
+            </Typography>
+            <Typography type={TypographyType.REGULAR}>in-wallet balance</Typography>
+          </div>
+        </BalanceWrapper>
+      </Wrapper>
 
-    <StatsWrapper>
-      <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
-      <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
-    </StatsWrapper>
+      <Input onMax={() => {}} placeholder="5,393.76" point={8303.24} style={{ width: '100%' }} type="number" />
 
-    <BetButton color={color} fontColor={fontColor}>
-      Bet
-    </BetButton>
+      <StatsWrapper>
+        <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
+        <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
+      </StatsWrapper>
 
-    <Typography color={color} type={TypographyType.REGULAR_TITLE}>
-      if you lose you will earn 3000 BP
-    </Typography>
-    <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
-      find out more about bp <a>here</a>
-    </Typography>
-  </ModalWrapper>
-);
+      <BetButton color={color} disabled fontColor={fontColor}>
+        Bet
+      </BetButton>
+
+      <Typography color={color} type={TypographyType.REGULAR_TITLE}>
+        if you lose you will earn 3000 BP
+      </Typography>
+      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+        find out more about bp <a>here</a>
+      </Typography>
+    </ModalWrapper>
+  );
+};
 
 export default BetModal;

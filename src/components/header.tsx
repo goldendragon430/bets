@@ -117,11 +117,11 @@ const CloseButton = styled.img`
 const ROUTES = [
   {
     name: 'How it works',
-    route: '/guide',
+    route: '/',
   },
   {
     name: 'Upcoming',
-    route: '/upcoming',
+    route: '/',
   },
   {
     name: 'Featured Fight',

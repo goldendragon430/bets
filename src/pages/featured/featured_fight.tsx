@@ -28,7 +28,7 @@ const Container = styled.div`
 `;
 
 const InfoWrapper = styled.div`
-  flex: 1.5;
+  flex: 1;
   z-index: 1;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
@@ -53,14 +53,6 @@ const ChanceWrapper = styled(Wrapper)`
   width: calc(100% + 5rem);
   transform: translateX(-2.5rem);
   padding: 1.5rem 2.5rem;
-`;
-
-const TeamLogo = styled.img<{ firstTeam?: boolean; color: string }>`
-  width: 4rem;
-  height: 4rem;
-  border-radius: 0.75rem;
-  filter: drop-shadow(0px 0px 0.6875rem ${({ color }) => color});
-  ${({ firstTeam }) => (firstTeam ? `margin-left: 0.5rem;` : `margin-right: 0.5rem;`)}
 `;
 
 const LeftTeam = styled.div`
@@ -120,22 +112,21 @@ const FeaturedFight: React.FC = () => {
     <Container>
       <TeamSection
         color={theme.colors.red1}
+        ethStaked={825}
         firstTeam
+        nftStaked={5634}
         onBet={() => handleBet(true)}
         onStake={() => handleStake(true)}
         teamImg={TeamImg1}
+        teamLogo={TeamLogo1}
         teamName="MAYC"
       />
 
       <InfoWrapper>
         <Wrapper>
-          <LeftTeam>
-            <TeamLogo alt="" color={theme.colors.red1} firstTeam src={TeamLogo1} />
-          </LeftTeam>
+          <LeftTeam />
           <MidTeam />
-          <RightTeam>
-            <TeamLogo alt="" color={theme.colors.blue1} src={TeamLogo2} />
-          </RightTeam>
+          <RightTeam />
         </Wrapper>
 
         <Wrapper>
@@ -195,23 +186,18 @@ const FeaturedFight: React.FC = () => {
         </Wrapper>
 
         <Wrapper>
-          <LeftTeam>
-            <TeamLogo alt="" color={theme.colors.red1} firstTeam src={MarkImg1} />
-            <TeamLogo alt="" color={theme.colors.red1} firstTeam src={MarkImg2} />
-          </LeftTeam>
           <MidTeam />
-          <RightTeam>
-            <TeamLogo alt="" color={theme.colors.blue1} src={MarkImg1} />
-            <TeamLogo alt="" color={theme.colors.blue1} src={MarkImg2} />
-          </RightTeam>
         </Wrapper>
       </InfoWrapper>
 
       <TeamSection
         color={theme.colors.blue1}
+        ethStaked={225}
+        nftStaked={2543}
         onBet={() => handleBet(false)}
         onStake={() => handleStake(false)}
         teamImg={TeamImg2}
+        teamLogo={TeamLogo2}
         teamName="AZUKI"
       />
 

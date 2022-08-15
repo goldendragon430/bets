@@ -16,7 +16,7 @@ const WalletButton = () => {
   };
 
   return (
-    <Button color={theme.colors.purple1} onClick={handleConnect}>
+    <Button color={theme.colors.purple1} onClick={handleConnect} shadow>
       {account ? getShortWalletAddress(account) : 'Connect Wallet'}
     </Button>
   );

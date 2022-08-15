@@ -3,8 +3,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import EthIcon from '../../assets/images/eth_icon.svg';
+import SocialIcon1 from '../../assets/images/social1.svg';
+import SocialIcon2 from '../../assets/images/social2.svg';
+import SocialIcon3 from '../../assets/images/social3.svg';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useTheme } from '../../contexts/theme_context';
 
 const TeamWrapper = styled.div`
   flex: 1;
@@ -16,30 +21,64 @@ const TeamWrapper = styled.div`
   }`}
 `;
 
-const TeamImageWrapper = styled.div<{ firstTeam?: boolean; color: string }>`
-  width: 125%;
-  transform: translateX(${({ firstTeam }) => (firstTeam ? '-20%' : '0')});
+const StatsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const StatsItem = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TeamImageWrapper = styled.div<{ color: string }>`
+  width: 100%;
   border: 0.5rem solid ${({ color }) => color};
-  padding: 2rem;
+  position: relative;
+  margin-bottom: 1rem;
 
   img {
     width: 100%;
   }
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    width: 100%;
-    transform: translateX(0);
-  }`}
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 
   button {
     flex: 1;
     margin: 0.5rem;
+  }
+`;
+
+const TeamLogo = styled.img<{ color: string }>`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  filter: drop-shadow(0px 0px 0.6875rem ${({ color }) => color});
+  margin: 1rem;
+`;
+
+const EthImg = styled.img`
+  height: 6rem;
+`;
+
+const SocialWrapper = styled.div<{ firstTeam?: boolean }>`
+  border-top: 1px solid ${({ theme }) => theme.colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: ${({ firstTeam }) => (firstTeam ? 'flex-end' : 'flex-start')};
+  padding: 1rem 0;
+
+  img {
+    height: 2rem;
+    ${({ firstTeam }) => (firstTeam ? 'margin-left: 1rem;' : 'margin-right: 1rem;')}
   }
 `;
 
@@ -48,34 +87,66 @@ interface ITeamSection {
   color: string;
   teamName: string;
   teamImg: string;
+  teamLogo: string;
+  nftStaked: number;
+  ethStaked: number;
   onBet: () => void;
   onStake: () => void;
 }
 
-const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, teamName, teamImg, onBet, onStake }) => (
-  <TeamWrapper>
-    <Typography
-      color={color}
-      shadow
-      style={{ textAlign: firstTeam ? 'right' : 'left' }}
-      type={TypographyType.BOLD_TITLE}
-    >
-      {teamName}
-    </Typography>
+const TeamSection: React.FC<ITeamSection> = ({
+  firstTeam,
+  color,
+  teamName,
+  teamImg,
+  teamLogo,
+  nftStaked,
+  ethStaked,
+  onBet,
+  onStake,
+}) => {
+  const { theme } = useTheme();
+  return (
+    <TeamWrapper>
+      <StatsWrapper>
+        <StatsItem>
+          <Typography type={TypographyType.REGULAR_TITLE}>{nftStaked.toLocaleString()}</Typography>
+          <TeamLogo alt="" color={color} src={teamLogo} />
+        </StatsItem>
+        <StatsItem>
+          <Typography type={TypographyType.REGULAR_TITLE}>{ethStaked.toLocaleString()}</Typography>
+          <EthImg alt="" src={EthIcon} />
+        </StatsItem>
+      </StatsWrapper>
 
-    <TeamImageWrapper color={color} firstTeam={firstTeam}>
-      <img alt="" src={teamImg} />
-    </TeamImageWrapper>
+      <TeamImageWrapper color={color}>
+        <img alt="" src={teamImg} />
+        <ButtonWrapper>
+          <Button color={color} fontColor={firstTeam ? theme.colors.white : theme.colors.black} onClick={onStake}>
+            Stake
+          </Button>
+          <Button color={color} fontColor={firstTeam ? theme.colors.white : theme.colors.black} onClick={onBet}>
+            Bet
+          </Button>
+        </ButtonWrapper>
+      </TeamImageWrapper>
 
-    <ButtonWrapper>
-      <Button color={color} onClick={onStake}>
-        Stake
-      </Button>
-      <Button color={color} onClick={onBet}>
-        Bet
-      </Button>
-    </ButtonWrapper>
-  </TeamWrapper>
-);
+      <Typography
+        color={color}
+        shadow
+        style={{ textAlign: firstTeam ? 'right' : 'left' }}
+        type={TypographyType.BOLD_TITLE}
+      >
+        {teamName}
+      </Typography>
+
+      <SocialWrapper firstTeam={firstTeam}>
+        <img alt="" src={SocialIcon1} />
+        <img alt="" src={SocialIcon2} />
+        <img alt="" src={SocialIcon3} />
+      </SocialWrapper>
+    </TeamWrapper>
+  );
+};
 
 export default TeamSection;

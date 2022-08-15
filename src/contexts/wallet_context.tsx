@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { hexStripZeros } from '@ethersproject/bytes';
@@ -22,6 +22,8 @@ export interface IWalletContext {
   connect: () => void;
   disconnect: () => void;
   switchChain: (targetChainId: number) => void;
+  balance: number;
+  updateBalance: () => void;
 }
 
 const WalletContext = React.createContext<Maybe<IWalletContext>>(null);
@@ -31,6 +33,7 @@ export const WalletProvider = ({ children = null as any }) => {
 
   const DEFAULT_NETWORK = SupportedChainId.GOERLI;
   const [walletType, setWalletType] = useLocalStorageState('CONNECTOR_ID', '');
+  const [balance, setBalance] = useState(0);
 
   const activateInjectedProvider = (_connector: AbstractConnector | undefined) => {
     const { ethereum } = window;
@@ -174,6 +177,19 @@ export const WalletProvider = ({ children = null as any }) => {
     }
   }, [DEFAULT_NETWORK, active, chainId, switchChain]);
 
+  const updateBalance = useCallback(async () => {
+    if (account && chainId && library) {
+      const res = await (library as Web3Provider).getBalance(account);
+      setBalance(Number(ethers.utils.formatEther(res)));
+    } else {
+      setBalance(0);
+    }
+  }, [chainId, account, library]);
+
+  useEffect(() => {
+    updateBalance();
+  }, [chainId, account, library, updateBalance]);
+
   return (
     <WalletContext.Provider
       value={{
@@ -182,6 +198,8 @@ export const WalletProvider = ({ children = null as any }) => {
         connect,
         disconnect,
         switchChain,
+        balance,
+        updateBalance,
       }}
     >
       {children}

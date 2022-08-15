@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CloseIcon from '../assets/images/close.svg';
-import EthIcon from '../assets/images/eth_icon.svg';
+import DiscordIcon from '../assets/images/discord.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
+import TwitterIcon from '../assets/images/twitter.svg';
+import WalletIcon from '../assets/images/wallet.svg';
 import { Typography, TypographyType } from './common/typography';
 import WalletButton from './wallet_button';
 
@@ -63,10 +65,6 @@ const ButtonWrapper = styled(Flex)`
   }`}
 `;
 
-const BalanceImg = styled.img`
-  height: 5rem;
-`;
-
 const MenuButton = styled.img`
   display: none;
   cursor: pointer;
@@ -74,6 +72,12 @@ const MenuButton = styled.img`
   ${({ theme }) => `${theme.media_width.upToMedium} {
     display: block;
   }`}
+`;
+
+const SocialIcon = styled.img`
+  height: 2rem;
+  margin: 0 1rem;
+  cursor: pointer;
 `;
 
 const MobileView = styled.div<{ show: boolean }>`
@@ -132,6 +136,14 @@ const Header: React.FC = () => {
     setShowMobileView(false);
   };
 
+  const getSocialIcons = () => (
+    <Flex style={{ padding: '0 2rem' }}>
+      <SocialIcon alt="" src={TwitterIcon} />
+      <SocialIcon alt="" src={DiscordIcon} />
+      <SocialIcon alt="" src={WalletIcon} />
+    </Flex>
+  );
+
   return (
     <Container>
       <Flex>
@@ -158,12 +170,7 @@ const Header: React.FC = () => {
       </Flex>
 
       <ButtonWrapper>
-        <Flex style={{ marginRight: '1rem' }}>
-          <BalanceImg alt="" src={EthIcon} />
-          <Typography shadow type={TypographyType.BOLD_TITLE}>
-            3.25
-          </Typography>
-        </Flex>
+        {getSocialIcons()}
         <WalletButton />
       </ButtonWrapper>
 
@@ -180,12 +187,7 @@ const Header: React.FC = () => {
           ))}
         </MobileLinkWrapper>
 
-        <Flex style={{ marginBottom: '1rem', paddingRight: '1rem' }}>
-          <BalanceImg alt="" src={EthIcon} />
-          <Typography shadow type={TypographyType.BOLD_TITLE}>
-            3.25
-          </Typography>
-        </Flex>
+        {getSocialIcons()}
 
         <WalletButton />
 

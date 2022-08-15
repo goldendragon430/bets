@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { useTheme } from '../contexts/theme_context';
 import { useWallet } from '../contexts/wallet_context';
+import { getShortWalletAddress } from '../utils';
 import Button from './common/button';
 
 const Container = styled.div`
@@ -11,6 +12,7 @@ const Container = styled.div`
 
   button {
     white-space: nowrap;
+    font-size: 1.2rem;
   }
 `;
 
@@ -22,7 +24,7 @@ const DisconnectButton = styled(Button)`
 `;
 
 const WalletButton = () => {
-  const { account, connect, disconnect, balance } = useWallet();
+  const { account, connect, disconnect } = useWallet();
   const { theme } = useTheme();
 
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +45,7 @@ const WalletButton = () => {
   return (
     <Container>
       <Button color={theme.colors.white} onClick={handleConnect} shadow>
-        {account ? `${balance.toLocaleString()} ETH` : 'Connect'}
+        {account ? getShortWalletAddress(account) : 'Connect'}
       </Button>
 
       {showModal && (

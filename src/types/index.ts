@@ -6,3 +6,10 @@ export interface TwitterFeed {
   username: string;
   profileImg: string;
 }
+
+export interface TeamInfo {
+  logo: string;
+  ethStaked: number;
+  nftStaked: number;
+  color: string;
+}

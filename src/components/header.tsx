@@ -6,11 +6,16 @@ import styled from 'styled-components';
 
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
+import EthIcon from '../assets/images/eth_icon.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
+import TeamLogo1 from '../assets/images/team_logo1.jpeg';
+import TeamLogo2 from '../assets/images/team_logo2.jpeg';
 import TwitterIcon from '../assets/images/twitter.svg';
-import WalletIcon from '../assets/images/wallet.svg';
+import { useTheme } from '../contexts/theme_context';
+import { useWallet } from '../contexts/wallet_context';
 import { Typography, TypographyType } from './common/typography';
+import MyBetModal from './modals/my_bet_modal';
 import WalletButton from './wallet_button';
 
 const Container = styled.div`
@@ -24,7 +29,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.colors.text1};
   border-bottom: 1px solid ${({ theme }) => theme.colors.white};
 
-  ${({ theme }) => `${theme.media_width.upToMedium} {
+  ${({ theme }) => `${theme.media_width.upToLarge} {
     padding: 1rem 2rem;
   }`};
 `;
@@ -76,7 +81,7 @@ const MenuButton = styled.img`
 
 const SocialIcon = styled.img`
   height: 2rem;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   cursor: pointer;
 `;
 
@@ -114,6 +119,15 @@ const CloseButton = styled.img`
   right: calc(4rem + 12px);
 `;
 
+const BalanceWrapper = styled(Flex)`
+  margin-left: 1rem;
+  cursor: pointer;
+`;
+
+const BalanceImg = styled.img`
+  height: 4rem;
+`;
+
 const ROUTES = [
   {
     name: 'How it works',
@@ -130,17 +144,26 @@ const ROUTES = [
 ];
 
 const Header: React.FC = () => {
+  const { balance } = useWallet();
+  const { theme } = useTheme();
+
   const [showMobileView, setShowMobileView] = useState(false);
+  const [showBetModal, setShowBetModal] = useState(false);
 
   const handleClose = () => {
     setShowMobileView(false);
   };
 
   const getSocialIcons = () => (
-    <Flex style={{ padding: '2rem' }}>
+    <Flex style={{ padding: '2rem 1rem' }}>
       <SocialIcon alt="" src={TwitterIcon} />
       <SocialIcon alt="" src={DiscordIcon} />
-      <SocialIcon alt="" src={WalletIcon} />
+      <BalanceWrapper onClick={() => setShowBetModal(true)}>
+        <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
+          {balance.toLocaleString()}
+        </Typography>
+        <BalanceImg alt="" src={EthIcon} />
+      </BalanceWrapper>
     </Flex>
   );
 
@@ -193,6 +216,13 @@ const Header: React.FC = () => {
 
         <CloseButton alt="" onClick={handleClose} src={CloseIcon} />
       </MobileView>
+
+      <MyBetModal
+        onClose={() => setShowBetModal(false)}
+        teamA={{ logo: TeamLogo1, ethStaked: 3.6, nftStaked: 123, color: theme.colors.red1 }}
+        teamB={{ logo: TeamLogo2, ethStaked: 0.05, nftStaked: 1, color: theme.colors.blue1 }}
+        visible={showBetModal}
+      />
     </Container>
   );
 };

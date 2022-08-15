@@ -3,7 +3,6 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-import LogoIcon from '../../assets/images/logo.svg';
 import { useWallet } from '../../contexts/wallet_context';
 import Button from '../common/button';
 import Input from '../common/input';
@@ -54,11 +53,6 @@ const HeaderWrapper = styled.div`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-const Logo = styled.img`
-  height: 32px;
-  margin-right: 1rem;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -84,6 +78,7 @@ const BalanceWrapper = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 `;
 
 const BalanceImg = styled.img`
@@ -125,7 +120,6 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
       onCancel={onClose}
       title={
         <HeaderWrapper>
-          <Logo alt="" src={LogoIcon} />
           <Typography type={TypographyType.REGULAR_TITLE}>BET</Typography>
         </HeaderWrapper>
       }
@@ -152,7 +146,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
         <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
       </StatsWrapper>
 
-      <BetButton color={color} disabled fontColor={fontColor}>
+      <BetButton color={color} fontColor={fontColor}>
         Bet
       </BetButton>
 

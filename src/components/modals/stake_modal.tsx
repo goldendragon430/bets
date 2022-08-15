@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
-import LogoIcon from '../../assets/images/logo.svg';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
 import NftList from '../nft_list';
@@ -52,11 +51,6 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.colors.white};
-`;
-
-const Logo = styled.img`
-  height: 32px;
-  margin-right: 1rem;
 `;
 
 const ButtonWrapper = styled.div`
@@ -111,7 +105,6 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
       onCancel={onClose}
       title={
         <HeaderWrapper>
-          <Logo alt="" src={LogoIcon} />
           <Typography type={TypographyType.REGULAR_TITLE}>Stake</Typography>
         </HeaderWrapper>
       }

@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Contract } from '@ethersproject/contracts';
 
+import BetABI from '../abi/BetABI.json';
+import { BET_CONTRACT_ADDRESS } from '../constants/addresses';
 import { getContract } from '../utils';
 import useActiveWeb3React from './useActiveWeb3React';
 
@@ -30,4 +32,8 @@ export function useContract<T extends Contract = Contract>(
       return null;
     }
   }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T;
+}
+
+export function useBetContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(BET_CONTRACT_ADDRESS, BetABI, withSignerIfPossible);
 }

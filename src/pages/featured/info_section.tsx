@@ -125,7 +125,7 @@ const InfoSection = () => {
       <Wrapper>
         <Chart
           prize={totalBetAmountA + totalBetAmountB}
-          value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA)}
+          value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}
         />
       </Wrapper>
     </InfoWrapper>

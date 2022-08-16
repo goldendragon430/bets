@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Modal } from 'antd';
 import styled from 'styled-components';
@@ -118,6 +118,10 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState('');
 
+  useEffect(() => {
+    setAmount('');
+  }, [visible]);
+
   const getMaxAmount = () => Math.max(0, balance - 0.01);
 
   const handleMax = () => {
@@ -135,7 +139,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
       centered
       color={color}
       footer={null}
-      onCancel={onClose}
+      onCancel={() => !loading && onClose()}
       title={
         <HeaderWrapper>
           <Typography type={TypographyType.REGULAR_TITLE}>BET</Typography>
@@ -158,6 +162,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
       </Wrapper>
 
       <Input
+        disabled={loading}
         onChange={(e) => setAmount(e.target.value)}
         onMax={handleMax}
         placeholder={balance.toLocaleString()}

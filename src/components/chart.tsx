@@ -41,7 +41,7 @@ const ChartWrapper = styled(Circle)`
 
   width: 70%;
   height: 70%;
-  // animation: rotating 20s linear infinite;
+  animation: rotating 20s linear infinite;
 `;
 
 const PieBg = styled(Circle)<{ color: string }>`

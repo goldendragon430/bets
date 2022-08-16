@@ -50,9 +50,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onMax?: () => void;
 }
 
-const Input: React.FC<InputProps> = ({ style, className, point, onMax, ...props }) => (
+const Input: React.FC<InputProps> = ({ style, className, point, onMax, disabled, ...props }) => (
   <Container className={className} style={style}>
-    <CustomInput {...props} />
+    <CustomInput disabled={disabled} {...props} />
     {point && (
       <Typography style={{ marginRight: '1rem' }} type={TypographyType.REGULAR_TITLE}>
         {point.toLocaleString()}
@@ -61,7 +61,9 @@ const Input: React.FC<InputProps> = ({ style, className, point, onMax, ...props 
     {onMax && (
       <>
         <Typography type={TypographyType.BOLD_TITLE}>|</Typography>
-        <MaxButton onClick={onMax}>max</MaxButton>
+        <MaxButton disabled={disabled} onClick={onMax}>
+          max
+        </MaxButton>
       </>
     )}
   </Container>

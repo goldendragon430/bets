@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import Header from '../components/header';
 import Featured from './featured';
+import MintNFT from './mint-nft';
 
 const Container = styled.div`
   position: relative;
@@ -27,6 +28,7 @@ const AppRouter = () => (
     <Header />
     <Content>
       <Routes>
+        <Route element={<MintNFT />} path="/mint-nft" />
         <Route element={<Featured />} path="/" />
       </Routes>
     </Content>

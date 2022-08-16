@@ -131,16 +131,12 @@ const BalanceImg = styled.img`
 
 const ROUTES = [
   {
-    name: 'How it works',
-    route: '/',
-  },
-  {
-    name: 'Upcoming',
-    route: '/',
-  },
-  {
     name: 'Featured Fight',
     route: '/',
+  },
+  {
+    name: 'Mint NFT',
+    route: '/mint-nft',
   },
 ];
 
@@ -178,18 +174,18 @@ const Header: React.FC = () => {
 
         <LinkWrapper>
           {ROUTES.map((link, key) => (
-            <>
+            <Flex key={key}>
               {key > 0 && (
-                <Typography key={`split_${key}`} shadow type={TypographyType.REGULAR}>
+                <Typography shadow type={TypographyType.REGULAR}>
                   /
                 </Typography>
               )}
-              <StyledLink key={key} to={link.route}>
+              <StyledLink to={link.route}>
                 <Typography shadow type={TypographyType.REGULAR}>
                   {link.name}
                 </Typography>
               </StyledLink>
-            </>
+            </Flex>
           ))}
         </LinkWrapper>
       </Flex>

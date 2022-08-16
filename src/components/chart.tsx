@@ -122,10 +122,13 @@ const PrizeText = styled(BoldText)`
   }`}
 `;
 
-const Chart: React.FC = () => {
-  const { theme } = useTheme();
+interface IChart {
+  value: number;
+  prize: number;
+}
 
-  const value = '55';
+const Chart: React.FC<IChart> = ({ value, prize }) => {
+  const { theme } = useTheme();
 
   const getPieceCount = useCallback(() => {
     const redValue = Math.max(Math.min(Number(value) || 0, 100), 0);
@@ -190,7 +193,7 @@ const Chart: React.FC = () => {
         Prize
       </PrizeText>
       <ValueText shadow type={TypographyType.BOLD_SUBTITLE}>
-        1,080
+        {Number(prize).toLocaleString()}
       </ValueText>
     </ChartContainer>
   );

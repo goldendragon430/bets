@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import Chart from '../../components/chart';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
 
 const InfoWrapper = styled.div`
@@ -82,6 +83,10 @@ const Stats = styled.div<{ color: string }>`
 
 const InfoSection = () => {
   const { theme } = useTheme();
+  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB } = useBet();
+
+  const chanceA = getChance(false);
+  const chanceB = getChance(true);
 
   return (
     <InfoWrapper>
@@ -90,7 +95,7 @@ const InfoSection = () => {
       <Wrapper>
         <LeftTeam>
           <Stats color={theme.colors.red1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>1.18x</Typography>
+            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false).toFixed(2)}x</Typography>
           </Stats>
         </LeftTeam>
         <MidTeam>
@@ -98,25 +103,30 @@ const InfoSection = () => {
         </MidTeam>
         <RightTeam>
           <Stats color={theme.colors.blue1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>4.07x</Typography>
+            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true).toFixed(2)}x</Typography>
           </Stats>
         </RightTeam>
       </Wrapper>
 
       <ChanceWrapper>
         <LeftTeam>
-          <Typography type={TypographyType.BOLD_SUBTITLE}>73%</Typography>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>{Math.round(chanceA * 100)}%</Typography>
         </LeftTeam>
         <MidTeam>
           <Typography type={TypographyType.REGULAR_BODY}>chances</Typography>
         </MidTeam>
         <RightTeam>
-          <Typography type={TypographyType.BOLD_SUBTITLE}>27%</Typography>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>
+            {chanceB > 0 ? 100 - Math.round(chanceA * 100) : 0}%
+          </Typography>
         </RightTeam>
       </ChanceWrapper>
 
       <Wrapper>
-        <Chart />
+        <Chart
+          prize={totalBetAmountA + totalBetAmountB}
+          value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA)}
+        />
       </Wrapper>
     </InfoWrapper>
   );

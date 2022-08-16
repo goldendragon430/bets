@@ -12,6 +12,7 @@ import LogoIcon from '../assets/images/logo.svg';
 import TeamLogo1 from '../assets/images/team_logo1.jpeg';
 import TeamLogo2 from '../assets/images/team_logo2.jpeg';
 import TwitterIcon from '../assets/images/twitter.svg';
+import { useBet } from '../contexts/bet_context';
 import { useTheme } from '../contexts/theme_context';
 import { useWallet } from '../contexts/wallet_context';
 import { Typography, TypographyType } from './common/typography';
@@ -146,6 +147,7 @@ const ROUTES = [
 const Header: React.FC = () => {
   const { balance } = useWallet();
   const { theme } = useTheme();
+  const { userBetAmountA, userBetAmountB } = useBet();
 
   const [showMobileView, setShowMobileView] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);
@@ -219,8 +221,8 @@ const Header: React.FC = () => {
 
       <MyBetModal
         onClose={() => setShowBetModal(false)}
-        teamA={{ logo: TeamLogo1, ethStaked: 3.6, nftStaked: 123, color: theme.colors.red1 }}
-        teamB={{ logo: TeamLogo2, ethStaked: 0.05, nftStaked: 1, color: theme.colors.blue1 }}
+        teamA={{ logo: TeamLogo1, ethStaked: userBetAmountA, nftStaked: 0, color: theme.colors.red1 }}
+        teamB={{ logo: TeamLogo2, ethStaked: userBetAmountB, nftStaked: 0, color: theme.colors.blue1 }}
         visible={showBetModal}
       />
     </Container>

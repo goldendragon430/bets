@@ -1,4 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useState } from 'react';
+
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
@@ -107,11 +109,26 @@ interface IBetModal {
   color: string;
   fontColor: string;
   rewardPotential: number;
-  onBet: () => void;
+  onBet: (amount: number) => void;
 }
 
 const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential, onBet }) => {
   const { balance } = useWallet();
+
+  const [loading, setLoading] = useState(false);
+  const [amount, setAmount] = useState('');
+
+  const getMaxAmount = () => Math.max(0, balance - 0.01);
+
+  const handleMax = () => {
+    setAmount(getMaxAmount().toFixed(2));
+  };
+
+  const handleBet = async () => {
+    setLoading(true);
+    await onBet(Number(amount));
+    setLoading(false);
+  };
 
   return (
     <ModalWrapper
@@ -140,15 +157,28 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
         </BalanceWrapper>
       </Wrapper>
 
-      <Input onMax={() => {}} placeholder="5,393.76" point={8303.24} style={{ width: '100%' }} type="number" />
+      <Input
+        onChange={(e) => setAmount(e.target.value)}
+        onMax={handleMax}
+        placeholder={balance.toLocaleString()}
+        point={balance}
+        style={{ width: '100%' }}
+        type="number"
+        value={amount}
+      />
 
       <StatsWrapper>
         <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
         <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
       </StatsWrapper>
 
-      <BetButton color={color} fontColor={fontColor} onClick={onBet}>
-        Bet
+      <BetButton
+        color={color}
+        disabled={loading || Number.isNaN(Number(amount)) || Number(amount) <= 0 || Number(amount) > getMaxAmount()}
+        fontColor={fontColor}
+        onClick={handleBet}
+      >
+        {loading ? 'Betting...' : 'Bet'}
       </BetButton>
 
       <Typography color={color} type={TypographyType.REGULAR_TITLE}>

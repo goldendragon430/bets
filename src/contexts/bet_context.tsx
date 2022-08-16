@@ -16,6 +16,8 @@ export interface IBetContext {
   userBetAmountB: number;
   updateUserInfo: () => void;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
+  getRewardPotential: (side: boolean) => number;
+  getChance: (side: boolean) => number;
 }
 
 const BetContext = React.createContext<Maybe<IBetContext>>(null);
@@ -34,17 +36,17 @@ export const BetProvider = ({ children = null as any }) => {
       if (betContract) {
         await betContract.estimateGas.totalBettedAmountA();
         const totalAmountA = await betContract.totalBettedAmountA();
-        setTotalBetAmountA(totalAmountA);
+        setTotalBetAmountA(Number(ethers.utils.formatEther(totalAmountA)));
 
         await betContract.estimateGas.totalBettedAmountB();
         const totalAmountB = await betContract.totalBettedAmountB();
-        setTotalBetAmountB(totalAmountB);
+        setTotalBetAmountB(Number(ethers.utils.formatEther(totalAmountB)));
       } else {
         setTotalBetAmountA(0);
         setTotalBetAmountB(0);
       }
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.reason || err.error?.message || err.message);
       setTotalBetAmountA(0);
       setTotalBetAmountB(0);
     }
@@ -59,17 +61,17 @@ export const BetProvider = ({ children = null as any }) => {
       if (betContract && account) {
         await betContract.estimateGas.getUserBettedAmount(account, false);
         const userAmountA = await betContract.getUserBettedAmount(account, false);
-        setUserBetAmountA(userAmountA);
+        setUserBetAmountA(Number(ethers.utils.formatEther(userAmountA)));
 
         await betContract.estimateGas.getUserBettedAmount(account, true);
         const userAmountB = await betContract.getUserBettedAmount(account, true);
-        setUserBetAmountB(userAmountB);
+        setUserBetAmountB(Number(ethers.utils.formatEther(userAmountB)));
       } else {
         setUserBetAmountA(0);
         setUserBetAmountB(0);
       }
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.reason || err.error?.message || err.message);
       setUserBetAmountA(0);
       setUserBetAmountB(0);
     }
@@ -94,9 +96,29 @@ export const BetProvider = ({ children = null as any }) => {
         toast.error('Place bet error');
       }
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.reason || err.error?.message || err.message);
     }
     return false;
+  };
+
+  const getRewardPotential = (side: boolean) => {
+    const totalAmount = totalBetAmountA + totalBetAmountB;
+
+    if (!side) {
+      return totalBetAmountA > 0 ? totalAmount / totalBetAmountA : 0;
+    }
+    return totalBetAmountB > 0 ? totalAmount / totalBetAmountB : 0;
+  };
+
+  const getChance = (side: boolean) => {
+    const chanceA = 0 * 100 + totalBetAmountA * 1000;
+    const chanceB = 0 * 100 + totalBetAmountB * 1000;
+    const totalChance = chanceA + chanceB;
+
+    if (!side) {
+      return chanceA > 0 ? chanceA / totalChance : 0;
+    }
+    return chanceB > 0 ? chanceB / totalChance : 0;
   };
 
   return (
@@ -109,6 +131,8 @@ export const BetProvider = ({ children = null as any }) => {
         userBetAmountB,
         updateUserInfo,
         placeBet,
+        getRewardPotential,
+        getChance,
       }}
     >
       {children}

@@ -30,12 +30,13 @@ const Container = styled.div`
 
 const FeaturedFight: React.FC = () => {
   const { theme } = useTheme();
-  const { totalBetAmountA, totalBetAmountB } = useBet();
+  const { totalBetAmountA, totalBetAmountB, getRewardPotential, placeBet } = useBet();
 
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [betAmount, setBetAmount] = useState(0);
 
   const handleShowBet = (teamA: boolean) => {
     setSelectA(teamA);
@@ -47,9 +48,13 @@ const FeaturedFight: React.FC = () => {
     setShowStakeModal(true);
   };
 
-  const handleBet = () => {
-    setShowBetModal(false);
-    setShowSuccessModal(true);
+  const handleBet = async (amount: number) => {
+    const res = await placeBet(amount, !selectA);
+    if (res) {
+      setBetAmount(amount);
+      setShowBetModal(false);
+      setShowSuccessModal(true);
+    }
   };
 
   const handleStake = () => {
@@ -89,7 +94,7 @@ const FeaturedFight: React.FC = () => {
         fontColor={selectA ? theme.colors.white : theme.colors.black}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
-        rewardPotential={selectA ? 1.18 : 4.07}
+        rewardPotential={getRewardPotential(!selectA)}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
         visible={showBetModal}
       />
@@ -105,8 +110,8 @@ const FeaturedFight: React.FC = () => {
 
       <SuccessModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
-        ethStaked={3.25}
-        nftStaked={2}
+        ethStaked={betAmount}
+        nftStaked={0}
         onClose={() => setShowSuccessModal(false)}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
         visible={showSuccessModal}

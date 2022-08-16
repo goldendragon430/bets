@@ -35,14 +35,24 @@ const FeaturedFight: React.FC = () => {
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleBet = (teamA: boolean) => {
+  const handleShowBet = (teamA: boolean) => {
     setSelectA(teamA);
     setShowBetModal(true);
   };
 
-  const handleStake = (teamA: boolean) => {
+  const handleShowStake = (teamA: boolean) => {
     setSelectA(teamA);
     setShowStakeModal(true);
+  };
+
+  const handleBet = () => {
+    setShowBetModal(false);
+    setShowSuccessModal(true);
+  };
+
+  const handleStake = () => {
+    setShowStakeModal(false);
+    setShowSuccessModal(true);
   };
 
   return (
@@ -52,8 +62,8 @@ const FeaturedFight: React.FC = () => {
         ethStaked={825}
         firstTeam
         nftStaked={5634}
-        onBet={() => handleBet(true)}
-        onStake={() => handleStake(true)}
+        onBet={() => handleShowBet(true)}
+        onStake={() => handleShowStake(true)}
         teamImg={TeamImg1}
         teamLogo={TeamLogo1}
         teamName="MAYC"
@@ -65,8 +75,8 @@ const FeaturedFight: React.FC = () => {
         color={theme.colors.blue1}
         ethStaked={225}
         nftStaked={2543}
-        onBet={() => handleBet(false)}
-        onStake={() => handleStake(false)}
+        onBet={() => handleShowBet(false)}
+        onStake={() => handleShowStake(false)}
         teamImg={TeamImg2}
         teamLogo={TeamLogo2}
         teamName="AZUKI"
@@ -75,10 +85,7 @@ const FeaturedFight: React.FC = () => {
       <BetModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
         fontColor={selectA ? theme.colors.white : theme.colors.black}
-        onBet={() => {
-          setShowBetModal(false);
-          setShowSuccessModal(true);
-        }}
+        onBet={handleBet}
         onClose={() => setShowBetModal(false)}
         rewardPotential={selectA ? 1.18 : 4.07}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
@@ -90,10 +97,7 @@ const FeaturedFight: React.FC = () => {
         fontColor={selectA ? theme.colors.white : theme.colors.black}
         nfts={selectA ? NFT_LIST1 : NFT_LIST2}
         onClose={() => setShowStakeModal(false)}
-        onStake={() => {
-          setShowStakeModal(false);
-          setShowSuccessModal(true);
-        }}
+        onStake={handleStake}
         visible={showStakeModal}
       />
 

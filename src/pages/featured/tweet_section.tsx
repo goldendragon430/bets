@@ -12,8 +12,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3rem;
-  padding-top: 6rem;
+  padding-top: 4rem;
   background: ${({ theme }) => theme.colors.black};
 
   ${({ theme }) => `${theme.media_width.upToMedium} {

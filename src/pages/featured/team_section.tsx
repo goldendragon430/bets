@@ -9,7 +9,9 @@ import SocialIcon2 from '../../assets/images/social2.svg';
 import SocialIcon3 from '../../assets/images/social3.svg';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
+import { isExpired } from '../../utils';
 
 const TeamWrapper = styled.div`
   flex: 1;
@@ -106,6 +108,8 @@ const TeamSection: React.FC<ITeamSection> = ({
   onStake,
 }) => {
   const { theme } = useTheme();
+  const { endTime } = useBet();
+
   return (
     <TeamWrapper>
       <StatsWrapper>
@@ -122,10 +126,20 @@ const TeamSection: React.FC<ITeamSection> = ({
       <TeamImageWrapper color={color}>
         <img alt="" src={teamImg} />
         <ButtonWrapper>
-          <Button color={color} fontColor={firstTeam ? theme.colors.white : theme.colors.black} onClick={onStake}>
+          <Button
+            color={color}
+            disabled={isExpired(endTime)}
+            fontColor={firstTeam ? theme.colors.white : theme.colors.black}
+            onClick={onStake}
+          >
             Stake
           </Button>
-          <Button color={color} fontColor={firstTeam ? theme.colors.white : theme.colors.black} onClick={onBet}>
+          <Button
+            color={color}
+            disabled={isExpired(endTime)}
+            fontColor={firstTeam ? theme.colors.white : theme.colors.black}
+            onClick={onBet}
+          >
             Bet
           </Button>
         </ButtonWrapper>

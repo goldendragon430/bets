@@ -12,6 +12,8 @@ import { useWallet } from './wallet_context';
 export interface IBetContext {
   totalBetAmountA: number;
   totalBetAmountB: number;
+  totalNftStakedA: number;
+  totalNftStakedB: number;
   updateBetInfo: () => void;
   userBetAmountA: number;
   userBetAmountB: number;
@@ -31,6 +33,8 @@ export const BetProvider = ({ children = null as any }) => {
 
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
+  const [totalNftStakedA, setTotalNftStakedA] = useState(0);
+  const [totalNftStakedB, setTotalNftStakedB] = useState(0);
   const [userBetAmountA, setUserBetAmountA] = useState(0);
   const [userBetAmountB, setUserBetAmountB] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -45,14 +49,26 @@ export const BetProvider = ({ children = null as any }) => {
         await betContract.estimateGas.totalBettedAmountB();
         const totalAmountB = await betContract.totalBettedAmountB();
         setTotalBetAmountB(Number(ethers.utils.formatEther(totalAmountB)));
+
+        await betContract.estimateGas.totalNftStakedA();
+        const nftStakedA = await betContract.totalNftStakedA();
+        setTotalNftStakedA(Number(nftStakedA));
+
+        await betContract.estimateGas.totalNftStakedB();
+        const nftStakedB = await betContract.totalNftStakedB();
+        setTotalNftStakedB(Number(nftStakedB));
       } else {
         setTotalBetAmountA(0);
         setTotalBetAmountB(0);
+        setTotalNftStakedA(0);
+        setTotalNftStakedB(0);
       }
     } catch (err: any) {
       toast.error(err.reason || err.error?.message || err.message);
       setTotalBetAmountA(0);
       setTotalBetAmountB(0);
+      setTotalNftStakedA(0);
+      setTotalNftStakedB(0);
     }
   }, [betContract]);
 
@@ -146,6 +162,8 @@ export const BetProvider = ({ children = null as any }) => {
       value={{
         totalBetAmountA,
         totalBetAmountB,
+        totalNftStakedA,
+        totalNftStakedB,
         updateBetInfo,
         userBetAmountA,
         userBetAmountB,

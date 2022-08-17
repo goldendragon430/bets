@@ -30,7 +30,7 @@ const Container = styled.div`
 
 const FeaturedFight: React.FC = () => {
   const { theme } = useTheme();
-  const { totalBetAmountA, totalBetAmountB, getRewardPotential, placeBet } = useBet();
+  const { totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB, getRewardPotential, placeBet } = useBet();
 
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
@@ -68,7 +68,7 @@ const FeaturedFight: React.FC = () => {
         color={theme.colors.red1}
         ethStaked={totalBetAmountA}
         firstTeam
-        nftStaked={0}
+        nftStaked={totalNftStakedA}
         onBet={() => handleShowBet(true)}
         onStake={() => handleShowStake(true)}
         teamImg={TeamImg1}
@@ -81,7 +81,7 @@ const FeaturedFight: React.FC = () => {
       <TeamSection
         color={theme.colors.blue1}
         ethStaked={totalBetAmountB}
-        nftStaked={0}
+        nftStaked={totalNftStakedB}
         onBet={() => handleShowBet(false)}
         onStake={() => handleShowStake(false)}
         teamImg={TeamImg2}

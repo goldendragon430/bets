@@ -15,7 +15,7 @@ const ModalWrapper = styled(Modal)`
   .ant-modal-content {
     border: 0.25rem solid ${({ theme }) => theme.colors.white};
     border-radius: 0.75rem;
-    box-shadow: 0px 0px 1rem ${({ theme }) => theme.colors.white};
+    // box-shadow: 0px 0px 1rem ${({ theme }) => theme.colors.white};
     background-color: ${({ theme }) => theme.colors.grey1};
 
     .ant-modal-close {

@@ -5,7 +5,9 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
+import { useBet } from '../../contexts/bet_context';
 import { useWallet } from '../../contexts/wallet_context';
+import { isExpired } from '../../utils';
 import Button from '../common/button';
 import Input from '../common/input';
 import { Typography, TypographyType } from '../common/typography';
@@ -17,7 +19,7 @@ const ModalWrapper = styled(Modal)<{ color: string }>`
   .ant-modal-content {
     border: 0.25rem solid ${({ color }) => color};
     border-radius: 0.75rem;
-    box-shadow: 0px 0px 1rem ${({ color }) => color};
+    // box-shadow: 0px 0px 1rem ${({ color }) => color};
     background-color: ${({ theme }) => theme.colors.grey1};
 
     .ant-modal-close {
@@ -114,6 +116,7 @@ interface IBetModal {
 
 const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential, onBet }) => {
   const { balance } = useWallet();
+  const { endTime } = useBet();
 
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState('');
@@ -162,7 +165,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
       </Wrapper>
 
       <Input
-        disabled={loading}
+        disabled={loading || isExpired(endTime)}
         onChange={(e) => setAmount(e.target.value)}
         onMax={handleMax}
         placeholder={balance.toLocaleString()}
@@ -179,7 +182,13 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
 
       <BetButton
         color={color}
-        disabled={loading || Number.isNaN(Number(amount)) || Number(amount) <= 0 || Number(amount) > getMaxAmount()}
+        disabled={
+          loading ||
+          isExpired(endTime) ||
+          Number.isNaN(Number(amount)) ||
+          Number(amount) <= 0 ||
+          Number(amount) > getMaxAmount()
+        }
         fontColor={fontColor}
         onClick={handleBet}
       >

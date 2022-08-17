@@ -12,6 +12,10 @@ const Container = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    flex-direction: column;
+  }`};
 `;
 
 const TabButton = styled(Button)`
@@ -27,11 +31,25 @@ const TabButton = styled(Button)`
   font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
 `;
 
+const Splitter = styled(Typography)`
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: none;
+  }`};
+`;
+
+const Splitter1 = styled(Typography)`
+  display: none;
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: block;
+  }`};
+`;
+
 const SocialSection = () => (
   <Container>
     <ButtonWrapper>
       <TabButton shadow>Live chat</TabButton>
-      <Typography type={TypographyType.BOLD_TITLE}>|</Typography>
+      <Splitter type={TypographyType.BOLD_TITLE}>|</Splitter>
+      <Splitter1 type={TypographyType.BOLD_TITLE}>-</Splitter1>
       <TabButton shadow>Retweets</TabButton>
     </ButtonWrapper>
     <TweetSection />

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
+import { useBet } from '../../contexts/bet_context';
+import { isExpired } from '../../utils';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
 import NftList from '../nft_list';
@@ -15,7 +17,7 @@ const ModalWrapper = styled(Modal)<{ color: string }>`
   .ant-modal-content {
     border: 0.25rem solid ${({ color }) => color};
     border-radius: 0.75rem;
-    box-shadow: 0px 0px 1rem ${({ color }) => color};
+    // box-shadow: 0px 0px 1rem ${({ color }) => color};
     background-color: ${({ theme }) => theme.colors.grey1};
 
     .ant-modal-close {
@@ -75,6 +77,8 @@ interface IStakeModal {
 }
 
 const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, onStake }) => {
+  const { endTime } = useBet();
+
   const [selectedNfts, setSelectedNfts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -118,7 +122,7 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
           Select All
         </Button>
         <div style={{ minWidth: '2rem' }} />
-        <Button color={color} fontColor={fontColor} onClick={onStake}>
+        <Button color={color} disabled={isExpired(endTime)} fontColor={fontColor} onClick={onStake}>
           Stake
         </Button>
       </ButtonWrapper>

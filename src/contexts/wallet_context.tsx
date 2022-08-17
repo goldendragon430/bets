@@ -11,7 +11,7 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 import { BigNumber, ethers } from 'ethers';
 
 import { CHAIN_INFO } from '../constants/chain_info';
-import { SupportedChainId } from '../constants/chains';
+import { DEFAULT_NETWORK, SupportedChainId } from '../constants/chains';
 import { SUPPORTED_WALLETS } from '../constants/wallet';
 import { useLocalStorageState } from '../hooks';
 import { getRpcUrls } from '../utils/get_rpc_urls';
@@ -31,7 +31,6 @@ const WalletContext = React.createContext<Maybe<IWalletContext>>(null);
 export const WalletProvider = ({ children = null as any }) => {
   const { activate, deactivate, active, chainId, account, library } = useWeb3React();
 
-  const DEFAULT_NETWORK = SupportedChainId.GOERLI;
   const [walletType, setWalletType] = useLocalStorageState('CONNECTOR_ID', '');
   const [balance, setBalance] = useState(0);
 
@@ -175,7 +174,7 @@ export const WalletProvider = ({ children = null as any }) => {
         switchChain(DEFAULT_NETWORK);
       }
     }
-  }, [DEFAULT_NETWORK, active, chainId, switchChain]);
+  }, [active, chainId, switchChain]);
 
   const updateBalance = useCallback(async () => {
     if (account && chainId && library) {

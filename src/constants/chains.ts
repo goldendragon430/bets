@@ -11,3 +11,5 @@ export const CHAIN_IDS_TO_NAMES = {
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(
   (id) => typeof id === 'number'
 ) as SupportedChainId[];
+
+export const DEFAULT_NETWORK = SupportedChainId.GOERLI;

@@ -10,7 +10,6 @@ import { Typography, TypographyType } from './common/typography';
 const ChartContainer = styled.div`
   position: relative;
   width: 100%;
-  background: ${({ theme }) => theme.colors.black};
   border-radius: 50%;
 `;
 
@@ -23,8 +22,8 @@ const Circle = styled.div`
 `;
 
 const ChartFrame1 = styled(Circle)`
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   background: ${({ theme }) => theme.colors.black};
   // box-shadow: 0px 0px 44px ${({ theme }) => theme.colors.purple1};
 `;
@@ -39,8 +38,8 @@ const ChartWrapper = styled(Circle)`
     }
   }
 
-  width: 70%;
-  height: 70%;
+  width: 90%;
+  height: 90%;
   animation: rotating 20s linear infinite;
 `;
 
@@ -77,8 +76,8 @@ const PieShadow = styled(Circle)`
 `;
 
 const ChartFrame3 = styled(Circle)`
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 60%;
   background: ${({ theme }) => theme.colors.black};
 `;
 

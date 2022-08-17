@@ -18,14 +18,14 @@ import TeamSection from './team_section';
 
 const Container = styled.div`
   width: 100%;
-  padding: 4rem;
   display: flex;
+  padding: 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     flex-direction: column;
     align-items: center;
-    padding: 4rem 0;
-  }`}
+    padding: 2rem 0;
+  }`};
 `;
 
 const FeaturedFight: React.FC = () => {

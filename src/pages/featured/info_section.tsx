@@ -131,7 +131,7 @@ const InfoSection = () => {
         </RightTeam>
       </ChanceWrapper>
 
-      <Wrapper>
+      <Wrapper style={{ width: '80%', marginLeft: '10%' }}>
         <Chart
           prize={totalBetAmountA + totalBetAmountB}
           value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}

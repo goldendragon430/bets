@@ -15,6 +15,16 @@
         "internalType": "uint256",
         "name": "_betEndTime",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_nftCollectionA",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_nftCollectionB",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -72,6 +82,31 @@
       }
     ],
     "name": "Fulfilled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "collectionAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "NFTStaked",
     "type": "event"
   },
   {
@@ -198,7 +233,7 @@
   },
   {
     "inputs": [],
-    "name": "betsAmount",
+    "name": "betsPercentage",
     "outputs": [
       {
         "internalType": "uint256",
@@ -211,7 +246,7 @@
   },
   {
     "inputs": [],
-    "name": "betsPercentage",
+    "name": "betsReward",
     "outputs": [
       {
         "internalType": "uint256",
@@ -294,12 +329,12 @@
   },
   {
     "inputs": [],
-    "name": "nftStakedA",
+    "name": "nftCollectionA",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -307,12 +342,12 @@
   },
   {
     "inputs": [],
-    "name": "nftStakedB",
+    "name": "nftCollectionB",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -338,40 +373,21 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "nftStakerInfo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nftStakersAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "nftStakersPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nftStakersReward",
     "outputs": [
       {
         "internalType": "uint256",
@@ -415,19 +431,6 @@
   },
   {
     "inputs": [],
-    "name": "rakeAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "rakeClaimStatus",
     "outputs": [
       {
@@ -442,6 +445,19 @@
   {
     "inputs": [],
     "name": "rakePercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rakeReward",
     "outputs": [
       {
         "internalType": "uint256",
@@ -478,18 +494,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftStakedA",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_nftStakedB",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [],
     "name": "requestRandomWords",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -531,6 +536,24 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "_betStart",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_betEnd",
+        "type": "uint256"
+      }
+    ],
+    "name": "setBetPeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "_rakePercentage",
         "type": "uint256"
       },
@@ -553,17 +576,25 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_nftStakers",
-        "type": "address[]"
-      },
-      {
         "internalType": "uint256[]",
-        "name": "_stakedAmount",
+        "name": "tokenIds",
         "type": "uint256[]"
       }
     ],
-    "name": "setNftStakersInfo",
+    "name": "stakeNftA",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "stakeNftB",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -595,6 +626,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "totalNftStakedA",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalNftStakedB",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -605,6 +662,128 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "unstakeNftAFromUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "unstakeNftBFromUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "userNftAStakeInfo",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userNftAStakeLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "userNftBStakeInfo",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userNftBStakeLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { Contract } from '@ethersproject/contracts';
 
 import BetABI from '../abi/BetABI.json';
+import NFTABI from '../abi/NFTABI.json';
 import { BET_CONTRACT_ADDRESS } from '../constants/addresses';
 import { getContract } from '../utils';
 import useActiveWeb3React from './useActiveWeb3React';
@@ -36,4 +37,8 @@ export function useContract<T extends Contract = Contract>(
 
 export function useBetContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract(BET_CONTRACT_ADDRESS, BetABI, withSignerIfPossible);
+}
+
+export function useNFTContract(contractAddress: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(contractAddress, NFTABI, withSignerIfPossible);
 }

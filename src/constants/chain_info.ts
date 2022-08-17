@@ -24,11 +24,11 @@ export const CHAIN_INFO: ChainInfoMap = {
     label: 'Ethereum',
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   },
-  [SupportedChainId.RINKEBY]: {
+  [SupportedChainId.GOERLI]: {
     docs: 'https://docs.uniswap.org/',
-    explorer: 'https://rinkeby.etherscan.io/',
+    explorer: 'https://goerli.etherscan.io/',
     infoLink: 'https://info.uniswap.org/#/',
-    label: 'Rinkeby',
-    nativeCurrency: { name: 'Rinkeby Ether', symbol: 'RinkebyETH', decimals: 18 },
+    label: 'Görli',
+    nativeCurrency: { name: 'Görli Ether', symbol: 'görETH', decimals: 18 },
   },
 };

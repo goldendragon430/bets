@@ -5,7 +5,7 @@ import { INFURA_NETWORK_URLS } from '../constants/infura';
 export const getRpcUrls = (chainId: SupportedChainId): [string] => {
   switch (chainId) {
     case SupportedChainId.MAINNET:
-    case SupportedChainId.RINKEBY:
+    case SupportedChainId.GOERLI:
       return [INFURA_NETWORK_URLS[chainId]];
     default:
   }

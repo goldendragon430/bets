@@ -31,7 +31,7 @@ const WalletContext = React.createContext<Maybe<IWalletContext>>(null);
 export const WalletProvider = ({ children = null as any }) => {
   const { activate, deactivate, active, chainId, account, library } = useWeb3React();
 
-  const DEFAULT_NETWORK = SupportedChainId.RINKEBY;
+  const DEFAULT_NETWORK = SupportedChainId.GOERLI;
   const [walletType, setWalletType] = useLocalStorageState('CONNECTOR_ID', '');
   const [balance, setBalance] = useState(0);
 

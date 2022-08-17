@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
@@ -15,6 +16,8 @@ export interface IBetContext {
   userBetAmountA: number;
   userBetAmountB: number;
   updateUserInfo: () => void;
+  endTime: number;
+  updateEndTime: () => void;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
@@ -30,6 +33,7 @@ export const BetProvider = ({ children = null as any }) => {
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
   const [userBetAmountA, setUserBetAmountA] = useState(0);
   const [userBetAmountB, setUserBetAmountB] = useState(0);
+  const [endTime, setEndTime] = useState(0);
 
   const updateBetInfo = useCallback(async () => {
     try {
@@ -52,9 +56,25 @@ export const BetProvider = ({ children = null as any }) => {
     }
   }, [betContract]);
 
+  const updateEndTime = useCallback(async () => {
+    try {
+      if (betContract) {
+        await betContract.estimateGas.betEndTime();
+        const betEndTime = await betContract.betEndTime();
+        setEndTime(Number(betEndTime));
+      } else {
+        setEndTime(0);
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+      setEndTime(0);
+    }
+  }, [betContract]);
+
   useEffect(() => {
     updateBetInfo();
-  }, [betContract, updateBetInfo]);
+    updateEndTime();
+  }, [betContract]);
 
   const updateUserInfo = useCallback(async () => {
     try {
@@ -79,7 +99,7 @@ export const BetProvider = ({ children = null as any }) => {
 
   useEffect(() => {
     updateUserInfo();
-  }, [betContract, account, updateUserInfo]);
+  }, [betContract, account]);
 
   const placeBet = async (amount: number, side: boolean) => {
     try {
@@ -130,6 +150,8 @@ export const BetProvider = ({ children = null as any }) => {
         userBetAmountA,
         userBetAmountB,
         updateUserInfo,
+        endTime,
+        updateEndTime,
         placeBet,
         getRewardPotential,
         getChance,

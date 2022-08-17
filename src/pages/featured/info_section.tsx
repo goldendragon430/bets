@@ -1,3 +1,5 @@
+import Countdown from 'react-countdown';
+
 import styled from 'styled-components';
 
 import Chart from '../../components/chart';
@@ -20,6 +22,7 @@ const NumberText = styled(Typography)`
   text-align: center;
   white-space: nowrap;
   padding: 0.8rem 0;
+  height: 7rem;
 `;
 
 const Wrapper = styled.div`
@@ -83,14 +86,20 @@ const Stats = styled.div<{ color: string }>`
 
 const InfoSection = () => {
   const { theme } = useTheme();
-  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB } = useBet();
+  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB, endTime } = useBet();
 
   const chanceA = getChance(false);
   const chanceB = getChance(true);
 
   return (
     <InfoWrapper>
-      <NumberText type={TypographyType.BOLD_TITLE}>00:10:23:38</NumberText>
+      <NumberText type={TypographyType.BOLD_TITLE}>
+        {endTime > 0 && (
+          <Countdown date={endTime * 1000}>
+            <span>Expired!</span>
+          </Countdown>
+        )}
+      </NumberText>
 
       <Wrapper>
         <LeftTeam>

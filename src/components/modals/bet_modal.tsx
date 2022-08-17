@@ -174,7 +174,7 @@ const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, font
 
       <StatsWrapper>
         <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
-        <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential}x</Typography>
+        <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential.toFixed(2)}x</Typography>
       </StatsWrapper>
 
       <BetButton

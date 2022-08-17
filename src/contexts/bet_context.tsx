@@ -4,10 +4,19 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { Alchemy, Network } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
+import { TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS } from '../constants/addresses';
 import { useBetContract } from '../hooks/useContract';
+import { NFTMetadata } from '../types';
 import { useWallet } from './wallet_context';
+
+const config = {
+  apiKey: process.env.REACT_APP_ALCHEMY_KEY,
+  network: Network.ETH_GOERLI,
+};
+const alchemy = new Alchemy(config);
 
 export interface IBetContext {
   totalBetAmountA: number;
@@ -18,6 +27,9 @@ export interface IBetContext {
   userBetAmountA: number;
   userBetAmountB: number;
   updateUserInfo: () => void;
+  userNftListA: NFTMetadata[];
+  userNftListB: NFTMetadata[];
+  updateUserNftList: () => void;
   endTime: number;
   updateEndTime: () => void;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
@@ -31,13 +43,15 @@ export const BetProvider = ({ children = null as any }) => {
   const { account, updateBalance } = useWallet();
   const betContract = useBetContract();
 
+  const [endTime, setEndTime] = useState(0);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
   const [totalNftStakedA, setTotalNftStakedA] = useState(0);
   const [totalNftStakedB, setTotalNftStakedB] = useState(0);
   const [userBetAmountA, setUserBetAmountA] = useState(0);
   const [userBetAmountB, setUserBetAmountB] = useState(0);
-  const [endTime, setEndTime] = useState(0);
+  const [userNftListA, setUserNftListA] = useState<NFTMetadata[]>([]);
+  const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
 
   const updateBetInfo = useCallback(async () => {
     try {
@@ -157,6 +171,38 @@ export const BetProvider = ({ children = null as any }) => {
     return chanceB > 0 ? chanceB / totalChance : 0;
   };
 
+  const updateUserNftList = useCallback(async () => {
+    if (account) {
+      try {
+        const nfts = await alchemy.nft.getNftsForOwner(account, {
+          contractAddresses: [TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS],
+        });
+        console.log(nfts);
+        setUserNftListA(
+          nfts.ownedNfts.filter(
+            (item) => item.contract.address.toLowerCase() === TEAM_COLLECTION_A_ADDRESS.toLowerCase()
+          )
+        );
+        setUserNftListB(
+          nfts.ownedNfts.filter(
+            (item) => item.contract.address.toLowerCase() === TEAM_COLLECTION_B_ADDRESS.toLowerCase()
+          )
+        );
+      } catch (e) {
+        console.error(e);
+        setUserNftListA([]);
+        setUserNftListB([]);
+      }
+    } else {
+      setUserNftListA([]);
+      setUserNftListB([]);
+    }
+  }, [account]);
+
+  useEffect(() => {
+    updateUserNftList();
+  }, [account]);
+
   return (
     <BetContext.Provider
       value={{
@@ -168,6 +214,9 @@ export const BetProvider = ({ children = null as any }) => {
         userBetAmountA,
         userBetAmountB,
         updateUserInfo,
+        userNftListA,
+        userNftListB,
+        updateUserNftList,
         endTime,
         updateEndTime,
         placeBet,

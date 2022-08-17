@@ -2,6 +2,8 @@
 /* eslint-disable react/no-array-index-key */
 import styled from 'styled-components';
 
+import { NFTMetadata } from '../types';
+
 const Container = styled.div<{ color: string }>`
   overflow-y: auto;
   overflow-x: hidden;
@@ -26,6 +28,9 @@ const NftItem = styled.div`
   align-items: center;
   cursor: pointer;
   margin: 0.5rem;
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: 0.75rem;
+  overflow: hidden;
 `;
 
 const NftImage = styled.img`
@@ -33,33 +38,50 @@ const NftImage = styled.img`
   max-height: 100%;
 `;
 
-const NftSelected = styled.div<{ color: string }>`
+const NftSelected = styled.div<{ staked?: boolean; color: string }>`
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   border: 3px solid ${({ color }) => color};
-  box-shadow: inset 0px 4px 222px ${({ color }) => `${color}88`};
-  filter: drop-shadow(0px 4px 11px ${({ color }) => color});
+  border-radius: 0.75rem;
+  ${({ staked, color }) =>
+    staked &&
+    `
+    box-shadow: inset 0px 4px 222px ${`${color}88`};
+    filter: drop-shadow(0px 4px 11px ${color});
+  `}
 `;
 
 interface INftList {
   color: string;
-  nfts: any[];
-  selectedNfts: any[];
-  onSelect: (metadata: any) => void;
+  nfts: NFTMetadata[];
+  selectedNfts: NFTMetadata[];
+  onSelect: (metadata: NFTMetadata) => void;
 }
 
-const NftList: React.FC<INftList> = ({ color, nfts, selectedNfts, onSelect }) => (
-  <Container color={color}>
-    {nfts.map((metadata, index) => (
-      <NftItem key={index} onClick={() => onSelect(metadata)}>
-        <NftImage alt="" src={metadata.image} />
-        {selectedNfts.findIndex((item) => item.mint === metadata.mint) > -1 && <NftSelected color={color} />}
-      </NftItem>
-    ))}
-  </Container>
-);
+const NftList: React.FC<INftList> = ({ color, nfts, selectedNfts, onSelect }) => {
+  const getImageUrl = (url: string) => {
+    if (url.startsWith('ipfs://')) {
+      return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    }
+    return url;
+  };
+
+  return (
+    <Container color={color}>
+      {nfts.map((metadata, index) => (
+        <NftItem key={index} onClick={() => onSelect(metadata)}>
+          <NftImage alt="" src={getImageUrl(metadata.rawMetadata?.image || '')} />
+          {metadata.staked ||
+            (selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1 && (
+              <NftSelected color={color} staked={metadata.staked} />
+            ))}
+        </NftItem>
+      ))}
+    </Container>
+  );
+};
 
 export default NftList;

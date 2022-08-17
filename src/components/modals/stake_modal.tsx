@@ -5,6 +5,7 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import { useBet } from '../../contexts/bet_context';
+import { NFTMetadata } from '../../types';
 import { isExpired } from '../../utils';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
@@ -72,33 +73,34 @@ interface IStakeModal {
   onClose: () => void;
   color: string;
   fontColor: string;
-  nfts: any[];
+  nfts: NFTMetadata[];
   onStake: () => void;
 }
 
 const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, onStake }) => {
   const { endTime } = useBet();
 
-  const [selectedNfts, setSelectedNfts] = useState<any[]>([]);
+  const [selectedNfts, setSelectedNfts] = useState<NFTMetadata[]>([]);
 
   useEffect(() => {
     setSelectedNfts([]);
   }, [nfts]);
 
-  const handleSelect = (metadata: any) => {
-    const exist = selectedNfts.findIndex((item) => item.mint === metadata.mint) > -1;
-    const res = selectedNfts.filter((item) => item.mint !== metadata.mint);
-    if (!exist) {
+  const handleSelect = (metadata: NFTMetadata) => {
+    const exist = selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1;
+    const res = selectedNfts.filter((item) => item.tokenId !== metadata.tokenId);
+    if (!exist && !metadata.staked) {
       res.push(metadata);
     }
     setSelectedNfts(res);
   };
 
   const handleSelectAll = () => {
-    if (nfts.length === selectedNfts.length) {
+    const unstakedNfts = nfts.filter((item) => !item.staked);
+    if (unstakedNfts.length === selectedNfts.length) {
       setSelectedNfts([]);
     } else {
-      setSelectedNfts(nfts);
+      setSelectedNfts(unstakedNfts);
     }
   };
 

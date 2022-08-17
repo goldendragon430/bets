@@ -1,3 +1,5 @@
+import { OwnedNft } from 'alchemy-sdk';
+
 export interface TwitterFeed {
   id: string;
   text: string;
@@ -12,4 +14,8 @@ export interface TeamInfo {
   ethStaked: number;
   nftStaked: number;
   color: string;
+}
+
+export interface NFTMetadata extends OwnedNft {
+  staked?: boolean;
 }

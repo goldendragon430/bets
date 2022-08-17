@@ -12,7 +12,6 @@ import StakeModal from '../../components/modals/stake_modal';
 import SuccessModal from '../../components/modals/success_modal';
 import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
-import { NFT_LIST1, NFT_LIST2 } from '../../mocks/nfts';
 import InfoSection from './info_section';
 import TeamSection from './team_section';
 
@@ -30,7 +29,16 @@ const Container = styled.div`
 
 const FeaturedFight: React.FC = () => {
   const { theme } = useTheme();
-  const { totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB, getRewardPotential, placeBet } = useBet();
+  const {
+    totalBetAmountA,
+    totalBetAmountB,
+    totalNftStakedA,
+    totalNftStakedB,
+    getRewardPotential,
+    placeBet,
+    userNftListA,
+    userNftListB,
+  } = useBet();
 
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
@@ -102,7 +110,7 @@ const FeaturedFight: React.FC = () => {
       <StakeModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
         fontColor={selectA ? theme.colors.white : theme.colors.black}
-        nfts={selectA ? NFT_LIST1 : NFT_LIST2}
+        nfts={selectA ? userNftListA : userNftListB}
         onClose={() => setShowStakeModal(false)}
         onStake={handleStake}
         visible={showStakeModal}

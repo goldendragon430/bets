@@ -34,7 +34,6 @@ export interface IBetContext {
   userNftListB: NFTMetadata[];
   updateUserNftList: () => void;
   endTime: number;
-  updateEndTime: () => void;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
@@ -50,6 +49,8 @@ export const BetProvider = ({ children = null as any }) => {
   const betContract = useBetContract();
 
   const [endTime, setEndTime] = useState(0);
+  const [rakePercentage, setRakePercentage] = useState(0);
+  const [nftStakersPercentage, setNftStakersPercentage] = useState(0);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
   const [totalNftStakedA, setTotalNftStakedA] = useState(0);
@@ -61,6 +62,33 @@ export const BetProvider = ({ children = null as any }) => {
   const [claimAmount, setClaimAmount] = useState(0);
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const updateInitInfo = useCallback(async () => {
+    try {
+      if (betContract) {
+        await betContract.estimateGas.betEndTime();
+        const betEndTime = await betContract.betEndTime();
+        setEndTime(Number(betEndTime));
+
+        await betContract.estimateGas.rakePercentage();
+        const rakePercent = await betContract.rakePercentage();
+        setRakePercentage(Number(rakePercent));
+
+        await betContract.estimateGas.nftStakersPercentage();
+        const nftStakersPercent = await betContract.nftStakersPercentage();
+        setNftStakersPercentage(Number(nftStakersPercent));
+      } else {
+        setEndTime(0);
+        setRakePercentage(0);
+        setNftStakersPercentage(0);
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+      setEndTime(0);
+      setRakePercentage(0);
+      setNftStakersPercentage(0);
+    }
+  }, [betContract]);
 
   const updateTotalInfo = () => {
     updateBalance();
@@ -109,24 +137,9 @@ export const BetProvider = ({ children = null as any }) => {
     }
   }, [betContract]);
 
-  const updateEndTime = useCallback(async () => {
-    try {
-      if (betContract) {
-        await betContract.estimateGas.betEndTime();
-        const betEndTime = await betContract.betEndTime();
-        setEndTime(Number(betEndTime));
-      } else {
-        setEndTime(0);
-      }
-    } catch (err: any) {
-      toast.error(err.reason || err.error?.message || err.message);
-      setEndTime(0);
-    }
-  }, [betContract]);
-
   useEffect(() => {
+    updateInitInfo();
     updateBetInfo();
-    updateEndTime();
   }, [betContract]);
 
   const updateUserInfo = useCallback(async () => {
@@ -190,10 +203,15 @@ export const BetProvider = ({ children = null as any }) => {
   const getRewardPotential = (side: boolean) => {
     const totalAmount = totalBetAmountA + totalBetAmountB;
 
+    const rakeReward = (totalAmount * rakePercentage) / 1e4;
+    const loserAmount = side ? totalBetAmountA : totalBetAmountB;
+    const nftStakersReward = (loserAmount * (1e4 - rakePercentage) * nftStakersPercentage) / 1e8;
+    const betsReward = totalAmount - rakeReward - nftStakersReward;
+
     if (!side) {
-      return totalBetAmountA > 0 ? totalAmount / totalBetAmountA : 0;
+      return totalBetAmountA > 0 ? betsReward / totalBetAmountA : 0;
     }
-    return totalBetAmountB > 0 ? totalAmount / totalBetAmountB : 0;
+    return totalBetAmountB > 0 ? betsReward / totalBetAmountB : 0;
   };
 
   const getChance = (side: boolean) => {
@@ -298,7 +316,6 @@ export const BetProvider = ({ children = null as any }) => {
         userNftListB,
         updateUserNftList,
         endTime,
-        updateEndTime,
         placeBet,
         getRewardPotential,
         getChance,

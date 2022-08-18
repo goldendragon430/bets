@@ -30,6 +30,7 @@ const Container = styled.div`
 const FeaturedFight: React.FC = () => {
   const { theme } = useTheme();
   const {
+    battleInfo,
     totalBetAmountA,
     totalBetAmountB,
     totalNftStakedA,
@@ -78,7 +79,7 @@ const FeaturedFight: React.FC = () => {
     }
   };
 
-  return (
+  return battleInfo ? (
     <Container>
       <TeamSection
         color={theme.colors.red1}
@@ -87,9 +88,7 @@ const FeaturedFight: React.FC = () => {
         nftStaked={totalNftStakedA}
         onBet={() => handleShowBet(true)}
         onStake={() => handleShowStake(true)}
-        teamImg={TeamImg1}
-        teamLogo={TeamLogo1}
-        teamName="MAYC"
+        project={battleInfo.projectL}
       />
 
       <InfoSection />
@@ -100,9 +99,7 @@ const FeaturedFight: React.FC = () => {
         nftStaked={totalNftStakedB}
         onBet={() => handleShowBet(false)}
         onStake={() => handleShowStake(false)}
-        teamImg={TeamImg2}
-        teamLogo={TeamLogo2}
-        teamName="AZUKI"
+        project={battleInfo.projectR}
       />
 
       <BetModal
@@ -133,7 +130,7 @@ const FeaturedFight: React.FC = () => {
         visible={showSuccessModal}
       />
     </Container>
-  );
+  ) : null;
 };
 
 export default FeaturedFight;

@@ -8,10 +8,9 @@ import { toast } from 'react-toastify';
 import { Alchemy, Network } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
-import { TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS } from '../constants/addresses';
 import { useBetContract } from '../hooks/useContract';
 import { getActiveBattle } from '../services';
-import { NFTMetadata } from '../types';
+import { BattleInfo, NFTMetadata } from '../types';
 import { isExpired } from '../utils';
 import { useWallet } from './wallet_context';
 
@@ -22,6 +21,7 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export interface IBetContext {
+  battleInfo: BattleInfo | null;
   totalBetAmountA: number;
   totalBetAmountB: number;
   totalNftStakedA: number;
@@ -48,6 +48,7 @@ export const BetProvider = ({ children = null as any }) => {
   const { account, updateBalance } = useWallet();
   const betContract = useBetContract();
 
+  const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
   const [endTime, setEndTime] = useState(0);
   const [rakePercentage, setRakePercentage] = useState(0);
   const [nftStakersPercentage, setNftStakersPercentage] = useState(0);
@@ -62,6 +63,19 @@ export const BetProvider = ({ children = null as any }) => {
   const [claimAmount, setClaimAmount] = useState(0);
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const updateBattleInfo = useCallback(async () => {
+    try {
+      const info = await getActiveBattle();
+      setBattleInfo(info.data.data as BattleInfo);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateBattleInfo();
+  }, []);
 
   const updateInitInfo = useCallback(async () => {
     try {
@@ -226,19 +240,19 @@ export const BetProvider = ({ children = null as any }) => {
   };
 
   const updateUserNftList = useCallback(async () => {
-    if (account) {
+    if (account && battleInfo) {
       try {
         const nfts = await alchemy.nft.getNftsForOwner(account, {
-          contractAddresses: [TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS],
+          contractAddresses: [battleInfo.projectL.contract, battleInfo.projectR.contract],
         });
         setUserNftListA(
           nfts.ownedNfts.filter(
-            (item) => item.contract.address.toLowerCase() === TEAM_COLLECTION_A_ADDRESS.toLowerCase()
+            (item) => item.contract.address.toLowerCase() === battleInfo.projectL.contract.toLowerCase()
           )
         );
         setUserNftListB(
           nfts.ownedNfts.filter(
-            (item) => item.contract.address.toLowerCase() === TEAM_COLLECTION_B_ADDRESS.toLowerCase()
+            (item) => item.contract.address.toLowerCase() === battleInfo.projectR.contract.toLowerCase()
           )
         );
       } catch (e) {
@@ -250,15 +264,11 @@ export const BetProvider = ({ children = null as any }) => {
       setUserNftListA([]);
       setUserNftListB([]);
     }
-  }, [account]);
+  }, [account, battleInfo]);
 
   useEffect(() => {
     updateUserNftList();
-  }, [account]);
-
-  useEffect(() => {
-    getActiveBattle();
-  }, []);
+  }, [account, battleInfo]);
 
   const stakeNft = async (tokenIds: number[], side: boolean) => {
     try {
@@ -304,6 +314,7 @@ export const BetProvider = ({ children = null as any }) => {
   return (
     <BetContext.Provider
       value={{
+        battleInfo,
         totalBetAmountA,
         totalBetAmountB,
         totalNftStakedA,

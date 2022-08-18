@@ -11,6 +11,7 @@ import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
+import { ProjectInfo } from '../../types';
 import { isExpired } from '../../utils';
 
 const TeamWrapper = styled.div`
@@ -87,26 +88,14 @@ const SocialWrapper = styled.div<{ firstTeam?: boolean }>`
 interface ITeamSection {
   firstTeam?: boolean;
   color: string;
-  teamName: string;
-  teamImg: string;
-  teamLogo: string;
+  project: ProjectInfo;
   nftStaked: number;
   ethStaked: number;
   onBet: () => void;
   onStake: () => void;
 }
 
-const TeamSection: React.FC<ITeamSection> = ({
-  firstTeam,
-  color,
-  teamName,
-  teamImg,
-  teamLogo,
-  nftStaked,
-  ethStaked,
-  onBet,
-  onStake,
-}) => {
+const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, project, nftStaked, ethStaked, onBet, onStake }) => {
   const { theme } = useTheme();
   const { endTime } = useBet();
 
@@ -115,7 +104,7 @@ const TeamSection: React.FC<ITeamSection> = ({
       <StatsWrapper>
         <StatsItem>
           <Typography type={TypographyType.REGULAR_TITLE}>{nftStaked.toLocaleString()}</Typography>
-          <TeamLogo alt="" color={color} src={teamLogo} />
+          <TeamLogo alt="" color={color} src={project.logo} />
         </StatsItem>
         <StatsItem>
           <Typography type={TypographyType.REGULAR_TITLE}>{ethStaked.toLocaleString()}</Typography>
@@ -124,7 +113,7 @@ const TeamSection: React.FC<ITeamSection> = ({
       </StatsWrapper>
 
       <TeamImageWrapper color={color}>
-        <img alt="" src={teamImg} />
+        <img alt="" src={project.headerImage} />
         <ButtonWrapper>
           <Button
             color={color}
@@ -151,7 +140,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         style={{ textAlign: firstTeam ? 'right' : 'left' }}
         type={TypographyType.BOLD_TITLE}
       >
-        {teamName}
+        {project.subName}
       </Typography>
 
       <SocialWrapper firstTeam={firstTeam}>

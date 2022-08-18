@@ -3,10 +3,11 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import Button from '../../components/common/button';
-import { TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS } from '../../constants/addresses';
+import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { useNFTContract } from '../../hooks/useContract';
+import { BattleInfo } from '../../types';
 
 const Container = styled.div`
   padding: 4rem;
@@ -19,11 +20,15 @@ const MintButton = styled(Button)`
   margin: 1rem;
 `;
 
-const MintNFT = () => {
+interface IMintContent {
+  battleInfo: BattleInfo;
+}
+
+const MintContent: React.FC<IMintContent> = ({ battleInfo }) => {
   const { account } = useWallet();
   const { theme } = useTheme();
-  const teamAContract = useNFTContract(TEAM_COLLECTION_A_ADDRESS);
-  const teamBContract = useNFTContract(TEAM_COLLECTION_B_ADDRESS);
+  const teamAContract = useNFTContract(battleInfo.projectL.contract);
+  const teamBContract = useNFTContract(battleInfo.projectR.contract);
 
   const mintNft = async (side: boolean) => {
     if (!account) {
@@ -59,6 +64,12 @@ const MintNFT = () => {
       </MintButton>
     </Container>
   );
+};
+
+const MintNFT = () => {
+  const { battleInfo } = useBet();
+
+  return battleInfo ? <MintContent battleInfo={battleInfo} /> : null;
 };
 
 export default MintNFT;

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -7,7 +8,6 @@ import EthIcon from '../../assets/images/eth_icon.svg';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useBet } from '../../contexts/bet_context';
-import { isExpired } from '../../utils';
 
 const Container = styled.div`
   display: flex;
@@ -23,9 +23,13 @@ const EthImg = styled.img`
 `;
 
 const ClaimSection: React.FC = () => {
-  const { claim, claimAmount, endTime } = useBet();
+  const { claim, claimAmount, winnerSet, updateClaimAmount } = useBet();
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    updateClaimAmount();
+  }, [winnerSet]);
 
   const handleClaim = async () => {
     setLoading(false);
@@ -33,7 +37,7 @@ const ClaimSection: React.FC = () => {
     setLoading(true);
   };
 
-  return isExpired(endTime) ? (
+  return winnerSet ? (
     <Container>
       <Typography type={TypographyType.REGULAR_TITLE}>{claimAmount.toLocaleString()}</Typography>
       <EthImg alt="" src={EthIcon} />

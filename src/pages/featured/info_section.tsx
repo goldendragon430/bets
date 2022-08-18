@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import Countdown from 'react-countdown';
 
 import styled from 'styled-components';
@@ -86,7 +87,8 @@ const Stats = styled.div<{ color: string }>`
 
 const InfoSection = () => {
   const { theme } = useTheme();
-  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB, endTime } = useBet();
+  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB, endTime, winnerSet, winner, battleInfo } =
+    useBet();
 
   const chanceA = getChance(false);
   const chanceB = getChance(true);
@@ -96,7 +98,13 @@ const InfoSection = () => {
       <NumberText type={TypographyType.BOLD_TITLE}>
         {endTime > 0 && (
           <Countdown date={endTime * 1000}>
-            <span>Expired!</span>
+            <span>
+              {winnerSet
+                ? !winner
+                  ? `${battleInfo?.projectL.subName} wins`
+                  : `${battleInfo?.projectR.subName} wins`
+                : 'Finalizing...'}
+            </span>
           </Countdown>
         )}
       </NumberText>

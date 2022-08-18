@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -34,6 +36,8 @@ export interface IBetContext {
   userNftListB: NFTMetadata[];
   updateUserNftList: () => void;
   endTime: number;
+  winnerSet: boolean;
+  winner: boolean;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
@@ -62,6 +66,8 @@ export const BetProvider = ({ children = null as any }) => {
   const [userNftListA, setUserNftListA] = useState<NFTMetadata[]>([]);
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
   const [claimAmount, setClaimAmount] = useState(0);
+  const [winnerSet, setWinnerSet] = useState(false);
+  const [winner, setWinner] = useState(false);
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -184,10 +190,40 @@ export const BetProvider = ({ children = null as any }) => {
       setTotalNftStakedA(0);
       setTotalNftStakedB(0);
     };
+    const getWinnerSet = async () => {
+      if (betContract) {
+        try {
+          await betContract.estimateGas.winnerSet();
+          const _winnerSet = await betContract.winnerSet();
+          setWinnerSet(_winnerSet);
+        } catch (err: any) {
+          toast.error(err.reason || err.error?.message || err.message);
+          setWinnerSet(false);
+        }
+      } else {
+        setWinnerSet(false);
+      }
+    };
+    const getWinner = async () => {
+      if (betContract) {
+        try {
+          await betContract.estimateGas.winner();
+          const _winner = await betContract.winner();
+          setWinner(_winner);
+        } catch (err: any) {
+          toast.error(err.reason || err.error?.message || err.message);
+          setWinner(false);
+        }
+      } else {
+        setWinner(false);
+      }
+    };
 
     getTotalBetAmountA();
     getTotalBetAmountB();
     getTotalNftStaked();
+    getWinnerSet();
+    getWinner();
   }, [betContract]);
 
   useEffect(() => {
@@ -350,7 +386,7 @@ export const BetProvider = ({ children = null as any }) => {
   };
 
   const updateClaimAmount = async () => {
-    if (isExpired(endTime)) {
+    if (winnerSet) {
       try {
         if (betContract && account) {
           await betContract.estimateGas.getClaimableAmount(account);
@@ -401,6 +437,8 @@ export const BetProvider = ({ children = null as any }) => {
         userNftListB,
         updateUserNftList,
         endTime,
+        winnerSet,
+        winner,
         placeBet,
         getRewardPotential,
         getChance,

@@ -13,7 +13,6 @@ import { ethers } from 'ethers';
 import { useBetContract } from '../hooks/useContract';
 import { getActiveBattle, getActiveTotalNftStakedAmount, getNftStakedStatus } from '../services';
 import { BattleInfo, NFTMetadata } from '../types';
-import { isExpired } from '../utils';
 import { useWallet } from './wallet_context';
 
 const config = {
@@ -407,8 +406,8 @@ export const BetProvider = ({ children = null as any }) => {
   const claim = async () => {
     try {
       if (betContract && account) {
-        await betContract.estimateGas.claim();
-        const tx = await betContract.claim();
+        await betContract.estimateGas.claimReward();
+        const tx = await betContract.claimReward();
         const receipt = await tx.wait();
         if (receipt.status) {
           updateTotalInfo();

@@ -10,8 +10,6 @@ import EthIcon from '../assets/images/eth_icon.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
-import { useBet } from '../contexts/bet_context';
-import { useTheme } from '../contexts/theme_context';
 import { useWallet } from '../contexts/wallet_context';
 import { Typography, TypographyType } from './common/typography';
 import MyBetModal from './modals/my_bet_modal';
@@ -140,8 +138,6 @@ const ROUTES = [
 
 const Header: React.FC = () => {
   const { balance } = useWallet();
-  const { theme } = useTheme();
-  const { userBetAmountA, userBetAmountB } = useBet();
 
   const [showMobileView, setShowMobileView] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);

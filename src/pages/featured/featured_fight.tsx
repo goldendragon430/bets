@@ -3,10 +3,6 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import TeamLogo1 from '../../assets/images/team_logo1.jpeg';
-import TeamLogo2 from '../../assets/images/team_logo2.jpeg';
-import TeamImg1 from '../../assets/images/team1.png';
-import TeamImg2 from '../../assets/images/team2.png';
 import BetModal from '../../components/modals/bet_modal';
 import StakeModal from '../../components/modals/stake_modal';
 import SuccessModal from '../../components/modals/success_modal';
@@ -108,7 +104,7 @@ const FeaturedFight: React.FC = () => {
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
         rewardPotential={getRewardPotential(!selectA)}
-        teamLogo={selectA ? TeamLogo1 : TeamLogo2}
+        teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
         visible={showBetModal}
       />
 
@@ -126,7 +122,7 @@ const FeaturedFight: React.FC = () => {
         ethStaked={betAmount}
         nftStaked={stakedAmount}
         onClose={() => setShowSuccessModal(false)}
-        teamLogo={selectA ? TeamLogo1 : TeamLogo2}
+        teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
         visible={showSuccessModal}
       />
     </Container>

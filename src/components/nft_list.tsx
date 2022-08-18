@@ -74,10 +74,9 @@ const NftList: React.FC<INftList> = ({ color, nfts, selectedNfts, onSelect }) =>
       {nfts.map((metadata, index) => (
         <NftItem key={index} onClick={() => onSelect(metadata)}>
           <NftImage alt="" src={getImageUrl(metadata.rawMetadata?.image || '')} />
-          {metadata.staked ||
-            (selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1 && (
-              <NftSelected color={color} staked={metadata.staked} />
-            ))}
+          {(metadata.staked || selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1) && (
+            <NftSelected color={color} staked={metadata.staked} />
+          )}
         </NftItem>
       ))}
     </Container>

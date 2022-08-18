@@ -49,7 +49,6 @@ const TeamImageWrapper = styled.div<{ color: string }>`
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem;
   position: absolute;
   bottom: 0;
   width: 100%;

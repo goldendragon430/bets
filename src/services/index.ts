@@ -14,3 +14,5 @@ export const getActiveBattle = () => http.get(`/v1/battles/get_active_battle`);
 
 export const getNftStakedStatus = (tokenIds: number[], contractAddress: string) =>
   http.post(`/v1/battles/get_nft_staked_status`, { tokenIds, contractAddress });
+
+export const getActiveTotalNftStakedAmount = () => http.get(`/v1/battles/get_active_total_nft_staked_amount`);

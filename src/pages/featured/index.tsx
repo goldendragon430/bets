@@ -3,6 +3,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import ClaimSection from './claim_section';
 import FeaturedFight from './featured_fight';
 import SocialSection from './social_section';
 
@@ -18,6 +19,7 @@ const Container = styled.div`
 
 const Featured: React.FC = () => (
   <Container>
+    <ClaimSection />
     <FeaturedFight />
     <SocialSection />
   </Container>

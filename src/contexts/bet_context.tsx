@@ -36,6 +36,8 @@ export interface IBetContext {
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
   stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
+  claimAmount: number;
+  claim: () => void;
 }
 
 const BetContext = React.createContext<Maybe<IBetContext>>(null);
@@ -53,6 +55,7 @@ export const BetProvider = ({ children = null as any }) => {
   const [userBetAmountB, setUserBetAmountB] = useState(0);
   const [userNftListA, setUserNftListA] = useState<NFTMetadata[]>([]);
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
+  const [claimAmount, setClaimAmount] = useState(0);
 
   const updateBetInfo = useCallback(async () => {
     try {
@@ -125,6 +128,19 @@ export const BetProvider = ({ children = null as any }) => {
       toast.error(err.reason || err.error?.message || err.message);
       setUserBetAmountA(0);
       setUserBetAmountB(0);
+    }
+
+    try {
+      if (betContract && account) {
+        await betContract.estimateGas.getClaimableAmount(account);
+        const amount = await betContract.getClaimableAmount(account);
+        setClaimAmount(Number(ethers.utils.formatEther(amount)));
+      } else {
+        setClaimAmount(0);
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+      setClaimAmount(0);
     }
   }, [account, betContract]);
 
@@ -229,6 +245,25 @@ export const BetProvider = ({ children = null as any }) => {
     return false;
   };
 
+  const claim = async () => {
+    try {
+      if (betContract && account) {
+        await betContract.estimateGas.claim();
+        const tx = await betContract.claim();
+        const receipt = await tx.wait();
+        if (receipt.status) {
+          updateBetInfo();
+          updateUserInfo();
+          updateBalance();
+          toast.success('Claim Success');
+        }
+        toast.error('Claim Error');
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+    }
+  };
+
   return (
     <BetContext.Provider
       value={{
@@ -249,6 +284,8 @@ export const BetProvider = ({ children = null as any }) => {
         getRewardPotential,
         getChance,
         stakeNft,
+        claimAmount,
+        claim,
       }}
     >
       {children}

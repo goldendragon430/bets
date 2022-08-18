@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import styled from 'styled-components';
@@ -30,6 +31,8 @@ const MintContent: React.FC<IMintContent> = ({ battleInfo }) => {
   const teamAContract = useNFTContract(battleInfo.projectL.contract);
   const teamBContract = useNFTContract(battleInfo.projectR.contract);
 
+  const [loading, setLoading] = useState(false);
+
   const mintNft = async (side: boolean) => {
     if (!account) {
       toast.error('Please connect wallet');
@@ -37,6 +40,8 @@ const MintContent: React.FC<IMintContent> = ({ battleInfo }) => {
     }
 
     const contract = side ? teamAContract : teamBContract;
+
+    setLoading(true);
 
     try {
       if (contract) {
@@ -52,15 +57,17 @@ const MintContent: React.FC<IMintContent> = ({ battleInfo }) => {
     } catch (err: any) {
       toast.error(err.reason || err.error?.message || err.message);
     }
+
+    setLoading(false);
   };
 
   return (
     <Container>
-      <MintButton color={theme.colors.red1} onClick={() => mintNft(true)} shadow>
-        Mint for Team A
+      <MintButton color={theme.colors.red1} disabled={loading} onClick={() => mintNft(true)} shadow>
+        {loading ? 'Minting...' : 'Mint for Team A'}
       </MintButton>
-      <MintButton color={theme.colors.blue1} onClick={() => mintNft(false)} shadow>
-        Mint for Team B
+      <MintButton color={theme.colors.blue1} disabled={loading} onClick={() => mintNft(false)} shadow>
+        {loading ? 'Minting...' : 'Mint for Team B'}
       </MintButton>
     </Container>
   );

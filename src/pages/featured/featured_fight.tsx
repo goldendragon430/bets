@@ -16,10 +16,6 @@ const Container = styled.div`
   display: flex;
   padding: 2rem;
 
-  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
-    padding: 2rem 15%;
-  }`};
-
   ${({ theme }) => `${theme.media_width.upToMedium} {
     flex-direction: column;
     align-items: center;

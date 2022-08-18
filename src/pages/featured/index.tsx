@@ -15,6 +15,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
+    padding: 0 15%;
+  }`};
 `;
 
 const Featured: React.FC = () => (

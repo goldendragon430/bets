@@ -9,8 +9,6 @@ import DiscordIcon from '../assets/images/discord.svg';
 import EthIcon from '../assets/images/eth_icon.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
-import TeamLogo1 from '../assets/images/team_logo1.jpeg';
-import TeamLogo2 from '../assets/images/team_logo2.jpeg';
 import TwitterIcon from '../assets/images/twitter.svg';
 import { useBet } from '../contexts/bet_context';
 import { useTheme } from '../contexts/theme_context';
@@ -215,12 +213,7 @@ const Header: React.FC = () => {
         <CloseButton alt="" onClick={handleClose} src={CloseIcon} />
       </MobileView>
 
-      <MyBetModal
-        onClose={() => setShowBetModal(false)}
-        teamA={{ logo: TeamLogo1, ethStaked: userBetAmountA, nftStaked: 0, color: theme.colors.red1 }}
-        teamB={{ logo: TeamLogo2, ethStaked: userBetAmountB, nftStaked: 0, color: theme.colors.blue1 }}
-        visible={showBetModal}
-      />
+      <MyBetModal onClose={() => setShowBetModal(false)} visible={showBetModal} />
     </Container>
   );
 };

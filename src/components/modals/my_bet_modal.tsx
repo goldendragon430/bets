@@ -4,7 +4,8 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-import { TeamInfo } from '../../types';
+import { useBet } from '../../contexts/bet_context';
+import { useTheme } from '../../contexts/theme_context';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
 
@@ -89,45 +90,56 @@ const BetButton = styled(Button)`
 interface IMyBetModal {
   visible: boolean;
   onClose: () => void;
-  teamA: TeamInfo;
-  teamB: TeamInfo;
 }
 
-const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, teamA, teamB }) => (
-  <ModalWrapper
-    centered
-    footer={null}
-    onCancel={onClose}
-    title={
-      <HeaderWrapper>
-        <Typography type={TypographyType.REGULAR_TITLE}>My Bet</Typography>
-      </HeaderWrapper>
-    }
-    visible={visible}
-    width="55rem"
-  >
-    <TeamContainer>
-      {[teamA, teamB].map((team, key) => (
-        <TeamWrapper key={key}>
-          <TeamLogo alt="" color={team.color} src={team.logo} />
-          <Wrapper>
-            <TeamLogo2 alt="" color={team.color} src={team.logo} />
-            <Typography type={TypographyType.REGULAR_TITLE}>{team.nftStaked.toLocaleString()}</Typography>
-          </Wrapper>
-          <Wrapper>
-            <EthImg alt="" src={EthIcon} />
-            <Typography type={TypographyType.REGULAR_TITLE}>{team.ethStaked.toLocaleString()}</Typography>
-          </Wrapper>
-        </TeamWrapper>
-      ))}
-    </TeamContainer>
+const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose }) => {
+  const { battleInfo, userBetAmountA, userBetAmountB, userNftListA, userNftListB } = useBet();
+  const { theme } = useTheme();
 
-    <BetButton>Bet on current game</BetButton>
+  return (
+    <ModalWrapper
+      centered
+      footer={null}
+      onCancel={onClose}
+      title={
+        <HeaderWrapper>
+          <Typography type={TypographyType.REGULAR_TITLE}>My Bet</Typography>
+        </HeaderWrapper>
+      }
+      visible={visible}
+      width="55rem"
+    >
+      <TeamContainer>
+        {battleInfo &&
+          [battleInfo.projectL, battleInfo.projectR].map((team, key) => (
+            <TeamWrapper key={key}>
+              <TeamLogo alt="" color={key === 0 ? theme.colors.red1 : theme.colors.blue1} src={team.logo} />
+              <Wrapper>
+                <TeamLogo2 alt="" color={key === 0 ? theme.colors.red1 : theme.colors.blue1} src={team.logo} />
+                <Typography type={TypographyType.REGULAR_TITLE}>
+                  {(key === 0
+                    ? userNftListA.filter((item) => item.staked).length
+                    : userNftListB.filter((item) => item.staked).length
+                  ).toLocaleString()}
+                </Typography>
+              </Wrapper>
+              <Wrapper>
+                <EthImg alt="" src={EthIcon} />
+                <Typography type={TypographyType.REGULAR_TITLE}>
+                  {(key === 0 ? userBetAmountA : userBetAmountB).toLocaleString()}
+                </Typography>
+              </Wrapper>
+            </TeamWrapper>
+          ))}
+      </TeamContainer>
 
-    <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
-      find out more about bp <a>here</a>
-    </Typography>
-  </ModalWrapper>
-);
+      <BetButton>Bet on current game</BetButton>
+
+      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+        find out more about bp <a>here</a>
+      </Typography>
+    </ModalWrapper>
+  );
+};
 
 export default MyBetModal;

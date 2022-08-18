@@ -35,6 +35,7 @@ export interface IBetContext {
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
+  stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
 }
 
 const BetContext = React.createContext<Maybe<IBetContext>>(null);
@@ -177,7 +178,6 @@ export const BetProvider = ({ children = null as any }) => {
         const nfts = await alchemy.nft.getNftsForOwner(account, {
           contractAddresses: [TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS],
         });
-        console.log(nfts);
         setUserNftListA(
           nfts.ownedNfts.filter(
             (item) => item.contract.address.toLowerCase() === TEAM_COLLECTION_A_ADDRESS.toLowerCase()
@@ -203,6 +203,32 @@ export const BetProvider = ({ children = null as any }) => {
     updateUserNftList();
   }, [account]);
 
+  const stakeNft = async (tokenIds: number[], side: boolean) => {
+    try {
+      if (betContract && account) {
+        let tx;
+        if (!side) {
+          await betContract.estimateGas.stakeNftA(tokenIds);
+          tx = await betContract.stakeNftA(tokenIds);
+        } else {
+          await betContract.estimateGas.stakeNftB(tokenIds);
+          tx = await betContract.stakeNftB(tokenIds);
+        }
+        const receipt = await tx.wait();
+        if (receipt.status) {
+          updateBetInfo();
+          updateUserInfo();
+          updateBalance();
+          return true;
+        }
+        toast.error('NFT Staking Error');
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+    }
+    return false;
+  };
+
   return (
     <BetContext.Provider
       value={{
@@ -222,6 +248,7 @@ export const BetProvider = ({ children = null as any }) => {
         placeBet,
         getRewardPotential,
         getChance,
+        stakeNft,
       }}
     >
       {children}

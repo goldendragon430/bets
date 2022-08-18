@@ -74,12 +74,13 @@ interface IStakeModal {
   color: string;
   fontColor: string;
   nfts: NFTMetadata[];
-  onStake: () => void;
+  onStake: (tokenIds: number[]) => void;
 }
 
 const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, onStake }) => {
   const { endTime } = useBet();
 
+  const [loading, setLoading] = useState(false);
   const [selectedNfts, setSelectedNfts] = useState<NFTMetadata[]>([]);
 
   useEffect(() => {
@@ -87,6 +88,9 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
   }, [nfts]);
 
   const handleSelect = (metadata: NFTMetadata) => {
+    if (loading) {
+      return;
+    }
     const exist = selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1;
     const res = selectedNfts.filter((item) => item.tokenId !== metadata.tokenId);
     if (!exist && !metadata.staked) {
@@ -104,12 +108,18 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
     }
   };
 
+  const handleStake = async () => {
+    setLoading(true);
+    await onStake(selectedNfts.map((item) => Number(item.tokenId)));
+    setLoading(false);
+  };
+
   return (
     <ModalWrapper
       centered
       color={color}
       footer={null}
-      onCancel={onClose}
+      onCancel={() => !loading && onClose()}
       title={
         <HeaderWrapper>
           <Typography type={TypographyType.REGULAR_TITLE}>Stake</Typography>
@@ -120,11 +130,16 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
     >
       <NftList color={color} nfts={nfts} onSelect={handleSelect} selectedNfts={selectedNfts} />
       <ButtonWrapper>
-        <Button color={color} fontColor={fontColor} onClick={handleSelectAll}>
+        <Button color={color} disabled={isExpired(endTime) || loading} fontColor={fontColor} onClick={handleSelectAll}>
           Select All
         </Button>
         <div style={{ minWidth: '2rem' }} />
-        <Button color={color} disabled={isExpired(endTime)} fontColor={fontColor} onClick={onStake}>
+        <Button
+          color={color}
+          disabled={isExpired(endTime) || loading || selectedNfts.length === 0}
+          fontColor={fontColor}
+          onClick={handleStake}
+        >
           Stake
         </Button>
       </ButtonWrapper>

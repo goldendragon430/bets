@@ -38,6 +38,7 @@ const FeaturedFight: React.FC = () => {
     placeBet,
     userNftListA,
     userNftListB,
+    stakeNft,
   } = useBet();
 
   const [selectA, setSelectA] = useState(true);
@@ -45,6 +46,7 @@ const FeaturedFight: React.FC = () => {
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [betAmount, setBetAmount] = useState(0);
+  const [stakedAmount, setStakedAmount] = useState(0);
 
   const handleShowBet = (teamA: boolean) => {
     setSelectA(teamA);
@@ -60,14 +62,20 @@ const FeaturedFight: React.FC = () => {
     const res = await placeBet(amount, !selectA);
     if (res) {
       setBetAmount(amount);
+      setStakedAmount(0);
       setShowBetModal(false);
       setShowSuccessModal(true);
     }
   };
 
-  const handleStake = () => {
-    setShowStakeModal(false);
-    setShowSuccessModal(true);
+  const handleStake = async (tokenIds: number[]) => {
+    const res = await stakeNft(tokenIds, !selectA);
+    if (res) {
+      setBetAmount(0);
+      setStakedAmount(tokenIds.length);
+      setShowStakeModal(false);
+      setShowSuccessModal(true);
+    }
   };
 
   return (
@@ -119,7 +127,7 @@ const FeaturedFight: React.FC = () => {
       <SuccessModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
         ethStaked={betAmount}
-        nftStaked={0}
+        nftStaked={stakedAmount}
         onClose={() => setShowSuccessModal(false)}
         teamLogo={selectA ? TeamLogo1 : TeamLogo2}
         visible={showSuccessModal}

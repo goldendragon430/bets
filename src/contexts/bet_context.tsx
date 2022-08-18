@@ -10,6 +10,7 @@ import { ethers } from 'ethers';
 
 import { TEAM_COLLECTION_A_ADDRESS, TEAM_COLLECTION_B_ADDRESS } from '../constants/addresses';
 import { useBetContract } from '../hooks/useContract';
+import { getActiveBattle } from '../services';
 import { NFTMetadata } from '../types';
 import { isExpired } from '../utils';
 import { useWallet } from './wallet_context';
@@ -236,6 +237,10 @@ export const BetProvider = ({ children = null as any }) => {
   useEffect(() => {
     updateUserNftList();
   }, [account]);
+
+  useEffect(() => {
+    getActiveBattle();
+  }, []);
 
   const stakeNft = async (tokenIds: number[], side: boolean) => {
     try {

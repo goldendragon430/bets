@@ -26,10 +26,10 @@ const TweetSection: React.FC = () => {
   const [listA, setListA] = useState<TwitterFeed[]>([]);
   const [listB, setListB] = useState<TwitterFeed[]>([]);
 
-  useEffect(() => {
-    fetchTwitterA();
-    fetchTwitterB();
-  }, []);
+  // useEffect(() => {
+  //   fetchTwitterA();
+  //   fetchTwitterB();
+  // }, []);
 
   const fetchTwitterA = async () => {
     try {

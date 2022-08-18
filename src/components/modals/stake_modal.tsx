@@ -140,7 +140,7 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
           fontColor={fontColor}
           onClick={handleStake}
         >
-          Stake
+          {loading ? 'Staking...' : 'Stake'}
         </Button>
       </ButtonWrapper>
     </ModalWrapper>

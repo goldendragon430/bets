@@ -9,3 +9,7 @@ const http = axios.create({
 });
 
 export const getTwitterFeeds = (tweet_id: string) => http.get(`/v1/twitter/get?tweet_id=${tweet_id}`);
+
+export const getActiveBattle = () => http.get(`/v1/battles/get_active_battle`);
+
+export const getNftStakedStatus = (tokenIds: number[]) => http.post(`/v1/battles/get_nft_staked_status`, { tokenIds });

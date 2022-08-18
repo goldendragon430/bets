@@ -43,9 +43,9 @@ const UserImage = styled.div<{ userImg?: string }>`
   border-radius: 50%;
   margin-right: 1rem;
   background: ${({ theme, userImg }) => (userImg ? `url(${userImg})` : theme.colors.grey3)};
-  background-position: 'center',
-  background-size: 'cover',
-  background-repeat: 'no-repeat',
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const NameContent = styled.div`

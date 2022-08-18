@@ -58,5 +58,5 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 }
 
 export function isExpired(time: number) {
-  return Date.now() > time * 1000;
+  return time > 0 && Date.now() > time * 1000;
 }

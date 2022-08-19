@@ -6,13 +6,10 @@ import styled from 'styled-components';
 
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
-import EthIcon from '../assets/images/eth_icon.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
-import { useWallet } from '../contexts/wallet_context';
 import { Typography, TypographyType } from './common/typography';
-import MyBetModal from './modals/my_bet_modal';
 import WalletButton from './wallet_button';
 
 const Container = styled.div`
@@ -116,31 +113,15 @@ const CloseButton = styled.img`
   right: calc(4rem + 12px);
 `;
 
-const BalanceWrapper = styled(Flex)`
-  margin-left: 1rem;
-  cursor: pointer;
-`;
-
-const BalanceImg = styled.img`
-  height: 4rem;
-`;
-
 const ROUTES = [
   {
     name: 'Featured Fight',
     route: '/',
   },
-  {
-    name: 'Mint NFT',
-    route: '/mint-nft',
-  },
 ];
 
 const Header: React.FC = () => {
-  const { balance } = useWallet();
-
   const [showMobileView, setShowMobileView] = useState(false);
-  const [showBetModal, setShowBetModal] = useState(false);
 
   const handleClose = () => {
     setShowMobileView(false);
@@ -150,12 +131,6 @@ const Header: React.FC = () => {
     <Flex style={{ padding: '2rem 1rem' }}>
       <SocialIcon alt="" src={TwitterIcon} />
       <SocialIcon alt="" src={DiscordIcon} />
-      <BalanceWrapper onClick={() => setShowBetModal(true)}>
-        <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
-          {balance.toLocaleString()}
-        </Typography>
-        <BalanceImg alt="" src={EthIcon} />
-      </BalanceWrapper>
     </Flex>
   );
 
@@ -208,8 +183,6 @@ const Header: React.FC = () => {
 
         <CloseButton alt="" onClick={handleClose} src={CloseIcon} />
       </MobileView>
-
-      <MyBetModal onClose={() => setShowBetModal(false)} visible={showBetModal} />
     </Container>
   );
 };

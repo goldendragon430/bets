@@ -1,19 +1,21 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Alchemy, Network } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
-import { useBetContract } from '../hooks/useContract';
-import { getActiveBattle, getActiveTotalNftStakedAmount, getNftStakedStatus } from '../services';
-import { BattleInfo, NFTMetadata } from '../types';
-import { useWallet } from './wallet_context';
+import { useWallet } from '../../contexts/wallet_context';
+import { useBetContract } from '../../hooks/useContract';
+import { getActiveTotalNftStakedAmount, getBattleById, getNftStakedStatus } from '../../services';
+import { BattleInfo, NFTMetadata } from '../../types';
+import BattlePage from './battle';
 
 const config = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
@@ -21,36 +23,9 @@ const config = {
 };
 const alchemy = new Alchemy(config);
 
-export interface IBetContext {
-  battleInfo: BattleInfo | null;
-  totalBetAmountA: number;
-  totalBetAmountB: number;
-  totalNftStakedA: number;
-  totalNftStakedB: number;
-  updateBetInfo: () => void;
-  userBetAmountA: number;
-  userBetAmountB: number;
-  updateUserInfo: () => void;
-  userNftListA: NFTMetadata[];
-  userNftListB: NFTMetadata[];
-  updateUserNftList: () => void;
-  endTime: number;
-  winnerSet: boolean;
-  winner: boolean;
-  placeBet: (amount: number, side: boolean) => Promise<boolean>;
-  getRewardPotential: (side: boolean) => number;
-  getChance: (side: boolean) => number;
-  stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
-  claimAmount: number;
-  updateClaimAmount: () => void;
-  claim: () => void;
-}
-
-const BetContext = React.createContext<Maybe<IBetContext>>(null);
-
-export const BetProvider = ({ children = null as any }) => {
+const BattleDetail: React.FC = () => {
+  const { battleId } = useParams();
   const { account, updateBalance } = useWallet();
-  const betContract = useBetContract();
 
   const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
   const [endTime, setEndTime] = useState(0);
@@ -68,7 +43,24 @@ export const BetProvider = ({ children = null as any }) => {
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
 
+  const betContract = useBetContract(battleInfo?.betContractAddress);
+
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const updateBattleInfo = useCallback(async () => {
+    try {
+      if (battleId) {
+        const info = await getBattleById(battleId);
+        setBattleInfo(info.data.data as BattleInfo);
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  }, [battleId]);
+
+  useEffect(() => {
+    updateBattleInfo();
+  }, [battleId]);
 
   const updateTotalInfo = () => {
     updateBalance();
@@ -83,19 +75,6 @@ export const BetProvider = ({ children = null as any }) => {
       updateTotalInfo();
     }, 10000);
   };
-
-  const updateBattleInfo = useCallback(async () => {
-    try {
-      const info = await getActiveBattle();
-      setBattleInfo(info.data.data as BattleInfo);
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  }, []);
-
-  useEffect(() => {
-    updateBattleInfo();
-  }, []);
 
   const updateInitInfo = useCallback(async () => {
     const getEndTime = async () => {
@@ -177,7 +156,7 @@ export const BetProvider = ({ children = null as any }) => {
     };
     const getTotalNftStaked = async () => {
       try {
-        const res = await getActiveTotalNftStakedAmount();
+        const res = await getActiveTotalNftStakedAmount(battleId || '');
         if (res.data.data) {
           setTotalNftStakedA(Number(res.data.data.collectionA));
           setTotalNftStakedB(Number(res.data.data.collectionB));
@@ -273,7 +252,8 @@ export const BetProvider = ({ children = null as any }) => {
       try {
         const res = await getNftStakedStatus(
           nfts.map((item) => Number(item.tokenId)),
-          contractAddresses
+          contractAddresses,
+          battleId || ''
         );
         result = nfts.map((item, index) => ({ ...item, staked: res.data.data[index].status }));
       } catch (err: any) {
@@ -421,43 +401,31 @@ export const BetProvider = ({ children = null as any }) => {
   };
 
   return (
-    <BetContext.Provider
-      value={{
-        battleInfo,
-        totalBetAmountA,
-        totalBetAmountB,
-        totalNftStakedA,
-        totalNftStakedB,
-        updateBetInfo,
-        userBetAmountA,
-        userBetAmountB,
-        updateUserInfo,
-        userNftListA,
-        userNftListB,
-        updateUserNftList,
-        endTime,
-        winnerSet,
-        winner,
-        placeBet,
-        getRewardPotential,
-        getChance,
-        stakeNft,
-        claimAmount,
-        updateClaimAmount,
-        claim,
-      }}
-    >
-      {children}
-    </BetContext.Provider>
+    <BattlePage
+      battleInfo={battleInfo}
+      claim={claim}
+      claimAmount={claimAmount}
+      endTime={endTime}
+      getChance={getChance}
+      getRewardPotential={getRewardPotential}
+      placeBet={placeBet}
+      stakeNft={stakeNft}
+      totalBetAmountA={totalBetAmountA}
+      totalBetAmountB={totalBetAmountB}
+      totalNftStakedA={totalNftStakedA}
+      totalNftStakedB={totalNftStakedB}
+      updateBetInfo={updateBetInfo}
+      updateClaimAmount={updateClaimAmount}
+      updateUserInfo={updateUserInfo}
+      updateUserNftList={updateUserNftList}
+      userBetAmountA={userBetAmountA}
+      userBetAmountB={userBetAmountB}
+      userNftListA={userNftListA}
+      userNftListB={userNftListB}
+      winner={winner}
+      winnerSet={winnerSet}
+    />
   );
 };
 
-export const useBet = () => {
-  const context = useContext(BetContext);
-
-  if (!context) {
-    throw new Error('Component rendered outside the provider tree');
-  }
-
-  return context;
-};
+export default BattleDetail;

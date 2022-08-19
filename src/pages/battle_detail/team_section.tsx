@@ -9,7 +9,6 @@ import SocialIcon2 from '../../assets/images/social2.svg';
 import SocialIcon3 from '../../assets/images/social3.svg';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
-import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
 import { ProjectInfo } from '../../types';
 import { isExpired } from '../../utils';
@@ -90,13 +89,22 @@ interface ITeamSection {
   project: ProjectInfo;
   nftStaked: number;
   ethStaked: number;
+  endTime: number;
   onBet: () => void;
   onStake: () => void;
 }
 
-const TeamSection: React.FC<ITeamSection> = ({ firstTeam, color, project, nftStaked, ethStaked, onBet, onStake }) => {
+const TeamSection: React.FC<ITeamSection> = ({
+  firstTeam,
+  color,
+  project,
+  nftStaked,
+  ethStaked,
+  endTime,
+  onBet,
+  onStake,
+}) => {
   const { theme } = useTheme();
-  const { endTime } = useBet();
 
   return (
     <TeamWrapper>

@@ -1,11 +1,12 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
+import { BattleDetailType } from '../../types';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
 
@@ -87,13 +88,13 @@ const BetButton = styled(Button)`
   margin: 2rem 0;
 `;
 
-interface IMyBetModal {
+interface IMyBetModal extends BattleDetailType {
   visible: boolean;
   onClose: () => void;
 }
 
-const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose }) => {
-  const { battleInfo, userBetAmountA, userBetAmountB, userNftListA, userNftListB } = useBet();
+const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
+  const { battleInfo, userBetAmountA, userBetAmountB, userNftListA, userNftListB } = props;
   const { theme } = useTheme();
 
   return (

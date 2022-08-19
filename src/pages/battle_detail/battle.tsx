@@ -1,10 +1,12 @@
-/* eslint-disable no-console */
+/* eslint-disable import/no-cycle */
 import React from 'react';
 
 import styled from 'styled-components';
 
+import { BattleDetailType } from '../../types';
 import ClaimSection from './claim_section';
 import FeaturedFight from './featured_fight';
+import MintNFT from './mint_nft';
 import SocialSection from './social_section';
 
 const Container = styled.div`
@@ -21,12 +23,17 @@ const Container = styled.div`
   }`};
 `;
 
-const Featured: React.FC = () => (
-  <Container>
-    <ClaimSection />
-    <FeaturedFight />
-    <SocialSection />
-  </Container>
-);
+const BattlePage: React.FC<BattleDetailType> = (props) => {
+  const { battleInfo } = props;
 
-export default Featured;
+  return (
+    <Container>
+      <ClaimSection {...props} />
+      <FeaturedFight {...props} />
+      {battleInfo && <MintNFT battleInfo={battleInfo} />}
+      <SocialSection />
+    </Container>
+  );
+};
+
+export default BattlePage;

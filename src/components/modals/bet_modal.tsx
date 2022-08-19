@@ -5,7 +5,6 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-import { useBet } from '../../contexts/bet_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { isExpired } from '../../utils';
 import Button from '../common/button';
@@ -111,12 +110,21 @@ interface IBetModal {
   color: string;
   fontColor: string;
   rewardPotential: number;
+  endTime: number;
   onBet: (amount: number) => void;
 }
 
-const BetModal: React.FC<IBetModal> = ({ visible, onClose, teamLogo, color, fontColor, rewardPotential, onBet }) => {
+const BetModal: React.FC<IBetModal> = ({
+  visible,
+  onClose,
+  teamLogo,
+  color,
+  fontColor,
+  rewardPotential,
+  endTime,
+  onBet,
+}) => {
   const { balance } = useWallet();
-  const { endTime } = useBet();
 
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState('');

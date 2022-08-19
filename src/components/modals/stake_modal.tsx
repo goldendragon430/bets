@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
-import { useBet } from '../../contexts/bet_context';
 import { NFTMetadata } from '../../types';
 import { isExpired } from '../../utils';
 import Button from '../common/button';
@@ -74,12 +73,11 @@ interface IStakeModal {
   color: string;
   fontColor: string;
   nfts: NFTMetadata[];
+  endTime: number;
   onStake: (tokenIds: number[]) => void;
 }
 
-const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, onStake }) => {
-  const { endTime } = useBet();
-
+const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, fontColor, endTime, onStake }) => {
   const [loading, setLoading] = useState(false);
   const [selectedNfts, setSelectedNfts] = useState<NFTMetadata[]>([]);
 

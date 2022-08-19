@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 
@@ -6,25 +7,24 @@ import styled from 'styled-components';
 import BetModal from '../../components/modals/bet_modal';
 import StakeModal from '../../components/modals/stake_modal';
 import SuccessModal from '../../components/modals/success_modal';
-import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
+import { BattleDetailType } from '../../types';
 import InfoSection from './info_section';
 import TeamSection from './team_section';
 
 const Container = styled.div`
   width: 100%;
   display: flex;
-  padding: 2rem;
+  padding: 0 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     flex-direction: column;
     align-items: center;
-    padding: 2rem 0;
+    padding: 0;
   }`};
 `;
 
-const FeaturedFight: React.FC = () => {
-  const { theme } = useTheme();
+const FeaturedFight: React.FC<BattleDetailType> = (props) => {
   const {
     battleInfo,
     totalBetAmountA,
@@ -36,7 +36,9 @@ const FeaturedFight: React.FC = () => {
     userNftListA,
     userNftListB,
     stakeNft,
-  } = useBet();
+    endTime,
+  } = props;
+  const { theme } = useTheme();
 
   const [selectA, setSelectA] = useState(true);
   const [showBetModal, setShowBetModal] = useState(false);
@@ -79,6 +81,7 @@ const FeaturedFight: React.FC = () => {
     <Container>
       <TeamSection
         color={theme.colors.red1}
+        endTime={endTime}
         ethStaked={totalBetAmountA}
         firstTeam
         nftStaked={totalNftStakedA}
@@ -87,10 +90,11 @@ const FeaturedFight: React.FC = () => {
         project={battleInfo.projectL}
       />
 
-      <InfoSection />
+      <InfoSection {...props} />
 
       <TeamSection
         color={theme.colors.blue1}
+        endTime={endTime}
         ethStaked={totalBetAmountB}
         nftStaked={totalNftStakedB}
         onBet={() => handleShowBet(false)}
@@ -100,6 +104,7 @@ const FeaturedFight: React.FC = () => {
 
       <BetModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        endTime={endTime}
         fontColor={selectA ? theme.colors.white : theme.colors.black}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
@@ -110,6 +115,7 @@ const FeaturedFight: React.FC = () => {
 
       <StakeModal
         color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        endTime={endTime}
         fontColor={selectA ? theme.colors.white : theme.colors.black}
         nfts={selectA ? userNftListA : userNftListB}
         onClose={() => setShowStakeModal(false)}

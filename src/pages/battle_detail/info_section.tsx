@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
 import Countdown from 'react-countdown';
 
@@ -5,8 +6,8 @@ import styled from 'styled-components';
 
 import Chart from '../../components/chart';
 import { Typography, TypographyType } from '../../components/common/typography';
-import { useBet } from '../../contexts/bet_context';
 import { useTheme } from '../../contexts/theme_context';
+import { BattleDetailType } from '../../types';
 
 const InfoWrapper = styled.div`
   flex: 1;
@@ -85,10 +86,17 @@ const Stats = styled.div<{ color: string }>`
   }
 `;
 
-const InfoSection = () => {
+const InfoSection: React.FC<BattleDetailType> = ({
+  getRewardPotential,
+  getChance,
+  totalBetAmountA,
+  totalBetAmountB,
+  endTime,
+  winnerSet,
+  winner,
+  battleInfo,
+}) => {
   const { theme } = useTheme();
-  const { getRewardPotential, getChance, totalBetAmountA, totalBetAmountB, endTime, winnerSet, winner, battleInfo } =
-    useBet();
 
   const chanceA = getChance(false);
   const chanceB = getChance(true);

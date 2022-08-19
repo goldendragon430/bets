@@ -90,6 +90,7 @@ interface ITeamSection {
   project: ProjectInfo;
   nftStaked: number;
   ethStaked: number;
+  startTime: number;
   endTime: number;
   onBet: () => void;
   onStake: () => void;
@@ -101,6 +102,7 @@ const TeamSection: React.FC<ITeamSection> = ({
   project,
   nftStaked,
   ethStaked,
+  startTime,
   endTime,
   onBet,
   onStake,
@@ -126,7 +128,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         <ButtonWrapper>
           <Button
             color={color}
-            disabled={isExpired(endTime) || !account}
+            disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
             fontColor={firstTeam ? theme.colors.white : theme.colors.black}
             onClick={onStake}
           >
@@ -134,7 +136,7 @@ const TeamSection: React.FC<ITeamSection> = ({
           </Button>
           <Button
             color={color}
-            disabled={isExpired(endTime) || !account}
+            disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
             fontColor={firstTeam ? theme.colors.white : theme.colors.black}
             onClick={onBet}
           >

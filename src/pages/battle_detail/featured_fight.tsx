@@ -36,6 +36,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
     userNftListA,
     userNftListB,
     stakeNft,
+    startTime,
     endTime,
   } = props;
   const { theme } = useTheme();
@@ -88,6 +89,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         onBet={() => handleShowBet(true)}
         onStake={() => handleShowStake(true)}
         project={battleInfo.projectL}
+        startTime={startTime}
       />
 
       <InfoSection {...props} />
@@ -100,6 +102,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         onBet={() => handleShowBet(false)}
         onStake={() => handleShowStake(false)}
         project={battleInfo.projectR}
+        startTime={startTime}
       />
 
       <BetModal

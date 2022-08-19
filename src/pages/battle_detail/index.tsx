@@ -28,6 +28,7 @@ const BattleDetail: React.FC = () => {
   const { account, updateBalance } = useWallet();
 
   const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
+  const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [rakePercentage, setRakePercentage] = useState(0);
   const [nftStakersPercentage, setNftStakersPercentage] = useState(0);
@@ -77,6 +78,18 @@ const BattleDetail: React.FC = () => {
   };
 
   const updateInitInfo = useCallback(async () => {
+    const getStartTime = async () => {
+      if (betContract) {
+        try {
+          const betStartTime = await betContract.betStartTime();
+          setStartTime(Number(betStartTime));
+        } catch (err: any) {
+          console.error(err.reason || err.error?.message || err.message);
+        }
+      } else {
+        setStartTime(0);
+      }
+    };
     const getEndTime = async () => {
       if (betContract) {
         try {
@@ -84,7 +97,6 @@ const BattleDetail: React.FC = () => {
           setEndTime(Number(betEndTime));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setEndTime(0);
         }
       } else {
         setEndTime(0);
@@ -97,7 +109,6 @@ const BattleDetail: React.FC = () => {
           setRakePercentage(Number(rakePercent));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setRakePercentage(0);
         }
       } else {
         setRakePercentage(0);
@@ -110,13 +121,13 @@ const BattleDetail: React.FC = () => {
           setNftStakersPercentage(Number(nftStakersPercent));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setNftStakersPercentage(0);
         }
       } else {
         setNftStakersPercentage(0);
       }
     };
 
+    getStartTime();
     getEndTime();
     getRakePercentage();
     getNftStakersPercentage();
@@ -130,7 +141,6 @@ const BattleDetail: React.FC = () => {
           setTotalBetAmountA(Number(ethers.utils.formatEther(totalAmountA)));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setTotalBetAmountA(0);
         }
       } else {
         setTotalBetAmountA(0);
@@ -143,25 +153,27 @@ const BattleDetail: React.FC = () => {
           setTotalBetAmountB(Number(ethers.utils.formatEther(totalAmountB)));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setTotalBetAmountB(0);
         }
       } else {
         setTotalBetAmountB(0);
       }
     };
     const getTotalNftStaked = async () => {
-      try {
-        const res = await getActiveTotalNftStakedAmount(battleId || '');
-        if (res.data.data) {
-          setTotalNftStakedA(Number(res.data.data.collectionA));
-          setTotalNftStakedB(Number(res.data.data.collectionB));
-          return;
+      if (battleId) {
+        try {
+          const res = await getActiveTotalNftStakedAmount(battleId || '');
+          if (res.data.data) {
+            setTotalNftStakedA(Number(res.data.data.collectionA));
+            setTotalNftStakedB(Number(res.data.data.collectionB));
+            return;
+          }
+        } catch (err: any) {
+          console.error(err.message);
         }
-      } catch (err: any) {
-        console.error(err.message);
+      } else {
+        setTotalNftStakedA(0);
+        setTotalNftStakedB(0);
       }
-      setTotalNftStakedA(0);
-      setTotalNftStakedB(0);
     };
     const getWinnerSet = async () => {
       if (betContract) {
@@ -170,7 +182,6 @@ const BattleDetail: React.FC = () => {
           setWinnerSet(_winnerSet);
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setWinnerSet(false);
         }
       } else {
         setWinnerSet(false);
@@ -183,7 +194,6 @@ const BattleDetail: React.FC = () => {
           setWinner(_winner);
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setWinner(false);
         }
       } else {
         setWinner(false);
@@ -210,7 +220,6 @@ const BattleDetail: React.FC = () => {
           setUserBetAmountA(Number(ethers.utils.formatEther(userAmountA)));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setUserBetAmountA(0);
         }
       } else {
         setUserBetAmountA(0);
@@ -223,7 +232,6 @@ const BattleDetail: React.FC = () => {
           setUserBetAmountB(Number(ethers.utils.formatEther(userAmountB)));
         } catch (err: any) {
           console.error(err.reason || err.error?.message || err.message);
-          setUserBetAmountB(0);
         }
       } else {
         setUserBetAmountB(0);
@@ -275,8 +283,6 @@ const BattleDetail: React.FC = () => {
         setUserNftListB(nftsB);
       } catch (e) {
         console.error(e);
-        setUserNftListA([]);
-        setUserNftListB([]);
       }
     } else {
       setUserNftListA([]);
@@ -369,7 +375,6 @@ const BattleDetail: React.FC = () => {
         }
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
-        setClaimAmount(0);
       }
     } else {
       setClaimAmount(0);
@@ -403,6 +408,7 @@ const BattleDetail: React.FC = () => {
       getRewardPotential={getRewardPotential}
       placeBet={placeBet}
       stakeNft={stakeNft}
+      startTime={startTime}
       totalBetAmountA={totalBetAmountA}
       totalBetAmountB={totalBetAmountB}
       totalNftStakedA={totalNftStakedA}

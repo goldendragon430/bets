@@ -95,6 +95,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
   totalBetAmountB,
   totalNftStakedA,
   totalNftStakedB,
+  startTime,
   endTime,
   winnerSet,
   winner,
@@ -113,16 +114,20 @@ const InfoSection: React.FC<BattleDetailType> = ({
   return (
     <InfoWrapper>
       <NumberText type={TypographyType.BOLD_TITLE}>
-        {endTime > 0 && (
-          <Countdown date={endTime * 1000}>
-            <span>
-              {winnerSet
-                ? !winner
-                  ? `${battleInfo?.projectL.subName} wins`
-                  : `${battleInfo?.projectR.subName} wins`
-                : 'Finalizing...'}
-            </span>
-          </Countdown>
+        {startTime * 1000 > Date.now() ? (
+          <span>Not Started</span>
+        ) : (
+          endTime > 0 && (
+            <Countdown date={endTime * 1000}>
+              <span>
+                {winnerSet
+                  ? !winner
+                    ? `${battleInfo?.projectL.subName} wins`
+                    : `${battleInfo?.projectR.subName} wins`
+                  : 'Finalizing...'}
+              </span>
+            </Countdown>
+          )
         )}
       </NumberText>
 

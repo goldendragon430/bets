@@ -23,9 +23,10 @@ const MintButton = styled(Button)`
 
 interface IMintNFT {
   battleInfo: BattleInfo;
+  updateUserNftList: () => void;
 }
 
-const MintNFT: React.FC<IMintNFT> = ({ battleInfo }) => {
+const MintNFT: React.FC<IMintNFT> = ({ battleInfo, updateUserNftList }) => {
   const { account } = useWallet();
   const { theme } = useTheme();
   const teamAContract = useNFTContract(battleInfo.projectL.contract);
@@ -55,6 +56,7 @@ const MintNFT: React.FC<IMintNFT> = ({ battleInfo }) => {
         const receipt = await tx.wait();
         if (receipt.status) {
           toast.success(' Mint success');
+          updateUserNftList();
         } else {
           toast.error('Mint error');
         }

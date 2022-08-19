@@ -27,7 +27,6 @@ const StatsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-bottom: 1rem;
 `;
 
 const StatsItem = styled.div`

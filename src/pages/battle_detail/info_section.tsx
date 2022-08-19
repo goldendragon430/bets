@@ -24,7 +24,7 @@ const NumberText = styled(Typography)`
   text-align: center;
   white-space: nowrap;
   padding: 0.8rem 0;
-  height: 7rem;
+  height: 6rem;
 `;
 
 const Wrapper = styled.div`

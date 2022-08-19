@@ -31,7 +31,8 @@ const MintNFT: React.FC<IMintNFT> = ({ battleInfo }) => {
   const teamAContract = useNFTContract(battleInfo.projectL.contract);
   const teamBContract = useNFTContract(battleInfo.projectR.contract);
 
-  const [loading, setLoading] = useState(false);
+  const [loadingA, setLoadingA] = useState(false);
+  const [loadingB, setLoadingB] = useState(false);
 
   const mintNft = async (side: boolean) => {
     if (!account) {
@@ -41,7 +42,11 @@ const MintNFT: React.FC<IMintNFT> = ({ battleInfo }) => {
 
     const contract = !side ? teamAContract : teamBContract;
 
-    setLoading(true);
+    if (!side) {
+      setLoadingA(true);
+    } else {
+      setLoadingB(true);
+    }
 
     try {
       if (contract) {
@@ -58,22 +63,26 @@ const MintNFT: React.FC<IMintNFT> = ({ battleInfo }) => {
       toast.error(err.reason || err.error?.message || err.message);
     }
 
-    setLoading(false);
+    if (!side) {
+      setLoadingA(false);
+    } else {
+      setLoadingB(false);
+    }
   };
 
   return (
     <Container>
       <MintButton
         color={theme.colors.red1}
-        disabled={loading}
+        disabled={loadingA}
         fontColor={theme.colors.white}
         onClick={() => mintNft(false)}
         shadow
       >
-        {loading ? 'Minting...' : `Mint ${battleInfo.projectL.subName}`}
+        {loadingA ? 'Minting...' : `Mint ${battleInfo.projectL.subName}`}
       </MintButton>
-      <MintButton color={theme.colors.blue1} disabled={loading} onClick={() => mintNft(true)} shadow>
-        {loading ? 'Minting...' : `Mint ${battleInfo.projectR.subName}`}
+      <MintButton color={theme.colors.blue1} disabled={loadingB} onClick={() => mintNft(true)} shadow>
+        {loadingB ? 'Minting...' : `Mint ${battleInfo.projectR.subName}`}
       </MintButton>
     </Container>
   );

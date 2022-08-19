@@ -9,6 +9,7 @@ import DiscordIcon from '../assets/images/discord.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
+import LinkButton from './common/link_button';
 import { Typography, TypographyType } from './common/typography';
 import WalletButton from './wallet_button';
 
@@ -73,10 +74,12 @@ const MenuButton = styled.img`
   }`}
 `;
 
-const SocialIcon = styled.img`
-  height: 2rem;
-  margin: 0 0.5rem;
-  cursor: pointer;
+const SocialIcon = styled(LinkButton)`
+  margin: 0 2rem;
+
+  img {
+    height: 2rem;
+  }
 `;
 
 const MobileView = styled.div<{ show: boolean }>`
@@ -129,8 +132,12 @@ const Header: React.FC = () => {
 
   const getSocialIcons = () => (
     <Flex style={{ padding: '2rem 1rem' }}>
-      <SocialIcon alt="" src={TwitterIcon} />
-      <SocialIcon alt="" src={DiscordIcon} />
+      <SocialIcon disabled>
+        <img alt="" src={TwitterIcon} />
+      </SocialIcon>
+      <SocialIcon disabled>
+        <img alt="" src={DiscordIcon} />
+      </SocialIcon>
     </Flex>
   );
 

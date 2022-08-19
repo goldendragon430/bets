@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import EthIcon from '../../assets/images/eth_icon.svg';
 import SocialIcon1 from '../../assets/images/social1.svg';
 import SocialIcon2 from '../../assets/images/social2.svg';
-import SocialIcon3 from '../../assets/images/social3.svg';
+// import SocialIcon3 from '../../assets/images/social3.svg';
 import Button from '../../components/common/button';
+import LinkButton from '../../components/common/link_button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { ProjectInfo } from '../../types';
@@ -151,9 +152,13 @@ const TeamSection: React.FC<ITeamSection> = ({
       </Typography>
 
       <SocialWrapper firstTeam={firstTeam}>
-        <img alt="" src={SocialIcon1} />
-        <img alt="" src={SocialIcon2} />
-        <img alt="" src={SocialIcon3} />
+        <LinkButton href={project.twitterID}>
+          <img alt="" src={SocialIcon1} />
+        </LinkButton>
+        <LinkButton href={project.openSeaLink}>
+          <img alt="" src={SocialIcon2} />
+        </LinkButton>
+        {/* <img alt="" src={SocialIcon3} /> */}
       </SocialWrapper>
     </TeamWrapper>
   );

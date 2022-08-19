@@ -35,15 +35,15 @@ const StatsItem = styled.div`
   align-items: center;
 `;
 
-const TeamImageWrapper = styled.div<{ color: string }>`
+const TeamImageWrapper = styled.div<{ color: string; image: string }>`
   width: 100%;
   border: 0.5rem solid ${({ color }) => color};
   position: relative;
   margin-bottom: 1rem;
-
-  img {
-    width: 100%;
-  }
+  background-image: url(${({ image }) => image});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const ButtonWrapper = styled.div`
@@ -121,8 +121,8 @@ const TeamSection: React.FC<ITeamSection> = ({
         </StatsItem>
       </StatsWrapper>
 
-      <TeamImageWrapper color={color}>
-        <img alt="" src={project.headerImage} />
+      <TeamImageWrapper color={color} image={project.headerImage}>
+        <div style={{ padding: '50%' }} />
         <ButtonWrapper>
           <Button
             color={color}

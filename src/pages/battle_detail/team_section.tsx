@@ -11,6 +11,7 @@ import Button from '../../components/common/button';
 import LinkButton from '../../components/common/link_button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
+import { useWallet } from '../../contexts/wallet_context';
 import { ProjectInfo } from '../../types';
 import { isExpired } from '../../utils';
 
@@ -105,6 +106,7 @@ const TeamSection: React.FC<ITeamSection> = ({
   onStake,
 }) => {
   const { theme } = useTheme();
+  const { account } = useWallet();
 
   return (
     <TeamWrapper>
@@ -124,7 +126,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         <ButtonWrapper>
           <Button
             color={color}
-            disabled={isExpired(endTime)}
+            disabled={isExpired(endTime) || !account}
             fontColor={firstTeam ? theme.colors.white : theme.colors.black}
             onClick={onStake}
           >
@@ -132,7 +134,7 @@ const TeamSection: React.FC<ITeamSection> = ({
           </Button>
           <Button
             color={color}
-            disabled={isExpired(endTime)}
+            disabled={isExpired(endTime) || !account}
             fontColor={firstTeam ? theme.colors.white : theme.colors.black}
             onClick={onBet}
           >

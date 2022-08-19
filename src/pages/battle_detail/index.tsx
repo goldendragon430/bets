@@ -80,7 +80,6 @@ const BattleDetail: React.FC = () => {
     const getEndTime = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.betEndTime();
           const betEndTime = await betContract.betEndTime();
           setEndTime(Number(betEndTime));
         } catch (err: any) {
@@ -94,7 +93,6 @@ const BattleDetail: React.FC = () => {
     const getRakePercentage = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.rakePercentage();
           const rakePercent = await betContract.rakePercentage();
           setRakePercentage(Number(rakePercent));
         } catch (err: any) {
@@ -108,7 +106,6 @@ const BattleDetail: React.FC = () => {
     const getNftStakersPercentage = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.nftStakersPercentage();
           const nftStakersPercent = await betContract.nftStakersPercentage();
           setNftStakersPercentage(Number(nftStakersPercent));
         } catch (err: any) {
@@ -129,7 +126,6 @@ const BattleDetail: React.FC = () => {
     const getTotalBetAmountA = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.totalBettedAmountA();
           const totalAmountA = await betContract.totalBettedAmountA();
           setTotalBetAmountA(Number(ethers.utils.formatEther(totalAmountA)));
         } catch (err: any) {
@@ -143,7 +139,6 @@ const BattleDetail: React.FC = () => {
     const getTotalBetAmountB = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.totalBettedAmountB();
           const totalAmountB = await betContract.totalBettedAmountB();
           setTotalBetAmountB(Number(ethers.utils.formatEther(totalAmountB)));
         } catch (err: any) {
@@ -171,7 +166,6 @@ const BattleDetail: React.FC = () => {
     const getWinnerSet = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.winnerSet();
           const _winnerSet = await betContract.winnerSet();
           setWinnerSet(_winnerSet);
         } catch (err: any) {
@@ -185,7 +179,6 @@ const BattleDetail: React.FC = () => {
     const getWinner = async () => {
       if (betContract) {
         try {
-          await betContract.estimateGas.winner();
           const _winner = await betContract.winner();
           setWinner(_winner);
         } catch (err: any) {
@@ -213,7 +206,6 @@ const BattleDetail: React.FC = () => {
     const getUserBetAmountA = async () => {
       if (betContract && account) {
         try {
-          await betContract.estimateGas.getUserBettedAmount(account, false);
           const userAmountA = await betContract.getUserBettedAmount(account, false);
           setUserBetAmountA(Number(ethers.utils.formatEther(userAmountA)));
         } catch (err: any) {
@@ -227,7 +219,6 @@ const BattleDetail: React.FC = () => {
     const getUserBetAmountB = async () => {
       if (betContract && account) {
         try {
-          await betContract.estimateGas.getUserBettedAmount(account, true);
           const userAmountB = await betContract.getUserBettedAmount(account, true);
           setUserBetAmountB(Number(ethers.utils.formatEther(userAmountB)));
         } catch (err: any) {
@@ -368,7 +359,6 @@ const BattleDetail: React.FC = () => {
     if (winnerSet) {
       try {
         if (betContract && account) {
-          await betContract.estimateGas.getClaimableAmount(account);
           const amount = await betContract.getClaimableAmount(account);
           setClaimAmount(Number(ethers.utils.formatEther(amount)));
         } else {

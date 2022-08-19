@@ -303,8 +303,8 @@ const BattleDetail: React.FC = () => {
   };
 
   const getChance = (side: boolean) => {
-    const chanceA = 0 * 100 + totalBetAmountA * 1000;
-    const chanceB = 0 * 100 + totalBetAmountB * 1000;
+    const chanceA = totalNftStakedA * 100 + totalBetAmountA * 1000;
+    const chanceB = totalNftStakedB * 100 + totalBetAmountB * 1000;
     const totalChance = chanceA + chanceB;
 
     if (!side) {

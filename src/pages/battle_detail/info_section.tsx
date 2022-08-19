@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
+import { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 
 import styled from 'styled-components';
@@ -91,6 +93,8 @@ const InfoSection: React.FC<BattleDetailType> = ({
   getChance,
   totalBetAmountA,
   totalBetAmountB,
+  totalNftStakedA,
+  totalNftStakedB,
   endTime,
   winnerSet,
   winner,
@@ -98,8 +102,13 @@ const InfoSection: React.FC<BattleDetailType> = ({
 }) => {
   const { theme } = useTheme();
 
-  const chanceA = getChance(false);
-  const chanceB = getChance(true);
+  const [chanceA, setChanceA] = useState(0);
+  const [chanceB, setChanceB] = useState(0);
+
+  useEffect(() => {
+    setChanceA(getChance(false));
+    setChanceB(getChance(true));
+  }, [totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB]);
 
   return (
     <InfoWrapper>

@@ -9,6 +9,8 @@ export interface Colors {
   purple1: string;
   purple2: string;
   purple3: string;
+  green1: string;
+  green2: string;
 }
 
 export const DARK_COLORS: Colors = {
@@ -22,4 +24,6 @@ export const DARK_COLORS: Colors = {
   purple1: '#B013E8',
   purple2: '#530071',
   purple3: '#76169E',
+  green1: '#7BFF4D',
+  green2: '#194B3E',
 };

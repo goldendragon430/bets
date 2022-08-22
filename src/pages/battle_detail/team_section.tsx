@@ -129,7 +129,7 @@ const TeamSection: React.FC<ITeamSection> = ({
           <Button
             color={color}
             disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
-            fontColor={firstTeam ? theme.colors.white : theme.colors.black}
+            fontColor={theme.colors.black}
             onClick={onStake}
           >
             Stake
@@ -137,7 +137,7 @@ const TeamSection: React.FC<ITeamSection> = ({
           <Button
             color={color}
             disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
-            fontColor={firstTeam ? theme.colors.white : theme.colors.black}
+            fontColor={theme.colors.black}
             onClick={onBet}
           >
             Bet

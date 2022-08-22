@@ -74,13 +74,7 @@ const MintNFT: React.FC<IMintNFT> = ({ battleInfo, updateUserNftList }) => {
 
   return (
     <Container>
-      <MintButton
-        color={theme.colors.red1}
-        disabled={loadingA || !account}
-        fontColor={theme.colors.white}
-        onClick={() => mintNft(false)}
-        shadow
-      >
+      <MintButton color={theme.colors.green1} disabled={loadingA || !account} onClick={() => mintNft(false)} shadow>
         {loadingA ? 'Minting...' : `Mint ${battleInfo.projectL.subName}`}
       </MintButton>
       <MintButton color={theme.colors.blue1} disabled={loadingB || !account} onClick={() => mintNft(true)} shadow>

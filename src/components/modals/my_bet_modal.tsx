@@ -114,9 +114,9 @@ const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
         {battleInfo &&
           [battleInfo.projectL, battleInfo.projectR].map((team, key) => (
             <TeamWrapper key={key}>
-              <TeamLogo alt="" color={key === 0 ? theme.colors.red1 : theme.colors.blue1} src={team.logo} />
+              <TeamLogo alt="" color={key === 0 ? theme.colors.green1 : theme.colors.blue1} src={team.logo} />
               <Wrapper>
-                <TeamLogo2 alt="" color={key === 0 ? theme.colors.red1 : theme.colors.blue1} src={team.logo} />
+                <TeamLogo2 alt="" color={key === 0 ? theme.colors.green1 : theme.colors.blue1} src={team.logo} />
                 <Typography type={TypographyType.REGULAR_TITLE}>
                   {(key === 0
                     ? userNftListA.filter((item) => item.staked).length

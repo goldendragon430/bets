@@ -24,11 +24,9 @@ const TweetSection: React.FC = () => {
   const { theme } = useTheme();
 
   const [listA, setListA] = useState<TwitterFeed[]>([]);
-  const [listB, setListB] = useState<TwitterFeed[]>([]);
 
   useEffect(() => {
     fetchTwitterA();
-    fetchTwitterB();
   }, []);
 
   const fetchTwitterA = async () => {
@@ -57,37 +55,9 @@ const TweetSection: React.FC = () => {
     }
   };
 
-  const fetchTwitterB = async () => {
-    try {
-      const res = await getTwitterFeeds('1560241600021790722');
-      if (res && res.data && res.data.data) {
-        const { data, includes } = res.data.data;
-        setListB(
-          data.map((item: any) => {
-            const user = includes.users.find((_user: any) => _user.id === item.author_id);
-            return {
-              id: item.id,
-              text: item.text,
-              createdAt: new Date(item.created_at),
-              name: user.name,
-              username: user.username,
-              profileImg: user.profile_image_url,
-            };
-          })
-        );
-      } else {
-        setListB([]);
-      }
-    } catch (e) {
-      setListB([]);
-    }
-  };
-
   return (
     <Container>
-      <TweetList color={theme.colors.red1} tweets={listA} />
-      <div style={{ minWidth: '10rem', minHeight: '10rem' }} />
-      <TweetList color={theme.colors.blue1} tweets={listB} />
+      <TweetList color={theme.colors.green2} tweets={listA} />
     </Container>
   );
 };

@@ -81,7 +81,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
   return battleInfo ? (
     <Container>
       <TeamSection
-        color={theme.colors.red1}
+        color={theme.colors.green1}
         endTime={endTime}
         ethStaked={totalBetAmountA}
         firstTeam
@@ -106,9 +106,9 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <BetModal
-        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        color={selectA ? theme.colors.green1 : theme.colors.blue1}
         endTime={endTime}
-        fontColor={selectA ? theme.colors.white : theme.colors.black}
+        fontColor={theme.colors.black}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
         rewardPotential={getRewardPotential(!selectA)}
@@ -117,9 +117,9 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <StakeModal
-        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        color={selectA ? theme.colors.green1 : theme.colors.blue1}
         endTime={endTime}
-        fontColor={selectA ? theme.colors.white : theme.colors.black}
+        fontColor={theme.colors.black}
         nfts={selectA ? userNftListA : userNftListB}
         onClose={() => setShowStakeModal(false)}
         onStake={handleStake}
@@ -127,7 +127,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <SuccessModal
-        color={selectA ? theme.colors.red1 : theme.colors.blue1}
+        color={selectA ? theme.colors.green1 : theme.colors.blue1}
         ethStaked={betAmount}
         nftStaked={stakedAmount}
         onClose={() => setShowSuccessModal(false)}

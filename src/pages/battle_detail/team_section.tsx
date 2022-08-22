@@ -17,7 +17,7 @@ import { isExpired } from '../../utils';
 
 const TeamWrapper = styled.div`
   flex: 1;
-  overflow: hidden;
+  // overflow: hidden;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     width: 60%;
@@ -28,6 +28,7 @@ const StatsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  height: 6rem;
 `;
 
 const StatsItem = styled.div`
@@ -62,15 +63,24 @@ const ButtonWrapper = styled.div`
 `;
 
 const TeamLogo = styled.img<{ color: string }>`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
   filter: drop-shadow(0px 0px 0.6875rem ${({ color }) => color});
-  margin: 1rem;
+  margin: 0.5rem;
 `;
 
 const EthImg = styled.img`
-  height: 6rem;
+  height: 2rem;
+  transform: scale(1.5);
+`;
+
+const NumberText = styled(Typography)`
+  font-size: 1.5rem;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    font-size: 1.875rem;
+  }`}
 `;
 
 const SocialWrapper = styled.div<{ firstTeam?: boolean }>`
@@ -116,11 +126,11 @@ const TeamSection: React.FC<ITeamSection> = ({
     <TeamWrapper>
       <StatsWrapper>
         <StatsItem>
-          <Typography type={TypographyType.REGULAR_TITLE}>{nftStaked.toLocaleString()}</Typography>
+          <NumberText type={TypographyType.REGULAR}>{nftStaked.toLocaleString()}</NumberText>
           <TeamLogo alt="" color={color} src={project.logo} />
         </StatsItem>
         <StatsItem>
-          <Typography type={TypographyType.REGULAR_TITLE}>{ethStaked.toLocaleString()}</Typography>
+          <NumberText type={TypographyType.REGULAR}>{ethStaked.toLocaleString()}</NumberText>
           <EthImg alt="" src={EthIcon} />
         </StatsItem>
       </StatsWrapper>

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Modal } from 'antd';
 import styled from 'styled-components';
@@ -145,6 +145,13 @@ const BetModal: React.FC<IBetModal> = ({
     setLoading(false);
   };
 
+  const getBPAmount = useCallback(() => {
+    if (Number.isNaN(Number(amount)) || Number(amount) <= 0) {
+      return '0';
+    }
+    return (Number(amount) * 3000).toLocaleString();
+  }, [amount]);
+
   return (
     <ModalWrapper
       centered
@@ -204,7 +211,7 @@ const BetModal: React.FC<IBetModal> = ({
       </BetButton>
 
       <Typography color={color} type={TypographyType.REGULAR_TITLE}>
-        if you lose you will earn 3000 BP
+        if you lose you will earn {getBPAmount()} BP
       </Typography>
       <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
         find out more about bp <a>here</a>

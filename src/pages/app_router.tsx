@@ -28,7 +28,7 @@ const AppRouter = () => (
     <Content>
       <Routes>
         <Route element={<BattleDetail />} path="/battle/:battleId" />
-        <Route element={<Navigate to="battle/62febb893b45450198cec775" />} path="/" />
+        <Route element={<Navigate to="battle/63038d0a0ac58f35319e7484" />} path="/" />
       </Routes>
     </Content>
     <ToastContainer />

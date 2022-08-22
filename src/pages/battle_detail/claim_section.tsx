@@ -54,9 +54,9 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
   }, [winnerSet]);
 
   const handleClaim = async () => {
-    setLoading(false);
-    await claim();
     setLoading(true);
+    await claim();
+    setLoading(false);
   };
 
   return (

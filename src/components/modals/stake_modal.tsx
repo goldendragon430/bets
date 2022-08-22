@@ -35,7 +35,7 @@ const ModalWrapper = styled(Modal)<{ color: string }>`
     }
 
     .ant-modal-body {
-      padding: 3rem;
+      padding: 2rem;
       background: radial-gradient(
         50% 50% at 50.01% 50.01%,
         ${({ color }) => `${color}40`} 0%,

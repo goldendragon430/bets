@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
-import LogoIcon from '../assets/images/logo.svg';
+// import LogoIcon from '../assets/images/logo.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
 import LinkButton from './common/link_button';
 import { Typography, TypographyType } from './common/typography';
@@ -18,14 +18,14 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 4rem;
+  padding: 1rem 2rem;
   height: 6.25rem;
   box-sizing: border-box;
   color: ${({ theme }) => theme.colors.text1};
   border-bottom: 1px solid ${({ theme }) => theme.colors.white};
 
   ${({ theme }) => `${theme.media_width.upToLarge} {
-    padding: 1rem 2rem;
+    padding: 1rem;
   }`};
 `;
 
@@ -35,7 +35,7 @@ const Flex = styled.div`
 `;
 
 const LinkWrapper = styled(Flex)`
-  margin-left: 1rem;
+  // margin-left: 1rem;
 
   ${({ theme }) => `${theme.media_width.upToSmall} {
     display: none;
@@ -55,9 +55,9 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Logo = styled.img`
-  height: 3rem;
-`;
+// const Logo = styled.img`
+//   height: 3rem;
+// `;
 
 const ButtonWrapper = styled(Flex)`
   ${({ theme }) => `${theme.media_width.upToMedium} {
@@ -144,9 +144,9 @@ const Header: React.FC = () => {
   return (
     <Container>
       <Flex>
-        <Link to="/">
+        {/* <Link to="/">
           <Logo alt="" src={LogoIcon} />
-        </Link>
+        </Link> */}
 
         <LinkWrapper>
           {ROUTES.map((link, key) => (

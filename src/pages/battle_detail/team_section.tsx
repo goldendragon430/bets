@@ -56,6 +56,8 @@ const ButtonWrapper = styled.div`
   button {
     flex: 1;
     margin: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
   }
 `;
 

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import Header from '../components/header';
 import BattleDetail from './battle_detail';
+import Battles from './battles';
 
 const Container = styled.div`
   position: relative;
@@ -27,6 +28,7 @@ const AppRouter = () => (
     <Header />
     <Content>
       <Routes>
+        <Route element={<Battles />} path="/upcoming" />
         <Route element={<BattleDetail />} path="/battle/:battleId" />
         <Route element={<Navigate to="battle/63038d0a0ac58f35319e7484" />} path="/" />
       </Routes>

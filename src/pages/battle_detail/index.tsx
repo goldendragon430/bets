@@ -8,20 +8,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { Alchemy, Network } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
-import { getActiveTotalNftStakedAmount, getBattleById, getNftStakedStatus } from '../../services';
+import { getBattleById } from '../../services';
 import { BattleInfo, NFTMetadata } from '../../types';
+import { getBattleBetInfo, getBattleInitInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
 import BattlePage from './battle';
-
-const config = {
-  apiKey: process.env.REACT_APP_ALCHEMY_KEY,
-  network: Network.ETH_GOERLI,
-};
-const alchemy = new Alchemy(config);
 
 const BattleDetail: React.FC = () => {
   const { battleId } = useParams();
@@ -78,133 +72,43 @@ const BattleDetail: React.FC = () => {
   };
 
   const updateInitInfo = useCallback(async () => {
-    const getStartTime = async () => {
-      if (betContract) {
-        try {
-          const betStartTime = await betContract.betStartTime();
-          setStartTime(Number(betStartTime));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setStartTime(0);
-      }
-    };
-    const getEndTime = async () => {
-      if (betContract) {
-        try {
-          const betEndTime = await betContract.betEndTime();
-          setEndTime(Number(betEndTime));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setEndTime(0);
-      }
-    };
-    const getRakePercentage = async () => {
-      if (betContract) {
-        try {
-          const rakePercent = await betContract.rakePercentage();
-          setRakePercentage(Number(rakePercent));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setRakePercentage(0);
-      }
-    };
-    const getNftStakersPercentage = async () => {
-      if (betContract) {
-        try {
-          const nftStakersPercent = await betContract.nftStakersPercentage();
-          setNftStakersPercentage(Number(nftStakersPercent));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setNftStakersPercentage(0);
-      }
-    };
+    const res = await getBattleInitInfo(betContract);
 
-    getStartTime();
-    getEndTime();
-    getRakePercentage();
-    getNftStakersPercentage();
+    if (res.startTime !== undefined) {
+      setStartTime(res.startTime);
+    }
+    if (res.endTime !== undefined) {
+      setEndTime(res.endTime);
+    }
+    if (res.rakePercentage !== undefined) {
+      setRakePercentage(res.rakePercentage);
+    }
+    if (res.nftStakersPercentage !== undefined) {
+      setNftStakersPercentage(res.nftStakersPercentage);
+    }
   }, [betContract]);
 
   const updateBetInfo = useCallback(async () => {
-    const getTotalBetAmountA = async () => {
-      if (betContract) {
-        try {
-          const totalAmountA = await betContract.totalBettedAmountA();
-          setTotalBetAmountA(Number(ethers.utils.formatEther(totalAmountA)));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setTotalBetAmountA(0);
-      }
-    };
-    const getTotalBetAmountB = async () => {
-      if (betContract) {
-        try {
-          const totalAmountB = await betContract.totalBettedAmountB();
-          setTotalBetAmountB(Number(ethers.utils.formatEther(totalAmountB)));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setTotalBetAmountB(0);
-      }
-    };
-    const getTotalNftStaked = async () => {
-      if (battleId) {
-        try {
-          const res = await getActiveTotalNftStakedAmount(battleId || '');
-          if (res.data.data) {
-            setTotalNftStakedA(Number(res.data.data.collectionA));
-            setTotalNftStakedB(Number(res.data.data.collectionB));
-            return;
-          }
-        } catch (err: any) {
-          console.error(err.message);
-        }
-      } else {
-        setTotalNftStakedA(0);
-        setTotalNftStakedB(0);
-      }
-    };
-    const getWinnerSet = async () => {
-      if (betContract) {
-        try {
-          const _winnerSet = await betContract.winnerSet();
-          setWinnerSet(_winnerSet);
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setWinnerSet(false);
-      }
-    };
-    const getWinner = async () => {
-      if (betContract) {
-        try {
-          const _winner = await betContract.winner();
-          setWinner(_winner);
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setWinner(false);
-      }
-    };
+    const res = await getBattleBetInfo(betContract, battleId);
 
-    getTotalBetAmountA();
-    getTotalBetAmountB();
-    getTotalNftStaked();
-    getWinnerSet();
-    getWinner();
+    if (res.totalBetAmountA !== undefined) {
+      setTotalBetAmountA(res.totalBetAmountA);
+    }
+    if (res.totalBetAmountB !== undefined) {
+      setTotalBetAmountB(res.totalBetAmountB);
+    }
+    if (res.totalNftStakedA !== undefined) {
+      setTotalNftStakedA(res.totalNftStakedA);
+    }
+    if (res.totalNftStakedB !== undefined) {
+      setTotalNftStakedB(res.totalNftStakedB);
+    }
+    if (res.winnerSet !== undefined) {
+      setWinnerSet(res.winnerSet);
+    }
+    if (res.winner !== undefined) {
+      setWinner(res.winner);
+    }
   }, [betContract]);
 
   useEffect(() => {
@@ -213,32 +117,14 @@ const BattleDetail: React.FC = () => {
   }, [betContract]);
 
   const updateUserInfo = useCallback(async () => {
-    const getUserBetAmountA = async () => {
-      if (betContract && account) {
-        try {
-          const userAmountA = await betContract.getUserBettedAmount(account, false);
-          setUserBetAmountA(Number(ethers.utils.formatEther(userAmountA)));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setUserBetAmountA(0);
-      }
-    };
-    const getUserBetAmountB = async () => {
-      if (betContract && account) {
-        try {
-          const userAmountB = await betContract.getUserBettedAmount(account, true);
-          setUserBetAmountB(Number(ethers.utils.formatEther(userAmountB)));
-        } catch (err: any) {
-          console.error(err.reason || err.error?.message || err.message);
-        }
-      } else {
-        setUserBetAmountB(0);
-      }
-    };
-    getUserBetAmountA();
-    getUserBetAmountB();
+    const res = await getUserBetInfo(betContract, account);
+
+    if (res.userBetAmountA !== undefined) {
+      setUserBetAmountA(res.userBetAmountA);
+    }
+    if (res.userBetAmountB !== undefined) {
+      setUserBetAmountB(res.userBetAmountB);
+    }
   }, [account, betContract]);
 
   useEffect(() => {
@@ -246,47 +132,13 @@ const BattleDetail: React.FC = () => {
   }, [betContract, account]);
 
   const updateUserNftList = useCallback(async () => {
-    const getStakedNfts = async (nfts: NFTMetadata[], contractAddresses: string) => {
-      let result = nfts;
-      try {
-        const res = await getNftStakedStatus(
-          nfts.map((item) => Number(item.tokenId)),
-          contractAddresses,
-          battleId || ''
-        );
-        result = nfts.map((item, index) => ({ ...item, staked: res.data.data[index].status }));
-      } catch (err: any) {
-        console.error(err);
-      }
-      return result;
-    };
+    const res = await getUserNftList(account, battleInfo);
 
-    if (account && battleInfo) {
-      try {
-        const nfts = await alchemy.nft.getNftsForOwner(account, {
-          contractAddresses: [battleInfo.projectL.contract, battleInfo.projectR.contract],
-        });
-        const nftsA = await getStakedNfts(
-          nfts.ownedNfts.filter(
-            (item) => item.contract.address.toLowerCase() === battleInfo.projectL.contract.toLowerCase()
-          ),
-          battleInfo.projectL.contract
-        );
-        const nftsB = await getStakedNfts(
-          nfts.ownedNfts.filter(
-            (item) => item.contract.address.toLowerCase() === battleInfo.projectR.contract.toLowerCase()
-          ),
-          battleInfo.projectR.contract
-        );
-
-        setUserNftListA(nftsA);
-        setUserNftListB(nftsB);
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      setUserNftListA([]);
-      setUserNftListB([]);
+    if (res.userNftListA !== undefined) {
+      setUserNftListA(res.userNftListA);
+    }
+    if (res.userNftListB !== undefined) {
+      setUserNftListB(res.userNftListB);
     }
   }, [account, battleInfo]);
 

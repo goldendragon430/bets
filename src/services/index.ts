@@ -12,6 +12,8 @@ export const getTwitterFeeds = (tweet_id: string) => http.get(`/v1/twitter/get?t
 
 export const getActiveBattleIds = () => http.get(`/v1/battles/get_active_battle_ids`);
 
+export const getBattleHistory = () => http.get(`/v1/battles/get_battle_histories`);
+
 export const getBattleById = (battleId: string) => http.get(`/v1/battles/get_battle_by_id/${battleId}`);
 
 export const getNftStakedStatus = (tokenIds: number[], contractAddress: string, battleId: string) =>

@@ -118,8 +118,16 @@ const CloseButton = styled.img`
 
 const ROUTES = [
   {
-    name: 'Featured Fight',
+    name: 'Main',
     route: '/',
+  },
+  {
+    name: 'Leaderboard',
+    route: '/leaderboard',
+  },
+  {
+    name: 'Upcoming',
+    route: '/upcoming',
   },
 ];
 

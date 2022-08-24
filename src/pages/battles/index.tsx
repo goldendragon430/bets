@@ -19,7 +19,7 @@ const Battles = () => {
     try {
       const res = await getBattleHistory();
       if (res.data.data) {
-        setBattles(res.data.data);
+        setBattles(res.data.data.reverse());
       }
     } catch (err: any) {
       console.error(err.message);

@@ -1,10 +1,11 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styled from 'styled-components';
 
 import Header from '../components/header';
+import ActiveBattle from './active_battle';
 import BattleDetail from './battle_detail';
 import Battles from './battles';
 
@@ -30,7 +31,7 @@ const AppRouter = () => (
       <Routes>
         <Route element={<Battles />} path="/upcoming" />
         <Route element={<BattleDetail />} path="/battle/:battleId" />
-        <Route element={<Navigate to="battle/63038d0a0ac58f35319e7484" />} path="/" />
+        <Route element={<ActiveBattle />} path="/" />
       </Routes>
     </Content>
     <ToastContainer />

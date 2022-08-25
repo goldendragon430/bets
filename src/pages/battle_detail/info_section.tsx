@@ -113,7 +113,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
 
   return (
     <InfoWrapper>
-      <NumberText type={TypographyType.BOLD_TITLE}>
+      <NumberText type={TypographyType.BOLD_SUBTITLE}>
         {startTime * 1000 > Date.now() ? (
           <span>Not Started</span>
         ) : (

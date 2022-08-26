@@ -11,4 +11,7 @@ interface Window {
     setSelectedProvider: (provider: any) => Promise<void>;
   };
   web3?: Record<string, unknown>;
+  rmlLoaded?: any;
+  rmlCalls?: any;
+  rml?: any;
 }

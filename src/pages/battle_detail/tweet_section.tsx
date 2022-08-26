@@ -8,19 +8,24 @@ import { getTwitterFeeds } from '../../services';
 import { TwitterFeed } from '../../types';
 import TweetList from './tweet_list';
 
-const Container = styled.div`
+const Container = styled.div<{ visible: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 4rem;
   background: ${({ theme }) => theme.colors.black};
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     flex-direction: column;
   }`}
+
+  ${({ visible }) => !visible && `display: none;`}
 `;
 
-const TweetSection: React.FC = () => {
+interface ITweetSection {
+  visible: boolean;
+}
+
+const TweetSection: React.FC<ITweetSection> = ({ visible }) => {
   const { theme } = useTheme();
 
   const [listA, setListA] = useState<TwitterFeed[]>([]);
@@ -56,7 +61,7 @@ const TweetSection: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container visible={visible}>
       <TweetList color={theme.colors.green2} tweets={listA} />
     </Container>
   );

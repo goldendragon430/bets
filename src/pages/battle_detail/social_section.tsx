@@ -3,9 +3,9 @@
 import styled from 'styled-components';
 
 import Button from '../../components/common/button';
+import Roomlio from '../../components/roomlio';
 // import { Typography, TypographyType } from '../../components/common/typography';
 import { useWallet } from '../../contexts/wallet_context';
-import ChatSection from './chat_section';
 import TweetSection from './tweet_section';
 
 const Container = styled.div`
@@ -67,7 +67,7 @@ const SocialSection = () => {
         <TabButton shadow>Retweets</TabButton>
       </ButtonWrapper>
 
-      {account && <ChatSection visible />}
+      {account && <Roomlio />}
       <TweetSection visible />
     </Container>
   );

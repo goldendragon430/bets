@@ -7,9 +7,7 @@ import styled from 'styled-components';
 import { useWallet } from '../contexts/wallet_context';
 import { getShortWalletAddress } from '../utils';
 
-const Container = styled.div`
-  border: 1px solid white;
-`;
+const Container = styled.div``;
 
 const Roomlio = () => {
   const { account } = useWallet();

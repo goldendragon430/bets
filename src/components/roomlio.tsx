@@ -37,8 +37,9 @@ const Roomlio = () => {
         pk: 'J-uYxt6H8QHLEZ-1c25DJ3nDRXtfwZF7wMgZdvta-iaL',
         roomElementID: 'battle_chat',
         options: {
-          embedPosition: 'inline',
-          collapsedMode: 'none',
+          embedPosition: 'bottomRight',
+          collapsedMode: 'chip',
+          collapsedModeOnlineLabel: 'Chat now!',
           showGreetingMessage: false,
           showRoomMemberList: false,
           styles: {

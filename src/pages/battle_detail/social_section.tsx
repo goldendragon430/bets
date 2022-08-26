@@ -1,9 +1,9 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import styled from 'styled-components';
 
 import Button from '../../components/common/button';
-import { Typography, TypographyType } from '../../components/common/typography';
+// import { Typography, TypographyType } from '../../components/common/typography';
 import { useWallet } from '../../contexts/wallet_context';
 import ChatSection from './chat_section';
 import TweetSection from './tweet_section';
@@ -35,27 +35,27 @@ const TabButton = styled(Button)`
   font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
 `;
 
-const Splitter = styled(Typography)`
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    display: none;
-  }`};
-`;
+// const Splitter = styled(Typography)`
+//   ${({ theme }) => `${theme.media_width.upToMedium} {
+//     display: none;
+//   }`};
+// `;
 
-const Splitter1 = styled(Typography)`
-  display: none;
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    display: block;
-  }`};
-`;
+// const Splitter1 = styled(Typography)`
+//   display: none;
+//   ${({ theme }) => `${theme.media_width.upToMedium} {
+//     display: block;
+//   }`};
+// `;
 
 const SocialSection = () => {
   const { account } = useWallet();
-  const [showTweet, setShowTweet] = useState(false);
+  // const [showTweet, setShowTweet] = useState(false);
 
   return (
     <Container>
       <ButtonWrapper>
-        {account && (
+        {/* {account && (
           <>
             <TabButton onClick={() => setShowTweet(false)} shadow>
               Live chat
@@ -63,16 +63,13 @@ const SocialSection = () => {
             <Splitter type={TypographyType.BOLD_TITLE}>|</Splitter>
             <Splitter1 type={TypographyType.BOLD_TITLE}>-</Splitter1>
           </>
-        )}
-        <TabButton onClick={() => setShowTweet(true)} shadow>
-          Retweets
-        </TabButton>
+        )} */}
+        <TabButton shadow>Retweets</TabButton>
       </ButtonWrapper>
 
-      {account && <ChatSection visible={!showTweet} />}
-      <TweetSection visible={!account || showTweet} />
+      {account && <ChatSection visible />}
+      <TweetSection visible />
     </Container>
   );
 };
-
 export default SocialSection;

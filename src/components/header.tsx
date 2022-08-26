@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
-// import LogoIcon from '../assets/images/logo.svg';
+import LogoIcon from '../assets/images/logo.png';
 import TwitterIcon from '../assets/images/twitter.svg';
 import LinkButton from './common/link_button';
 import { Typography, TypographyType } from './common/typography';
@@ -55,9 +55,9 @@ const StyledLink = styled(Link)`
   }
 `;
 
-// const Logo = styled.img`
-//   height: 3rem;
-// `;
+const Logo = styled.img`
+  height: 4rem;
+`;
 
 const ButtonWrapper = styled(Flex)`
   ${({ theme }) => `${theme.media_width.upToMedium} {
@@ -152,9 +152,9 @@ const Header: React.FC = () => {
   return (
     <Container>
       <Flex>
-        {/* <Link to="/">
+        <Link to="/">
           <Logo alt="" src={LogoIcon} />
-        </Link> */}
+        </Link>
 
         <LinkWrapper>
           {ROUTES.map((link, key) => (

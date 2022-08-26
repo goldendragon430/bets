@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
 import Header from '../components/header';
+import Roomlio from '../components/roomlio';
 import ActiveBattle from './active_battle';
 import BattleDetail from './battle_detail';
 import Battles from './battles';

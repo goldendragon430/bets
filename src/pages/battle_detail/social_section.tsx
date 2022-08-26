@@ -1,7 +1,11 @@
+import { useState } from 'react';
+
 import styled from 'styled-components';
 
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useWallet } from '../../contexts/wallet_context';
+import ChatSection from './chat_section';
 import TweetSection from './tweet_section';
 
 const Container = styled.div`
@@ -44,16 +48,31 @@ const Splitter1 = styled(Typography)`
   }`};
 `;
 
-const SocialSection = () => (
-  <Container>
-    <ButtonWrapper>
-      <TabButton shadow>Live chat</TabButton>
-      <Splitter type={TypographyType.BOLD_TITLE}>|</Splitter>
-      <Splitter1 type={TypographyType.BOLD_TITLE}>-</Splitter1>
-      <TabButton shadow>Retweets</TabButton>
-    </ButtonWrapper>
-    <TweetSection />
-  </Container>
-);
+const SocialSection = () => {
+  const { account } = useWallet();
+  const [showTweet, setShowTweet] = useState(false);
+
+  return (
+    <Container>
+      <ButtonWrapper>
+        {account && (
+          <>
+            <TabButton onClick={() => setShowTweet(false)} shadow>
+              Live chat
+            </TabButton>
+            <Splitter type={TypographyType.BOLD_TITLE}>|</Splitter>
+            <Splitter1 type={TypographyType.BOLD_TITLE}>-</Splitter1>
+          </>
+        )}
+        <TabButton onClick={() => setShowTweet(true)} shadow>
+          Retweets
+        </TabButton>
+      </ButtonWrapper>
+
+      {account && <ChatSection visible={!showTweet} />}
+      <TweetSection visible={!account || showTweet} />
+    </Container>
+  );
+};
 
 export default SocialSection;

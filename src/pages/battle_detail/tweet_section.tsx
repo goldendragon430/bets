@@ -36,7 +36,7 @@ const TweetSection: React.FC<ITweetSection> = ({ visible }) => {
 
   const fetchTwitterA = async () => {
     try {
-      const res = await getTwitterFeeds('1562864385701208066');
+      const res = await getTwitterFeeds('1563184041889001480');
       if (res && res.data && res.data.data) {
         const { data, includes } = res.data.data;
         setListA(

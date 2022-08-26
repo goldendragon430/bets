@@ -75,7 +75,7 @@ const MenuButton = styled.img`
 `;
 
 const SocialIcon = styled(LinkButton)`
-  margin: 0 2rem;
+  margin: 0 0.5rem;
 
   img {
     height: 2rem;
@@ -139,11 +139,11 @@ const Header: React.FC = () => {
   };
 
   const getSocialIcons = () => (
-    <Flex style={{ padding: '2rem 1rem' }}>
-      <SocialIcon disabled>
+    <Flex style={{ padding: '2rem' }}>
+      <SocialIcon href="https://twitter.com/AlphaBetsGG">
         <img alt="" src={TwitterIcon} />
       </SocialIcon>
-      <SocialIcon disabled>
+      <SocialIcon href="https://discord.gg/alphabets">
         <img alt="" src={DiscordIcon} />
       </SocialIcon>
     </Flex>

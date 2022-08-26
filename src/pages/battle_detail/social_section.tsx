@@ -3,9 +3,7 @@
 import styled from 'styled-components';
 
 import Button from '../../components/common/button';
-import Roomlio from '../../components/roomlio';
 // import { Typography, TypographyType } from '../../components/common/typography';
-import { useWallet } from '../../contexts/wallet_context';
 import TweetSection from './tweet_section';
 
 const Container = styled.div`
@@ -48,14 +46,10 @@ const TabButton = styled(Button)`
 //   }`};
 // `;
 
-const SocialSection = () => {
-  const { account } = useWallet();
-  // const [showTweet, setShowTweet] = useState(false);
-
-  return (
-    <Container>
-      <ButtonWrapper>
-        {/* {account && (
+const SocialSection = () => (
+  <Container>
+    <ButtonWrapper>
+      {/* {account && (
           <>
             <TabButton onClick={() => setShowTweet(false)} shadow>
               Live chat
@@ -64,12 +58,10 @@ const SocialSection = () => {
             <Splitter1 type={TypographyType.BOLD_TITLE}>-</Splitter1>
           </>
         )} */}
-        <TabButton shadow>Retweets</TabButton>
-      </ButtonWrapper>
+      <TabButton shadow>Retweets</TabButton>
+    </ButtonWrapper>
 
-      {account && <Roomlio />}
-      <TweetSection visible />
-    </Container>
-  );
-};
+    <TweetSection visible />
+  </Container>
+);
 export default SocialSection;

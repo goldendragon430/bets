@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import Header from '../components/header';
 import Roomlio from '../components/roomlio';
+import { useWallet } from '../contexts/wallet_context';
 import ActiveBattle from './active_battle';
 import BattleDetail from './battle_detail';
 import Battles from './battles';
@@ -25,18 +26,23 @@ const Content = styled.div`
   flex-direction: column;
 `;
 
-const AppRouter = () => (
-  <Container>
-    <Header />
-    <Content>
-      <Routes>
-        <Route element={<Battles />} path="/upcoming" />
-        <Route element={<BattleDetail />} path="/battle/:battleId" />
-        <Route element={<ActiveBattle />} path="/" />
-      </Routes>
-    </Content>
-    <ToastContainer />
-  </Container>
-);
+const AppRouter = () => {
+  const { account } = useWallet();
+
+  return (
+    <Container>
+      <Header />
+      <Content>
+        <Routes>
+          <Route element={<Battles />} path="/upcoming" />
+          <Route element={<BattleDetail />} path="/battle/:battleId" />
+          <Route element={<ActiveBattle />} path="/" />
+        </Routes>
+      </Content>
+      {account && <Roomlio />}
+      <ToastContainer />
+    </Container>
+  );
+};
 
 export default AppRouter;

@@ -38,7 +38,7 @@ const BattleDetail: React.FC = () => {
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
 
-  const betContract = useBetContract(battleInfo?.betContractAddress);
+  const betContract = useBetContract();
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
 

@@ -120,28 +120,15 @@ interface IBattleItem {
 }
 
 const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
-  const betContract = useBetContract(battleInfo.betContractAddress);
+  const betContract = useBetContract();
   const { theme } = useTheme();
 
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
   const [totalNftStakedA, setTotalNftStakedA] = useState(0);
   const [totalNftStakedB, setTotalNftStakedB] = useState(0);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
-
-  const updateInitInfo = useCallback(async () => {
-    const res = await getBattleInitInfo(betContract);
-
-    if (res.startTime !== undefined) {
-      setStartTime(res.startTime);
-    }
-    if (res.endTime !== undefined) {
-      setEndTime(res.endTime);
-    }
-  }, [betContract]);
 
   const updateBetInfo = useCallback(async () => {
     const res = await getBattleBetInfo(betContract, battleInfo.id);
@@ -167,7 +154,6 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
   }, [betContract, battleInfo]);
 
   useEffect(() => {
-    updateInitInfo();
     updateBetInfo();
   }, [betContract, battleInfo]);
 
@@ -184,20 +170,18 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
 
         <InfoWrapper>
           <StatusText type={TypographyType.BOLD_SUBTITLE}>
-            {startTime * 1000 > Date.now() ? (
+            {new Date(battleInfo.startDate) > new Date() ? (
               <span>Not Started</span>
             ) : (
-              endTime > 0 && (
-                <Countdown date={endTime * 1000}>
-                  <span>
-                    {winnerSet
-                      ? !winner
-                        ? `${battleInfo?.projectL.subName} wins`
-                        : `${battleInfo?.projectR.subName} wins`
-                      : 'Finalizing...'}
-                  </span>
-                </Countdown>
-              )
+              <Countdown date={new Date(battleInfo.endDate)}>
+                <span>
+                  {winnerSet
+                    ? !winner
+                      ? `${battleInfo?.projectL.subName} wins`
+                      : `${battleInfo?.projectR.subName} wins`
+                    : 'Finalizing...'}
+                </span>
+              </Countdown>
             )}
           </StatusText>
         </InfoWrapper>

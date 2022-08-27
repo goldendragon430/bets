@@ -61,7 +61,4 @@ export interface BattleDetailType {
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
   stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
-  claimAmount: number;
-  updateClaimAmount: () => void;
-  claim: () => void;
 }

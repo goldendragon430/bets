@@ -220,3 +220,42 @@ export const getUserNftList = async (account: Maybe<string>, battleInfo: BattleI
     return { userNftListA: [], userNftListB: [] };
   }
 };
+
+export const getUserClaimInfo = async (
+  betContract: ethers.Contract | null,
+  account: Maybe<string>,
+  battleInfo: BattleInfo | null
+) => {
+  const getClaimableAmount = async () => {
+    if (betContract && account && battleInfo) {
+      try {
+        const amount = await betContract.getClaimableAmount(battleInfo.battleId, account);
+        return Number(ethers.utils.formatEther(amount));
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return 0;
+    }
+  };
+  const getClaimableABPAmount = async () => {
+    if (betContract && account && battleInfo) {
+      try {
+        const amount = await betContract.getClaimableABPAmount(battleInfo.battleId, account);
+        return Number(ethers.utils.formatEther(amount));
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return 0;
+    }
+  };
+
+  const res = await Promise.all([getClaimableAmount(), getClaimableABPAmount()]);
+  return {
+    claimAmount: res[0],
+    claimABPAmount: res[1],
+  };
+};

@@ -32,7 +32,6 @@ const BattleDetail: React.FC = () => {
   const [userBetAmountB, setUserBetAmountB] = useState(0);
   const [userNftListA, setUserNftListA] = useState<NFTMetadata[]>([]);
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
-  const [claimAmount, setClaimAmount] = useState(0);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
 
@@ -215,45 +214,9 @@ const BattleDetail: React.FC = () => {
     return false;
   };
 
-  const updateClaimAmount = async () => {
-    if (winnerSet) {
-      try {
-        if (betContract && account && battleInfo) {
-          const amount = await betContract.getClaimableAmount(battleInfo.battleId, account);
-          setClaimAmount(Number(ethers.utils.formatEther(amount)));
-        } else {
-          setClaimAmount(0);
-        }
-      } catch (err: any) {
-        console.error(err.reason || err.error?.message || err.message);
-      }
-    } else {
-      setClaimAmount(0);
-    }
-  };
-
-  const claim = async () => {
-    try {
-      if (betContract && account && battleInfo) {
-        await betContract.estimateGas.claimReward(battleInfo.battleId);
-        const tx = await betContract.claimReward(battleInfo.battleId);
-        const receipt = await tx.wait();
-        if (receipt.status) {
-          updateTotalInfo();
-          toast.success('Claim Success');
-        }
-        toast.error('Claim Error');
-      }
-    } catch (err: any) {
-      toast.error(err.reason || err.error?.message || err.message);
-    }
-  };
-
   return (
     <BattlePage
       battleInfo={battleInfo}
-      claim={claim}
-      claimAmount={claimAmount}
       getChance={getChance}
       getRewardPotential={getRewardPotential}
       placeBet={placeBet}
@@ -263,7 +226,6 @@ const BattleDetail: React.FC = () => {
       totalNftStakedA={totalNftStakedA}
       totalNftStakedB={totalNftStakedB}
       updateBetInfo={updateBetInfo}
-      updateClaimAmount={updateClaimAmount}
       updateUserInfo={updateUserInfo}
       updateUserNftList={updateUserNftList}
       userBetAmountA={userBetAmountA}

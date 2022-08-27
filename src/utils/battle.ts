@@ -16,32 +16,6 @@ const config = {
 const alchemy = new Alchemy(config);
 
 export const getBattleInitInfo = async (betContract: ethers.Contract | null) => {
-  const getStartTime = async () => {
-    if (betContract) {
-      try {
-        const betStartTime = await betContract.betStartTime();
-        return Number(betStartTime);
-      } catch (err: any) {
-        console.error(err.reason || err.error?.message || err.message);
-        return undefined;
-      }
-    } else {
-      return 0;
-    }
-  };
-  const getEndTime = async () => {
-    if (betContract) {
-      try {
-        const betEndTime = await betContract.betEndTime();
-        return Number(betEndTime);
-      } catch (err: any) {
-        console.error(err.reason || err.error?.message || err.message);
-        return undefined;
-      }
-    } else {
-      return 0;
-    }
-  };
   const getRakePercentage = async () => {
     if (betContract) {
       try {
@@ -69,20 +43,18 @@ export const getBattleInitInfo = async (betContract: ethers.Contract | null) => 
     }
   };
 
-  const res = await Promise.all([getStartTime(), getEndTime(), getRakePercentage(), getNftStakersPercentage()]);
+  const res = await Promise.all([getRakePercentage(), getNftStakersPercentage()]);
   return {
-    startTime: res[0],
-    endTime: res[1],
-    rakePercentage: res[2],
-    nftStakersPercentage: res[3],
+    rakePercentage: res[0],
+    nftStakersPercentage: res[1],
   };
 };
 
-export const getBattleBetInfo = async (betContract: ethers.Contract | null, battleId: string | undefined) => {
+export const getBattleBetInfo = async (betContract: ethers.Contract | null, battleInfo: BattleInfo | null) => {
   const getTotalBetAmountA = async () => {
-    if (betContract) {
+    if (betContract && battleInfo) {
       try {
-        const totalAmountA = await betContract.totalBettedAmountA();
+        const totalAmountA = await betContract.totalBettedAmountA(battleInfo.battleId);
         return Number(ethers.utils.formatEther(totalAmountA));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -93,9 +65,9 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     }
   };
   const getTotalBetAmountB = async () => {
-    if (betContract) {
+    if (betContract && battleInfo) {
       try {
-        const totalAmountB = await betContract.totalBettedAmountB();
+        const totalAmountB = await betContract.totalBettedAmountB(battleInfo.battleId);
         return Number(ethers.utils.formatEther(totalAmountB));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -106,9 +78,9 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     }
   };
   const getTotalNftStaked = async () => {
-    if (battleId) {
+    if (battleInfo) {
       try {
-        const res = await getActiveTotalNftStakedAmount(battleId || '');
+        const res = await getActiveTotalNftStakedAmount(battleInfo.id);
         if (res.data.data) {
           return {
             totalNftStakedA: Number(res.data.data.collectionA),
@@ -123,9 +95,9 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     return { totalNftStakedA: 0, totalNftStakedB: 0 };
   };
   const getWinnerSet = async () => {
-    if (betContract) {
+    if (betContract && battleInfo) {
       try {
-        const _winnerSet = await betContract.winnerSet();
+        const _winnerSet = await betContract.winnerSet(battleInfo.battleId);
         return _winnerSet;
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -136,9 +108,9 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     }
   };
   const getWinner = async () => {
-    if (betContract) {
+    if (betContract && battleInfo) {
       try {
-        const _winner = await betContract.winner();
+        const _winner = await betContract.winner(battleInfo.battleId);
         return _winner;
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -166,11 +138,15 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
   };
 };
 
-export const getUserBetInfo = async (betContract: ethers.Contract | null, account: Maybe<string>) => {
+export const getUserBetInfo = async (
+  betContract: ethers.Contract | null,
+  account: Maybe<string>,
+  battleInfo: BattleInfo | null
+) => {
   const getUserBetAmountA = async () => {
-    if (betContract && account) {
+    if (betContract && account && battleInfo) {
       try {
-        const userAmountA = await betContract.getUserBettedAmount(account, false);
+        const userAmountA = await betContract.getUserBettedAmount(battleInfo.battleId, account, false);
         return Number(ethers.utils.formatEther(userAmountA));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -181,9 +157,9 @@ export const getUserBetInfo = async (betContract: ethers.Contract | null, accoun
     }
   };
   const getUserBetAmountB = async () => {
-    if (betContract && account) {
+    if (betContract && account && battleInfo) {
       try {
-        const userAmountB = await betContract.getUserBettedAmount(account, true);
+        const userAmountB = await betContract.getUserBettedAmount(battleInfo.battleId, account, true);
         return Number(ethers.utils.formatEther(userAmountB));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -243,4 +219,43 @@ export const getUserNftList = async (account: Maybe<string>, battleInfo: BattleI
   } else {
     return { userNftListA: [], userNftListB: [] };
   }
+};
+
+export const getUserClaimInfo = async (
+  betContract: ethers.Contract | null,
+  account: Maybe<string>,
+  battleInfo: BattleInfo | null
+) => {
+  const getClaimableAmount = async () => {
+    if (betContract && account && battleInfo) {
+      try {
+        const amount = await betContract.getClaimableAmount(battleInfo.battleId, account);
+        return Number(ethers.utils.formatEther(amount));
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return 0;
+    }
+  };
+  const getClaimableABPAmount = async () => {
+    if (betContract && account && battleInfo) {
+      try {
+        const amount = await betContract.getClaimableABPAmount(battleInfo.battleId, account);
+        return Number(ethers.utils.formatEther(amount));
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return 0;
+    }
+  };
+
+  const res = await Promise.all([getClaimableAmount(), getClaimableABPAmount()]);
+  return {
+    claimAmount: res[0],
+    claimABPAmount: res[1],
+  };
 };

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
 import { useWallet } from '../../contexts/wallet_context';
-import { isExpired } from '../../utils';
 import Button from '../common/button';
 import Input from '../common/input';
 import { Typography, TypographyType } from '../common/typography';
@@ -110,7 +109,7 @@ interface IBetModal {
   color: string;
   fontColor: string;
   rewardPotential: number;
-  endTime: number;
+  endTime: string;
   onBet: (amount: number) => void;
 }
 
@@ -180,7 +179,7 @@ const BetModal: React.FC<IBetModal> = ({
       </Wrapper>
 
       <Input
-        disabled={loading || isExpired(endTime)}
+        disabled={loading || new Date(endTime) < new Date()}
         onChange={(e) => setAmount(e.target.value)}
         onMax={handleMax}
         placeholder={balance.toLocaleString()}
@@ -199,7 +198,7 @@ const BetModal: React.FC<IBetModal> = ({
         color={color}
         disabled={
           loading ||
-          isExpired(endTime) ||
+          new Date(endTime) < new Date() ||
           Number.isNaN(Number(amount)) ||
           Number(amount) <= 0 ||
           Number(amount) > getMaxAmount()

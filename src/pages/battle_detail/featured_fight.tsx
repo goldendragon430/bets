@@ -36,8 +36,6 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
     userNftListA,
     userNftListB,
     stakeNft,
-    startTime,
-    endTime,
   } = props;
   const { theme } = useTheme();
 
@@ -81,33 +79,31 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
   return battleInfo ? (
     <Container>
       <TeamSection
+        battleInfo={battleInfo}
         color={theme.colors.green1}
-        endTime={endTime}
         ethStaked={totalBetAmountA}
         firstTeam
         nftStaked={totalNftStakedA}
         onBet={() => handleShowBet(true)}
         onStake={() => handleShowStake(true)}
         project={battleInfo.projectL}
-        startTime={startTime}
       />
 
       <InfoSection {...props} />
 
       <TeamSection
+        battleInfo={battleInfo}
         color={theme.colors.blue1}
-        endTime={endTime}
         ethStaked={totalBetAmountB}
         nftStaked={totalNftStakedB}
         onBet={() => handleShowBet(false)}
         onStake={() => handleShowStake(false)}
         project={battleInfo.projectR}
-        startTime={startTime}
       />
 
       <BetModal
         color={selectA ? theme.colors.green1 : theme.colors.blue1}
-        endTime={endTime}
+        endTime={battleInfo.endDate}
         fontColor={theme.colors.black}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
@@ -118,7 +114,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
 
       <StakeModal
         color={selectA ? theme.colors.green1 : theme.colors.blue1}
-        endTime={endTime}
+        endTime={battleInfo.endDate}
         fontColor={theme.colors.black}
         nfts={selectA ? userNftListA : userNftListB}
         onClose={() => setShowStakeModal(false)}

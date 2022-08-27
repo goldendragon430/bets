@@ -35,7 +35,7 @@ export interface ProjectInfo {
 
 export interface BattleInfo {
   id: string;
-  betContractAddress: string;
+  battleId: string;
   projectL: ProjectInfo;
   projectR: ProjectInfo;
   startDate: string;
@@ -55,15 +55,10 @@ export interface BattleDetailType {
   userNftListA: NFTMetadata[];
   userNftListB: NFTMetadata[];
   updateUserNftList: () => void;
-  startTime: number;
-  endTime: number;
   winnerSet: boolean;
   winner: boolean;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean) => number;
   getChance: (side: boolean) => number;
   stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
-  claimAmount: number;
-  updateClaimAmount: () => void;
-  claim: () => void;
 }

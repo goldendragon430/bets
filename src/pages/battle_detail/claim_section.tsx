@@ -47,7 +47,7 @@ const BalanceImg = styled.img`
 
 const ClaimSection: React.FC<BattleDetailType> = (props) => {
   const { winnerSet, battleInfo } = props;
-  const { balance, account } = useWallet();
+  const { balance, account, updateBalance } = useWallet();
   const betContract = useBetContract();
 
   const [claimAmount, setClaimAmount] = useState(0);
@@ -91,6 +91,7 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
         const receipt = await tx.wait();
         if (receipt.status) {
           updateClaimInfo();
+          updateBalance();
           toast.success('Claim Success');
         }
         toast.error('Claim Error');

@@ -12,8 +12,8 @@ import LinkButton from '../../components/common/link_button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
-import { ProjectInfo } from '../../types';
-import { isExpired } from '../../utils';
+import { BattleInfo, ProjectInfo } from '../../types';
+import { isInProgress } from '../../utils';
 
 const TeamWrapper = styled.div`
   flex: 1;
@@ -99,11 +99,10 @@ const SocialWrapper = styled.div<{ firstTeam?: boolean }>`
 interface ITeamSection {
   firstTeam?: boolean;
   color: string;
+  battleInfo: BattleInfo;
   project: ProjectInfo;
   nftStaked: number;
   ethStaked: number;
-  startTime: number;
-  endTime: number;
   onBet: () => void;
   onStake: () => void;
 }
@@ -111,11 +110,10 @@ interface ITeamSection {
 const TeamSection: React.FC<ITeamSection> = ({
   firstTeam,
   color,
+  battleInfo,
   project,
   nftStaked,
   ethStaked,
-  startTime,
-  endTime,
   onBet,
   onStake,
 }) => {
@@ -140,7 +138,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         <ButtonWrapper>
           <Button
             color={color}
-            disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
+            disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate)) || !account}
             fontColor={theme.colors.black}
             onClick={onStake}
           >
@@ -148,7 +146,7 @@ const TeamSection: React.FC<ITeamSection> = ({
           </Button>
           <Button
             color={color}
-            disabled={isExpired(endTime) || startTime * 1000 > Date.now() || !account}
+            disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate)) || !account}
             fontColor={theme.colors.black}
             onClick={onBet}
           >

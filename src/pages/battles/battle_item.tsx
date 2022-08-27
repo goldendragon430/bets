@@ -11,7 +11,7 @@ import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { useBetContract } from '../../hooks/useContract';
 import { BattleInfo, ProjectInfo } from '../../types';
-import { getBattleBetInfo, getBattleInitInfo } from '../../utils/battle';
+import { getBattleBetInfo } from '../../utils/battle';
 
 const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.white};
@@ -131,7 +131,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
   const [winner, setWinner] = useState(false);
 
   const updateBetInfo = useCallback(async () => {
-    const res = await getBattleBetInfo(betContract, battleInfo.id);
+    const res = await getBattleBetInfo(betContract, battleInfo);
 
     if (res.totalBetAmountA !== undefined) {
       setTotalBetAmountA(res.totalBetAmountA);

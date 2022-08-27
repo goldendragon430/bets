@@ -39,7 +39,7 @@ const AppRouter = () => {
           <Route element={<ActiveBattle />} path="/" />
         </Routes>
       </Content>
-      {account && <Roomlio />}
+      {/* {account && <Roomlio />} */}
       <ToastContainer />
     </Container>
   );

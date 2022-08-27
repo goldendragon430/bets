@@ -55,8 +55,6 @@ export interface BattleDetailType {
   userNftListA: NFTMetadata[];
   userNftListB: NFTMetadata[];
   updateUserNftList: () => void;
-  startTime: number;
-  endTime: number;
   winnerSet: boolean;
   winner: boolean;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;

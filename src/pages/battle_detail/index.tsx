@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -22,8 +22,6 @@ const BattleDetail: React.FC = () => {
   const { account, updateBalance } = useWallet();
 
   const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
   const [rakePercentage, setRakePercentage] = useState(0);
   const [nftStakersPercentage, setNftStakersPercentage] = useState(0);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
@@ -34,11 +32,10 @@ const BattleDetail: React.FC = () => {
   const [userBetAmountB, setUserBetAmountB] = useState(0);
   const [userNftListA, setUserNftListA] = useState<NFTMetadata[]>([]);
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
-  const [claimAmount, setClaimAmount] = useState(0);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
 
-  const betContract = useBetContract(battleInfo?.betContractAddress);
+  const betContract = useBetContract();
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -57,6 +54,21 @@ const BattleDetail: React.FC = () => {
     updateBattleInfo();
   }, [battleId]);
 
+  const updateInitInfo = useCallback(async () => {
+    const res = await getBattleInitInfo(betContract);
+
+    if (res.rakePercentage !== undefined) {
+      setRakePercentage(res.rakePercentage);
+    }
+    if (res.nftStakersPercentage !== undefined) {
+      setNftStakersPercentage(res.nftStakersPercentage);
+    }
+  }, [betContract]);
+
+  useEffect(() => {
+    updateInitInfo();
+  }, [betContract]);
+
   const updateTotalInfo = () => {
     updateBalance();
     updateBetInfo();
@@ -71,25 +83,8 @@ const BattleDetail: React.FC = () => {
     }, 10000);
   };
 
-  const updateInitInfo = useCallback(async () => {
-    const res = await getBattleInitInfo(betContract);
-
-    if (res.startTime !== undefined) {
-      setStartTime(res.startTime);
-    }
-    if (res.endTime !== undefined) {
-      setEndTime(res.endTime);
-    }
-    if (res.rakePercentage !== undefined) {
-      setRakePercentage(res.rakePercentage);
-    }
-    if (res.nftStakersPercentage !== undefined) {
-      setNftStakersPercentage(res.nftStakersPercentage);
-    }
-  }, [betContract]);
-
   const updateBetInfo = useCallback(async () => {
-    const res = await getBattleBetInfo(betContract, battleId);
+    const res = await getBattleBetInfo(betContract, battleInfo);
 
     if (res.totalBetAmountA !== undefined) {
       setTotalBetAmountA(res.totalBetAmountA);
@@ -109,15 +104,14 @@ const BattleDetail: React.FC = () => {
     if (res.winner !== undefined) {
       setWinner(res.winner);
     }
-  }, [betContract]);
+  }, [betContract, battleInfo]);
 
   useEffect(() => {
-    updateInitInfo();
     updateBetInfo();
-  }, [betContract]);
+  }, [betContract, battleInfo]);
 
   const updateUserInfo = useCallback(async () => {
-    const res = await getUserBetInfo(betContract, account);
+    const res = await getUserBetInfo(betContract, account, battleInfo);
 
     if (res.userBetAmountA !== undefined) {
       setUserBetAmountA(res.userBetAmountA);
@@ -125,11 +119,11 @@ const BattleDetail: React.FC = () => {
     if (res.userBetAmountB !== undefined) {
       setUserBetAmountB(res.userBetAmountB);
     }
-  }, [account, betContract]);
+  }, [account, betContract, battleInfo]);
 
   useEffect(() => {
     updateUserInfo();
-  }, [betContract, account]);
+  }, [account, betContract, battleInfo]);
 
   const updateUserNftList = useCallback(async () => {
     const res = await getUserNftList(account, battleInfo);
@@ -176,9 +170,13 @@ const BattleDetail: React.FC = () => {
 
   const placeBet = async (amount: number, side: boolean) => {
     try {
-      if (betContract && account) {
-        await betContract.estimateGas.placeBet(side, account, { value: ethers.utils.parseEther(String(amount)) });
-        const tx = await betContract.placeBet(side, account, { value: ethers.utils.parseEther(String(amount)) });
+      if (betContract && account && battleInfo) {
+        await betContract.estimateGas.placeBet(battleInfo.battleId, side, account, {
+          value: ethers.utils.parseEther(String(amount)),
+        });
+        const tx = await betContract.placeBet(battleInfo.battleId, side, account, {
+          value: ethers.utils.parseEther(String(amount)),
+        });
         const receipt = await tx.wait();
         if (receipt.status) {
           updateTotalInfo();
@@ -194,14 +192,14 @@ const BattleDetail: React.FC = () => {
 
   const stakeNft = async (tokenIds: number[], side: boolean) => {
     try {
-      if (betContract && account) {
+      if (betContract && account && battleInfo) {
         let tx;
         if (!side) {
-          await betContract.estimateGas.stakeNftA(tokenIds);
-          tx = await betContract.stakeNftA(tokenIds);
+          await betContract.estimateGas.stakeNftA(battleInfo.battleId, tokenIds);
+          tx = await betContract.stakeNftA(battleInfo.battleId, tokenIds);
         } else {
-          await betContract.estimateGas.stakeNftB(tokenIds);
-          tx = await betContract.stakeNftB(tokenIds);
+          await betContract.estimateGas.stakeNftB(battleInfo.battleId, tokenIds);
+          tx = await betContract.stakeNftB(battleInfo.battleId, tokenIds);
         }
         const receipt = await tx.wait();
         if (receipt.status) {
@@ -216,57 +214,18 @@ const BattleDetail: React.FC = () => {
     return false;
   };
 
-  const updateClaimAmount = async () => {
-    if (winnerSet) {
-      try {
-        if (betContract && account) {
-          const amount = await betContract.getClaimableAmount(account);
-          setClaimAmount(Number(ethers.utils.formatEther(amount)));
-        } else {
-          setClaimAmount(0);
-        }
-      } catch (err: any) {
-        console.error(err.reason || err.error?.message || err.message);
-      }
-    } else {
-      setClaimAmount(0);
-    }
-  };
-
-  const claim = async () => {
-    try {
-      if (betContract && account) {
-        await betContract.estimateGas.claimReward();
-        const tx = await betContract.claimReward();
-        const receipt = await tx.wait();
-        if (receipt.status) {
-          updateTotalInfo();
-          toast.success('Claim Success');
-        }
-        toast.error('Claim Error');
-      }
-    } catch (err: any) {
-      toast.error(err.reason || err.error?.message || err.message);
-    }
-  };
-
   return (
     <BattlePage
       battleInfo={battleInfo}
-      claim={claim}
-      claimAmount={claimAmount}
-      endTime={endTime}
       getChance={getChance}
       getRewardPotential={getRewardPotential}
       placeBet={placeBet}
       stakeNft={stakeNft}
-      startTime={startTime}
       totalBetAmountA={totalBetAmountA}
       totalBetAmountB={totalBetAmountB}
       totalNftStakedA={totalNftStakedA}
       totalNftStakedB={totalNftStakedB}
       updateBetInfo={updateBetInfo}
-      updateClaimAmount={updateClaimAmount}
       updateUserInfo={updateUserInfo}
       updateUserNftList={updateUserNftList}
       userBetAmountA={userBetAmountA}

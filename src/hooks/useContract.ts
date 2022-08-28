@@ -34,8 +34,8 @@ export function useContract<T extends Contract = Contract>(
   }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T;
 }
 
-export function useBetContract(contractAddress?: string | undefined, withSignerIfPossible?: boolean): Contract | null {
-  return useContract(contractAddress, BetABI, withSignerIfPossible);
+export function useBetContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(process.env.REACT_APP_BET_CONTRACT_ADDRESS, BetABI, withSignerIfPossible);
 }
 
 export function useNFTContract(contractAddress: string, withSignerIfPossible?: boolean): Contract | null {

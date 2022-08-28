@@ -5,7 +5,6 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import { NFTMetadata } from '../../types';
-import { isExpired } from '../../utils';
 import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
 import NftList from '../nft_list';
@@ -73,7 +72,7 @@ interface IStakeModal {
   color: string;
   fontColor: string;
   nfts: NFTMetadata[];
-  endTime: number;
+  endTime: string;
   onStake: (tokenIds: number[]) => void;
 }
 
@@ -128,13 +127,18 @@ const StakeModal: React.FC<IStakeModal> = ({ visible, onClose, color, nfts, font
     >
       <NftList color={color} nfts={nfts} onSelect={handleSelect} selectedNfts={selectedNfts} />
       <ButtonWrapper>
-        <Button color={color} disabled={isExpired(endTime) || loading} fontColor={fontColor} onClick={handleSelectAll}>
+        <Button
+          color={color}
+          disabled={new Date(endTime) < new Date() || loading}
+          fontColor={fontColor}
+          onClick={handleSelectAll}
+        >
           Select All
         </Button>
         <div style={{ minWidth: '2rem' }} />
         <Button
           color={color}
-          disabled={isExpired(endTime) || loading || selectedNfts.length === 0}
+          disabled={new Date(endTime) < new Date() || loading || selectedNfts.length === 0}
           fontColor={fontColor}
           onClick={handleStake}
         >

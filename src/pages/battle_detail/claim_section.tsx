@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import styled from 'styled-components';
 
@@ -10,7 +11,9 @@ import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import MyBetModal from '../../components/modals/my_bet_modal';
 import { useWallet } from '../../contexts/wallet_context';
+import { useBetContract } from '../../hooks/useContract';
 import { BattleDetailType } from '../../types';
+import { getUserClaimInfo } from '../../utils/battle';
 
 const Container = styled.div`
   display: flex;
@@ -24,11 +27,11 @@ const Container = styled.div`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 2rem;
 `;
 
 const EthImg = styled.img`
   height: 6rem;
-  margin-right: 1rem;
 `;
 
 const BalanceWrapper = styled.div`
@@ -43,19 +46,60 @@ const BalanceImg = styled.img`
 `;
 
 const ClaimSection: React.FC<BattleDetailType> = (props) => {
-  const { claim, claimAmount, winnerSet, updateClaimAmount } = props;
-  const { balance } = useWallet();
+  const { winnerSet, battleInfo } = props;
+  const { balance, account, updateBalance } = useWallet();
+  const betContract = useBetContract();
 
+  const [claimAmount, setClaimAmount] = useState(0);
+  const [claimABPAmount, setClaimABPAmount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);
 
+  const updateClaimInfo = async () => {
+    if (winnerSet) {
+      const res = await getUserClaimInfo(betContract, account, battleInfo);
+
+      if (res.claimAmount !== undefined) {
+        setClaimAmount(res.claimAmount);
+      }
+      if (res.claimABPAmount !== undefined) {
+        setClaimABPAmount(res.claimABPAmount);
+      }
+    } else {
+      setClaimAmount(0);
+      setClaimABPAmount(0);
+    }
+  };
+
   useEffect(() => {
-    updateClaimAmount();
+    updateClaimInfo();
   }, [winnerSet]);
 
-  const handleClaim = async () => {
+  const handleClaim = async (abpClaim: boolean) => {
     setLoading(true);
-    await claim();
+
+    try {
+      if (betContract && account && battleInfo) {
+        let tx;
+        if (!abpClaim) {
+          await betContract.estimateGas.claimReward(battleInfo.battleId);
+          tx = await betContract.claimReward(battleInfo.battleId);
+        } else {
+          await betContract.estimateGas.claimABP(battleInfo.battleId);
+          tx = await betContract.claimABP(battleInfo.battleId);
+        }
+        const receipt = await tx.wait();
+        if (receipt.status) {
+          updateClaimInfo();
+          updateBalance();
+          toast.success('Claim Success');
+        }
+        toast.error('Claim Error');
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+    }
+
     setLoading(false);
   };
 
@@ -70,11 +114,24 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
 
       {winnerSet && (
         <Wrapper>
-          <Typography type={TypographyType.REGULAR_TITLE}>{claimAmount.toLocaleString()}</Typography>
-          <EthImg alt="" src={EthIcon} />
-          <Button disabled={loading || claimAmount <= 0} onClick={handleClaim}>
-            {loading ? 'Claiming...' : 'Claim'}
-          </Button>
+          {claimAmount > 0 && (
+            <Wrapper>
+              <Typography type={TypographyType.REGULAR_TITLE}>{claimAmount.toLocaleString()} ABP </Typography>
+              <Button disabled={loading} onClick={() => handleClaim(false)} style={{ marginLeft: '1rem' }}>
+                {loading ? 'Claiming...' : 'Claim'}
+              </Button>
+            </Wrapper>
+          )}
+
+          {claimABPAmount > 0 && (
+            <Wrapper>
+              <Typography type={TypographyType.REGULAR_TITLE}>{claimABPAmount.toLocaleString()}</Typography>
+              <EthImg alt="" src={EthIcon} />
+              <Button disabled={loading} onClick={() => handleClaim(true)}>
+                {loading ? 'Claiming...' : 'Claim'}
+              </Button>
+            </Wrapper>
+          )}
         </Wrapper>
       )}
 

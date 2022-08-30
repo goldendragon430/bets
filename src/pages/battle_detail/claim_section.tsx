@@ -53,6 +53,7 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
   const [claimAmount, setClaimAmount] = useState(0);
   const [claimABPAmount, setClaimABPAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingBp, setLoadingBp] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);
 
   const updateClaimInfo = async () => {
@@ -76,15 +77,15 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
   }, [winnerSet]);
 
   const handleClaim = async (abpClaim: boolean) => {
-    setLoading(true);
-
     try {
       if (betContract && account && battleInfo) {
         let tx;
         if (!abpClaim) {
+          setLoading(true);
           await betContract.estimateGas.claimReward(battleInfo.battleId);
           tx = await betContract.claimReward(battleInfo.battleId);
         } else {
+          setLoadingBp(true);
           await betContract.estimateGas.claimABP(battleInfo.battleId);
           tx = await betContract.claimABP(battleInfo.battleId);
         }
@@ -114,20 +115,20 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
 
       {winnerSet && (
         <Wrapper>
-          {claimAmount > 0 && (
+          {claimABPAmount > 0 && (
             <Wrapper>
-              <Typography type={TypographyType.REGULAR_TITLE}>{claimAmount.toLocaleString()} ABP </Typography>
-              <Button disabled={loading} onClick={() => handleClaim(false)} style={{ marginLeft: '1rem' }}>
-                {loading ? 'Claiming...' : 'Claim'}
+              <Typography type={TypographyType.REGULAR_TITLE}>{claimABPAmount.toLocaleString()} ABP </Typography>
+              <Button disabled={loadingBp} onClick={() => handleClaim(true)} style={{ marginLeft: '1rem' }}>
+                {loadingBp ? 'Claiming...' : 'Claim'}
               </Button>
             </Wrapper>
           )}
 
-          {claimABPAmount > 0 && (
+          {claimAmount > 0 && (
             <Wrapper>
-              <Typography type={TypographyType.REGULAR_TITLE}>{claimABPAmount.toLocaleString()}</Typography>
+              <Typography type={TypographyType.REGULAR_TITLE}>{claimAmount.toLocaleString()}</Typography>
               <EthImg alt="" src={EthIcon} />
-              <Button disabled={loading} onClick={() => handleClaim(true)}>
+              <Button disabled={loading} onClick={() => handleClaim(false)}>
                 {loading ? 'Claiming...' : 'Claim'}
               </Button>
             </Wrapper>

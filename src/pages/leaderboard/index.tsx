@@ -41,7 +41,7 @@ const Leaderboard = () => {
 
   const updateLeaderboardData = async () => {
     try {
-      const res = await getLeaderboard('630d40d7c7b1dfc990aec9c1');
+      const res = await getLeaderboard();
       if (res.data.data) {
         setData(res.data.data);
       }

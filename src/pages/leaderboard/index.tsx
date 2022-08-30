@@ -22,14 +22,14 @@ const Leaderboard = () => {
         accessor: (_, index) => <span>{(index + 1).toLocaleString()}</span>,
       },
       {
-        Header: 'Wallet Address',
-        accessor: 'wallet_address',
+        Header: 'User',
+        accessor: 'user',
         width: 120,
         Cell: ({ value }) => <span>{getShortWalletAddress(value)}</span>,
       },
       {
         Header: '$ABP',
-        accessor: 'abp',
+        accessor: 'amount',
         width: 80,
         Cell: ({ value }) => <span>{value.toLocaleString()}</span>,
       },

@@ -144,7 +144,7 @@ const BetModal: React.FC<IBetModal> = ({
     setLoading(false);
   };
 
-  const getBPAmount = useCallback(() => {
+  const getABPAmount = useCallback(() => {
     if (Number.isNaN(Number(amount)) || Number(amount) <= 0) {
       return '0';
     }
@@ -210,10 +210,10 @@ const BetModal: React.FC<IBetModal> = ({
       </BetButton>
 
       <Typography color={color} type={TypographyType.REGULAR_TITLE}>
-        if you lose you will earn {getBPAmount()} BP
+        if you lose you will earn {getABPAmount()} ABP
       </Typography>
       <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
-        find out more about bp <a>here</a>
+        find out more about ABP <a>here</a>
       </Typography>
     </ModalWrapper>
   );

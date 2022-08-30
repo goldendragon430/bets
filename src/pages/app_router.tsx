@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import styled from 'styled-components';
 
+import BgImg from '../assets/images/bg.svg';
 import Header from '../components/header';
 import Roomlio from '../components/roomlio';
 import { useWallet } from '../contexts/wallet_context';
@@ -15,9 +16,13 @@ import Leaderboard from './leaderboard';
 const Container = styled.div`
   position: relative;
   color: ${({ theme }) => theme.colors.text1};
-  background: ${({ theme }) => theme.colors.black};
+  // background: ${({ theme }) => theme.colors.black};
   width: 100%;
   min-height: 100vh;
+  background: url(${BgImg});
+  background-position: top;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const Content = styled.div`

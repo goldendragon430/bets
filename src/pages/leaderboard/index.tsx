@@ -56,7 +56,7 @@ const Leaderboard = () => {
 
   return (
     <Container>
-      <Table columns={columns} data={data} itemSize="6rem" />
+      <Table columns={columns} data={data} itemSize="3rem" />
     </Container>
   );
 };

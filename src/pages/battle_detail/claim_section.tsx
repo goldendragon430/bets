@@ -103,6 +103,7 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
     }
 
     setLoading(false);
+    setLoadingBp(false);
   };
 
   return (

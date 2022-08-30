@@ -10,6 +10,7 @@ import { useWallet } from '../contexts/wallet_context';
 import ActiveBattle from './active_battle';
 import BattleDetail from './battle_detail';
 import Battles from './battles';
+import Leaderboard from './leaderboard';
 
 const Container = styled.div`
   position: relative;
@@ -35,6 +36,7 @@ const AppRouter = () => {
       <Content>
         <Routes>
           <Route element={<Battles />} path="/upcoming" />
+          <Route element={<Leaderboard />} path="/leaderboard" />
           <Route element={<BattleDetail />} path="/battle/:battleId" />
           <Route element={<ActiveBattle />} path="/" />
         </Routes>

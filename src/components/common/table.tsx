@@ -44,7 +44,7 @@ const HeaderCell = styled.div`
 const Body = styled.div`
   display: inline-block;
   min-width: 100%;
-  height: 33rem;
+  // height: 33rem;
   overflow-y: auto;
 
   -ms-overflow-style: none; /* Internet Explorer 10+ */

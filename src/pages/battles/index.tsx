@@ -3,13 +3,19 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { Typography, TypographyType } from '../../components/common/typography';
 import { getBattleHistory } from '../../services';
 import { BattleInfo } from '../../types';
+import { isInProgress } from '../../utils';
 import BattleItem from './battle_item';
 
 const Container = styled.div`
   width: 100%;
   padding: 2rem;
+`;
+
+const Title = styled(Typography)`
+  margin: 1rem;
 `;
 
 const Battles = () => {
@@ -32,9 +38,32 @@ const Battles = () => {
 
   return (
     <Container>
-      {battles.map((battle) => (
-        <BattleItem battleInfo={battle} key={battle.id} />
-      ))}
+      <Title shadow type={TypographyType.BOLD_SUBTITLE}>
+        Ongoing
+      </Title>
+      {battles
+        .filter((battle) => isInProgress(new Date(battle.startDate), new Date(battle.endDate)))
+        .map((battle) => (
+          <BattleItem battleInfo={battle} key={battle.id} />
+        ))}
+
+      <Title shadow type={TypographyType.BOLD_SUBTITLE}>
+        Completed
+      </Title>
+      {battles
+        .filter((battle) => new Date(battle.endDate) < new Date())
+        .map((battle) => (
+          <BattleItem battleInfo={battle} key={battle.id} />
+        ))}
+
+      <Title shadow type={TypographyType.BOLD_SUBTITLE}>
+        Upcoming
+      </Title>
+      {battles
+        .filter((battle) => new Date(battle.startDate) > new Date())
+        .map((battle) => (
+          <BattleItem battleInfo={battle} key={battle.id} />
+        ))}
     </Container>
   );
 };

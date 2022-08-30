@@ -94,8 +94,9 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
           updateClaimInfo();
           updateBalance();
           toast.success('Claim Success');
+        } else {
+          toast.error('Claim Error');
         }
-        toast.error('Claim Error');
       }
     } catch (err: any) {
       toast.error(err.reason || err.error?.message || err.message);

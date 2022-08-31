@@ -193,14 +193,8 @@ const BattleDetail: React.FC = () => {
   const stakeNft = async (tokenIds: number[], side: boolean) => {
     try {
       if (betContract && account && battleInfo) {
-        let tx;
-        if (!side) {
-          await betContract.estimateGas.stakeNftA(battleInfo.battleId, tokenIds);
-          tx = await betContract.stakeNftA(battleInfo.battleId, tokenIds);
-        } else {
-          await betContract.estimateGas.stakeNftB(battleInfo.battleId, tokenIds);
-          tx = await betContract.stakeNftB(battleInfo.battleId, tokenIds);
-        }
+        await betContract.estimateGas.stakeNft(battleInfo.battleId, tokenIds, side);
+        const tx = await betContract.stakeNft(battleInfo.battleId, tokenIds);
         const receipt = await tx.wait();
         if (receipt.status) {
           updateTotalInfo();

@@ -54,7 +54,7 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
   const getTotalBetAmountA = async () => {
     if (betContract && battleInfo) {
       try {
-        const totalAmountA = await betContract.totalBettedAmountA(battleInfo.battleId);
+        const totalAmountA = await betContract.totalBettedAmount(battleInfo.battleId, false);
         return Number(ethers.utils.formatEther(totalAmountA));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -67,7 +67,7 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
   const getTotalBetAmountB = async () => {
     if (betContract && battleInfo) {
       try {
-        const totalAmountB = await betContract.totalBettedAmountB(battleInfo.battleId);
+        const totalAmountB = await betContract.totalBettedAmount(battleInfo.battleId, true);
         return Number(ethers.utils.formatEther(totalAmountB));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -146,7 +146,7 @@ export const getUserBetInfo = async (
   const getUserBetAmountA = async () => {
     if (betContract && account && battleInfo) {
       try {
-        const userAmountA = await betContract.getUserBettedAmount(battleInfo.battleId, account, false);
+        const userAmountA = await betContract.betAmount(battleInfo.battleId, account, false);
         return Number(ethers.utils.formatEther(userAmountA));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);
@@ -159,7 +159,7 @@ export const getUserBetInfo = async (
   const getUserBetAmountB = async () => {
     if (betContract && account && battleInfo) {
       try {
-        const userAmountB = await betContract.getUserBettedAmount(battleInfo.battleId, account, true);
+        const userAmountB = await betContract.betAmount(battleInfo.battleId, account, true);
         return Number(ethers.utils.formatEther(userAmountB));
       } catch (err: any) {
         console.error(err.reason || err.error?.message || err.message);

@@ -194,7 +194,7 @@ const BattleDetail: React.FC = () => {
     try {
       if (betContract && account && battleInfo) {
         await betContract.estimateGas.stakeNft(battleInfo.battleId, tokenIds, side);
-        const tx = await betContract.stakeNft(battleInfo.battleId, tokenIds);
+        const tx = await betContract.stakeNft(battleInfo.battleId, tokenIds, side);
         const receipt = await tx.wait();
         if (receipt.status) {
           updateTotalInfo();

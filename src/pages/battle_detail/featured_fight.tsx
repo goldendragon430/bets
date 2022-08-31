@@ -116,6 +116,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         color={selectA ? theme.colors.green1 : theme.colors.blue1}
         endTime={battleInfo.endDate}
         fontColor={theme.colors.black}
+        nftContractAddress={selectA ? battleInfo.projectL.contract : battleInfo.projectR.contract}
         nfts={selectA ? userNftListA : userNftListB}
         onClose={() => setShowStakeModal(false)}
         onStake={handleStake}

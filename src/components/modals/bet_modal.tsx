@@ -156,7 +156,7 @@ const BetModal: React.FC<IBetModal> = ({
       centered
       color={color}
       footer={null}
-      onCancel={() => !loading && onClose()}
+      onCancel={onClose}
       title={
         <HeaderWrapper>
           <Typography type={TypographyType.REGULAR_TITLE}>BET</Typography>

@@ -103,23 +103,25 @@ const StatsWrapper = styled.div`
 `;
 
 interface IBetModal {
+  firstTeam: boolean;
   visible: boolean;
   onClose: () => void;
   teamLogo: string;
   color: string;
   fontColor: string;
-  rewardPotential: number;
+  getRewardPotential: (side: boolean, extraAmount: number) => number;
   endTime: string;
   onBet: (amount: number) => void;
 }
 
 const BetModal: React.FC<IBetModal> = ({
+  firstTeam,
   visible,
   onClose,
   teamLogo,
   color,
   fontColor,
-  rewardPotential,
+  getRewardPotential,
   endTime,
   onBet,
 }) => {
@@ -191,7 +193,9 @@ const BetModal: React.FC<IBetModal> = ({
 
       <StatsWrapper>
         <Typography type={TypographyType.REGULAR_TITLE}>reward potential</Typography>
-        <Typography type={TypographyType.REGULAR_TITLE}>{rewardPotential.toFixed(2)}x</Typography>
+        <Typography type={TypographyType.REGULAR_TITLE}>
+          {getRewardPotential(!firstTeam, Number(amount) || 0).toFixed(2)}x
+        </Typography>
       </StatsWrapper>
 
       <BetButton

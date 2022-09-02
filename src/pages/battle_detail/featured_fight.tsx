@@ -104,10 +104,11 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       <BetModal
         color={selectA ? theme.colors.green1 : theme.colors.blue1}
         endTime={battleInfo.endDate}
+        firstTeam={selectA}
         fontColor={theme.colors.black}
+        getRewardPotential={getRewardPotential}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
-        rewardPotential={getRewardPotential(!selectA)}
         teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
         visible={showBetModal}
       />

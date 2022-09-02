@@ -141,18 +141,20 @@ const BattleDetail: React.FC = () => {
     updateUserNftList();
   }, [account, battleInfo]);
 
-  const getRewardPotential = (side: boolean) => {
-    const totalAmount = totalBetAmountA + totalBetAmountB;
+  const getRewardPotential = (side: boolean, extraAmount: number) => {
+    const betAmountA = totalBetAmountA + (!side ? extraAmount : 0);
+    const betAmountB = totalBetAmountB + (side ? extraAmount : 0);
+    const totalAmount = betAmountA + betAmountB;
 
     const rakeReward = (totalAmount * rakePercentage) / 1e4;
-    const loserAmount = side ? totalBetAmountA : totalBetAmountB;
+    const loserAmount = side ? betAmountA : betAmountB;
     const nftStakersReward = (loserAmount * (1e4 - rakePercentage) * nftStakersPercentage) / 1e8;
     const betsReward = totalAmount - rakeReward - nftStakersReward;
 
     if (!side) {
-      return totalBetAmountA > 0 ? betsReward / totalBetAmountA : 0;
+      return betAmountA > 0 ? betsReward / betAmountA : 0;
     }
-    return totalBetAmountB > 0 ? betsReward / totalBetAmountB : 0;
+    return betAmountB > 0 ? betsReward / betAmountB : 0;
   };
 
   const getChance = useCallback(

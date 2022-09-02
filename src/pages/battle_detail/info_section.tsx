@@ -130,7 +130,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
       <Wrapper>
         <LeftTeam>
           <Stats color={theme.colors.green1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false).toFixed(2)}x</Typography>
+            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
           </Stats>
         </LeftTeam>
         <MidTeam>
@@ -138,7 +138,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
         </MidTeam>
         <RightTeam>
           <Stats color={theme.colors.blue1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true).toFixed(2)}x</Typography>
+            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true, 0).toFixed(2)}x</Typography>
           </Stats>
         </RightTeam>
       </Wrapper>

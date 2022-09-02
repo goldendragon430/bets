@@ -1,6 +1,8 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useNavigate } from 'react-router-dom';
+
 import { Modal } from 'antd';
 import styled from 'styled-components';
 
@@ -96,6 +98,7 @@ interface IMyBetModal extends BattleDetailType {
 const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
   const { battleInfo, userBetAmountA, userBetAmountB, userNftListA, userNftListB } = props;
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   return (
     <ModalWrapper
@@ -134,7 +137,14 @@ const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
           ))}
       </TeamContainer>
 
-      <BetButton>Bet on current game</BetButton>
+      <BetButton
+        onClick={() => {
+          onClose();
+          navigate('/');
+        }}
+      >
+        Bet on current game
+      </BetButton>
 
       <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
         find out more about ABP <a>here</a>

@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 import { ethers } from 'ethers';
 
+import { mixpanelTracker } from '../../config/mixpanel';
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
 import { getBattleById } from '../../services';
@@ -179,6 +180,11 @@ const BattleDetail: React.FC = () => {
         });
         const receipt = await tx.wait();
         if (receipt.status) {
+          mixpanelTracker.track('PLACE_BET', {
+            battleId: battleInfo.id,
+            amount,
+            side,
+          });
           updateTotalInfo();
           return true;
         }
@@ -197,6 +203,11 @@ const BattleDetail: React.FC = () => {
         const tx = await betContract.stakeNft(battleInfo.battleId, tokenIds, side);
         const receipt = await tx.wait();
         if (receipt.status) {
+          mixpanelTracker.track('STAKE_NFT', {
+            battleId: battleInfo.id,
+            tokenIds,
+            side,
+          });
           updateTotalInfo();
           return true;
         }

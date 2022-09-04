@@ -8,13 +8,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 import { mixpanelTracker } from '../../config/mixpanel';
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
 import { getBattleById } from '../../services';
-import { BattleInfo, NFTMetadata } from '../../types';
+import { BattleEvent, BattleInfo, NFTMetadata } from '../../types';
 import { getBattleBetInfo, getBattleInitInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
 import BattlePage from './battle';
 
@@ -35,6 +35,7 @@ const BattleDetail: React.FC = () => {
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
+  const [battleEvents, setBattleEvents] = useState<BattleEvent[]>([]);
 
   const betContract = useBetContract();
 
@@ -221,8 +222,67 @@ const BattleDetail: React.FC = () => {
     return false;
   };
 
+  useEffect(() => {
+    if (!betContract || !battleInfo) {
+      return;
+    }
+
+    betContract.on(
+      'NFTStaked',
+      async (_battleId: BigNumber, collectionAddress: string, user: string, tokenIds: BigNumber[], detail: any) => {
+        if (_battleId.toString() === battleInfo.battleId.toString()) {
+          const txHash = detail.transactionHash.toLowerCase();
+          if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
+            const teamStr =
+              collectionAddress.toLowerCase() === battleInfo.projectL.contract.toLowerCase()
+                ? battleInfo.projectL.subName
+                : battleInfo.projectR.subName;
+
+            const e: BattleEvent = {
+              txHash,
+              user,
+              amount: tokenIds.length,
+              teamName: teamStr,
+              action: 'STAKE_NFT',
+            };
+
+            setBattleEvents([...battleEvents, e]);
+          }
+        }
+      }
+    );
+
+    betContract.on(
+      'Betted',
+      async (_battleId: BigNumber, user: string, amount: BigNumber, side: boolean, detail: any) => {
+        if (_battleId.toString() === battleInfo.battleId.toString()) {
+          const txHash = detail.transactionHash.toLowerCase();
+          if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
+            const teamStr = !side ? battleInfo.projectL.subName : battleInfo.projectR.subName;
+
+            const e: BattleEvent = {
+              txHash,
+              user,
+              amount: Number(ethers.utils.formatEther(amount)),
+              teamName: teamStr,
+              action: 'BET',
+            };
+
+            setBattleEvents([...battleEvents, e]);
+          }
+        }
+      }
+    );
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      betContract.removeAllListeners();
+    };
+  }, [betContract, battleInfo, battleEvents]);
+
   return (
     <BattlePage
+      battleEvents={battleEvents}
       battleInfo={battleInfo}
       getChance={getChance}
       getRewardPotential={getRewardPotential}

@@ -61,4 +61,13 @@ export interface BattleDetailType {
   getRewardPotential: (side: boolean, extraAmount: number) => number;
   getChance: (side: boolean) => number;
   stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
+  battleEvents: BattleEvent[];
+}
+
+export interface BattleEvent {
+  txHash: string;
+  user: string;
+  amount: number;
+  teamName: string;
+  action: 'BET' | 'STAKE_NFT';
 }

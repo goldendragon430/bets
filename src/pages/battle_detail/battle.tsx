@@ -21,14 +21,14 @@ const Container = styled.div`
 `;
 
 const BattlePage: React.FC<BattleDetailType> = (props) => {
-  const { battleInfo, updateUserNftList } = props;
+  const { battleInfo, updateUserNftList, battleEvents } = props;
 
   return (
     <Container>
       <ClaimSection {...props} />
       <FeaturedFight {...props} />
       {battleInfo && <MintNFT battleInfo={battleInfo} updateUserNftList={updateUserNftList} />}
-      <SocialSection />
+      <SocialSection battleEvents={battleEvents} />
     </Container>
   );
 };

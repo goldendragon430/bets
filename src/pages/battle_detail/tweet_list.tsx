@@ -5,7 +5,11 @@ import { Typography, TypographyType } from '../../components/common/typography';
 import { TwitterFeed } from '../../types';
 import { formatTime } from '../../utils';
 
-const Container = styled.div<{ color: string }>`
+const Container = styled.div`
+  width: 100%;
+`;
+
+const Wrapper = styled.div<{ color: string }>`
   width: 100%;
   height: 30rem;
   overflow-x: hidden;
@@ -93,38 +97,43 @@ interface ITweetList {
 }
 
 const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
-  <Container color={color}>
-    {tweets.map((item, key) => {
-      const parts = item.text.split(' ');
-      return (
-        <TweetItem color={color} key={key}>
-          <UserContent>
-            <UserImage userImg={item.profileImg} />
-            <div>
-              <NameContent>
-                <Typography type={TypographyType.REGULAR}>{item.name}</Typography>
-                &nbsp;
-                <UsernameText type={TypographyType.REGULAR_BODY2}> · {formatTime(item.createdAt)}</UsernameText>
-              </NameContent>
-              <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.username}</UsernameText>
-            </div>
-          </UserContent>
-          <ContentText type={TypographyType.REGULAR}>
-            {parts.map((word, index) =>
-              word.startsWith('https://') || word.startsWith('http://') ? (
-                <a href={word} key={index} rel="noreferrer" target="_blank">
-                  <FilteredText style={{ textDecoration: 'underline' }}>{word} </FilteredText>
-                </a>
-              ) : (
-                <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
-                  {word}{' '}
-                </FilteredText>
-              )
-            )}
-          </ContentText>
-        </TweetItem>
-      );
-    })}
+  <Container>
+    <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
+      Twitter Wall
+    </Typography>
+    <Wrapper color={color}>
+      {tweets.map((item, key) => {
+        const parts = item.text.split(' ');
+        return (
+          <TweetItem color={color} key={key}>
+            <UserContent>
+              <UserImage userImg={item.profileImg} />
+              <div>
+                <NameContent>
+                  <Typography type={TypographyType.REGULAR}>{item.name}</Typography>
+                  &nbsp;
+                  <UsernameText type={TypographyType.REGULAR_BODY2}> · {formatTime(item.createdAt)}</UsernameText>
+                </NameContent>
+                <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.username}</UsernameText>
+              </div>
+            </UserContent>
+            <ContentText type={TypographyType.REGULAR}>
+              {parts.map((word, index) =>
+                word.startsWith('https://') || word.startsWith('http://') ? (
+                  <a href={word} key={index} rel="noreferrer" target="_blank">
+                    <FilteredText style={{ textDecoration: 'underline' }}>{word} </FilteredText>
+                  </a>
+                ) : (
+                  <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
+                    {word}{' '}
+                  </FilteredText>
+                )
+              )}
+            </ContentText>
+          </TweetItem>
+        );
+      })}
+    </Wrapper>
   </Container>
 );
 

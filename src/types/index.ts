@@ -69,5 +69,5 @@ export interface BattleEvent {
   user: string;
   amount: number;
   teamName: string;
-  action: 'BET' | 'STAKE_NFT';
+  action: 'Betted' | 'Staked';
 }

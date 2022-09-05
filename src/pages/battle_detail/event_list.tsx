@@ -72,9 +72,9 @@ const EventList: React.FC<IEventList> = ({ battleEvents, color }) => (
         <EventItem color={color} key={key}>
           <ContentText type={TypographyType.REGULAR}>
             <FilteredText>Alpha {getShortWalletAddress(event.user)}</FilteredText>
-            {event.action === 'BET' ? ' bets ' : ' stakes '}
+            {event.action === 'Betted' ? ' bets ' : ' stakes '}
             <FilteredText>{event.amount.toLocaleString()}</FilteredText>
-            {event.action === 'BET' ? ' ETH ' : ' NFT(s) '}
+            {event.action === 'Betted' ? ' ETH ' : ' NFT(s) '}
             on <FilteredText>{event.teamName}</FilteredText>
           </ContentText>
         </EventItem>

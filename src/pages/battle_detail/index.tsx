@@ -13,7 +13,7 @@ import { BigNumber, ethers } from 'ethers';
 import { mixpanelTracker } from '../../config/mixpanel';
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
-import { getBattleById } from '../../services';
+import { getBattleById, getBattleEventsById } from '../../services';
 import { BattleEvent, BattleInfo, NFTMetadata } from '../../types';
 import { getBattleBetInfo, getBattleInitInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
 import BattlePage from './battle';
@@ -222,6 +222,25 @@ const BattleDetail: React.FC = () => {
     return false;
   };
 
+  const initBattleEvents = useCallback(async () => {
+    if (!battleInfo) {
+      return;
+    }
+
+    try {
+      const res = await getBattleEventsById(battleInfo.battleId);
+      if (res.data.data) {
+        setBattleEvents(res.data.data);
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  }, [battleInfo]);
+
+  useEffect(() => {
+    initBattleEvents();
+  }, [battleInfo]);
+
   useEffect(() => {
     if (!betContract || !battleInfo) {
       return;
@@ -243,7 +262,7 @@ const BattleDetail: React.FC = () => {
               user,
               amount: tokenIds.length,
               teamName: teamStr,
-              action: 'STAKE_NFT',
+              action: 'Staked',
             };
 
             setBattleEvents([...battleEvents, e]);
@@ -265,7 +284,7 @@ const BattleDetail: React.FC = () => {
               user,
               amount: Number(ethers.utils.formatEther(amount)),
               teamName: teamStr,
-              action: 'BET',
+              action: 'Betted',
             };
 
             setBattleEvents([...battleEvents, e]);

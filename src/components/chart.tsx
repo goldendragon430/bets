@@ -147,14 +147,15 @@ const Chart: React.FC<IChart> = ({ value, prize }) => {
 
       const pieceAngle = 360 / getPieceCount();
       const isRed = redValue > 50;
+      const redV = isRed ? 1 : 0;
 
       const multiplier = 8 / getPieceCount();
 
       redValue = (isRed ? redValue - (100 - 100 / multiplier) : redValue) * multiplier;
 
       const color = index % 2 === 0 ? theme.colors.green1 : theme.colors.blue1;
-      const pieceValue = index % 2 === 0 ? (pieceAngle / 100) * redValue : (pieceAngle / 100) * (100 - redValue);
-      const angle = pieceAngle * Math.floor(index / 2) + (index % 2 === 0 ? 0 : (pieceAngle / 100) * redValue);
+      const pieceValue = index % 2 === redV ? (pieceAngle / 100) * redValue : (pieceAngle / 100) * (100 - redValue);
+      const angle = pieceAngle * Math.floor(index / 2) + (index % 2 === redV ? 0 : (pieceAngle / 100) * redValue);
 
       return {
         color,

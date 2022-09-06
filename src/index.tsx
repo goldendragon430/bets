@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { Web3ReactProvider } from '@web3-react/core';
+import { Buffer } from 'buffer';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import getLibrary from './utils/get_library';
 
 import './index.css';
+
+window.Buffer = window.Buffer || Buffer;
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

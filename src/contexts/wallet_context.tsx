@@ -8,6 +8,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { AbstractConnector } from '@web3-react/abstract-connector';
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { BigNumber, ethers } from 'ethers';
 
 import { CHAIN_INFO } from '../constants/chain_info';
@@ -19,7 +20,7 @@ import { getRpcUrls } from '../utils/get_rpc_urls';
 export interface IWalletContext {
   account: Maybe<string>;
   chainId: Maybe<number>;
-  connect: () => void;
+  connect: (connectorId: string) => void;
   disconnect: () => void;
   switchChain: (targetChainId: number) => void;
   balance: number;
@@ -63,6 +64,12 @@ export const WalletProvider = ({ children = null as any }) => {
         }
         return true;
       });
+
+      // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
+      if (connector instanceof WalletConnectConnector) {
+        // eslint-disable-next-line no-param-reassign
+        connector.walletConnectProvider = undefined;
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       connector &&

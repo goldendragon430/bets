@@ -6,6 +6,7 @@ import { useTheme } from '../contexts/theme_context';
 import { useWallet } from '../contexts/wallet_context';
 import { getShortWalletAddress } from '../utils';
 import Button from './common/button';
+import WalletModal from './modals/wallet_modal';
 
 const Container = styled.div`
   position: relative;
@@ -16,43 +17,19 @@ const Container = styled.div`
   }
 `;
 
-const DisconnectButton = styled(Button)`
-  position: absolute;
-  top: 120%;
-  right: 0;
-  z-index: 100;
-`;
-
 const WalletButton = () => {
-  const { account, connect, disconnect } = useWallet();
+  const { account } = useWallet();
   const { theme } = useTheme();
 
   const [showModal, setShowModal] = useState(false);
 
-  const handleConnect = () => {
-    if (!account) {
-      connect();
-    } else {
-      setShowModal(!showModal);
-    }
-  };
-
-  const handleDisconnect = () => {
-    setShowModal(false);
-    disconnect();
-  };
-
   return (
     <Container>
-      <Button color={theme.colors.white} onClick={handleConnect} shadow>
+      <Button color={theme.colors.white} onClick={() => setShowModal(true)} shadow>
         {account ? getShortWalletAddress(account) : 'Connect'}
       </Button>
 
-      {showModal && (
-        <DisconnectButton color={theme.colors.purple1} onClick={handleDisconnect} shadow>
-          Disconnect
-        </DisconnectButton>
-      )}
+      <WalletModal onClose={() => setShowModal(false)} visible={showModal} />
     </Container>
   );
 };

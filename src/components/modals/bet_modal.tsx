@@ -216,9 +216,9 @@ const BetModal: React.FC<IBetModal> = ({
       <Typography color={color} type={TypographyType.REGULAR_TITLE}>
         if you lose you will earn {getABPAmount()} ABP
       </Typography>
-      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+      {/* <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
         find out more about ABP <a>here</a>
-      </Typography>
+      </Typography> */}
     </ModalWrapper>
   );
 };

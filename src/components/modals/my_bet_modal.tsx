@@ -146,9 +146,9 @@ const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
         Bet on current game
       </BetButton>
 
-      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+      {/* <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
         find out more about ABP <a>here</a>
-      </Typography>
+      </Typography> */}
     </ModalWrapper>
   );
 };

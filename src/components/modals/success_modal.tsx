@@ -3,7 +3,7 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-import TwitterIcon from '../../assets/images/twitter.svg';
+// import TwitterIcon from '../../assets/images/twitter.svg';
 import { Typography, TypographyType } from '../common/typography';
 
 const ModalWrapper = styled(Modal)<{ color: string }>`
@@ -83,15 +83,15 @@ const BalanceImg = styled.img`
   height: 8rem;
 `;
 
-const CommentWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
+// const CommentWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+// `;
 
-const TwitterImg = styled.img`
-  height: 3rem;
-  margin-right: 2rem;
-`;
+// const TwitterImg = styled.img`
+//   height: 3rem;
+//   margin-right: 2rem;
+// `;
 
 interface ISuccessModal {
   visible: boolean;
@@ -123,34 +123,38 @@ const SuccessModal: React.FC<ISuccessModal> = ({ visible, onClose, teamLogo, col
     <TeamLogo alt="" color={color} src={teamLogo} />
 
     <Wrapper>
-      <BalanceWrapper color={color}>
-        <BalanceImg alt="" src={EthIcon} />
-        <div style={{ marginRight: '2rem' }}>
-          <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
-            {ethStaked.toLocaleString()}
-          </Typography>
-          <Typography type={TypographyType.REGULAR}>NEW BET</Typography>
-        </div>
-      </BalanceWrapper>
+      {ethStaked > 0 && (
+        <BalanceWrapper color={color}>
+          <BalanceImg alt="" src={EthIcon} />
+          <div style={{ marginRight: '2rem' }}>
+            <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
+              {ethStaked.toLocaleString()}
+            </Typography>
+            <Typography type={TypographyType.REGULAR}>NEW BET</Typography>
+          </div>
+        </BalanceWrapper>
+      )}
 
-      <div style={{ minWidth: '2rem' }} />
+      {/* <div style={{ minWidth: '2rem' }} /> */}
 
-      <BalanceWrapper color={color}>
-        <div style={{ textAlign: 'center' }}>
-          <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
-            {nftStaked.toLocaleString()}
-          </Typography>
-          <Typography type={TypographyType.REGULAR}>NEW NFT STAKED</Typography>
-        </div>
-      </BalanceWrapper>
+      {nftStaked > 0 && (
+        <BalanceWrapper color={color}>
+          <div style={{ textAlign: 'center' }}>
+            <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
+              {nftStaked.toLocaleString()}
+            </Typography>
+            <Typography type={TypographyType.REGULAR}>NEW NFT STAKED</Typography>
+          </div>
+        </BalanceWrapper>
+      )}
     </Wrapper>
 
-    <CommentWrapper>
+    {/* <CommentWrapper>
       <TwitterImg alt="" src={TwitterIcon} />
       <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
         <a>Share</a> with friends to win a free bet
       </Typography>
-    </CommentWrapper>
+    </CommentWrapper> */}
   </ModalWrapper>
 );
 

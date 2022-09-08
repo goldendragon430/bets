@@ -31,8 +31,8 @@ const Roomlio = () => {
       }
 
       window.rml('config', {
-        widgetID: 'wgt_cc3mtmgt91us00c3g29g',
-        pk: 'J-uYxt6H8QHLEZ-1c25DJ3nDRXtfwZF7wMgZdvta-iaL',
+        widgetID: process.env.REACT_APP_WIDGET_ID || '',
+        pk: process.env.REACT_APP_ROOMLIO_PK || '',
         roomElementID: 'battle_chat',
         options: {
           embedPosition: 'bottomRight',

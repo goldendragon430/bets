@@ -261,7 +261,7 @@ const BattleDetail: React.FC = () => {
               txHash,
               user,
               amount: tokenIds.length,
-              teamName: teamStr,
+              subTeamName: teamStr,
               action: 'Staked',
             };
 
@@ -283,7 +283,7 @@ const BattleDetail: React.FC = () => {
               txHash,
               user,
               amount: Number(ethers.utils.formatEther(amount)),
-              teamName: teamStr,
+              subTeamName: teamStr,
               action: 'Betted',
             };
 

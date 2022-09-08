@@ -75,7 +75,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, color }) => (
             {event.action === 'Betted' ? ' bets ' : ' stakes '}
             <FilteredText>{event.amount.toLocaleString()}</FilteredText>
             {event.action === 'Betted' ? ' ETH ' : ' NFT(s) '}
-            on <FilteredText>{event.teamName}</FilteredText>
+            on <FilteredText>{event.subTeamName}</FilteredText>
           </ContentText>
         </EventItem>
       ))}

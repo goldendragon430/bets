@@ -11,7 +11,7 @@ const useActiveWeb3React = () => {
     return interfaceContext;
   }
 
-  const library = new JsonRpcProvider('https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
+  const library = new JsonRpcProvider('https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161');
 
   return { library, chainId: 5 } as Web3ReactContextInterface<Web3Provider>;
 };

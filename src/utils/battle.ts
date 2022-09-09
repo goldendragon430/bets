@@ -11,7 +11,7 @@ import { BattleInfo, NFTMetadata } from '../types';
 
 const config = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
-  network: Network.ETH_GOERLI,
+  network: Network.ETH_MAINNET,
 };
 const alchemy = new Alchemy(config);
 

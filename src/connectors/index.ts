@@ -10,7 +10,7 @@ import { NetworkConnector } from './network_connector';
 
 export const network = new NetworkConnector({
   urls: INFURA_NETWORK_URLS,
-  defaultChainId: 5,
+  defaultChainId: 1,
 });
 
 let networkLibrary: Web3Provider | undefined;

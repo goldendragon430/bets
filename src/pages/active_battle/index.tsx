@@ -18,7 +18,7 @@ const ActiveBattle = () => {
     } catch (err: any) {
       console.error(err.message);
     }
-    navigate(`/upcoming`);
+    navigate(`/events`);
   };
 
   useEffect(() => {

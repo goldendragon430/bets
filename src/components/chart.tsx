@@ -153,7 +153,7 @@ const Chart: React.FC<IChart> = ({ value, prize }) => {
 
       redValue = (isRed ? redValue - (100 - 100 / multiplier) : redValue) * multiplier;
 
-      const color = index % 2 === 0 ? theme.colors.green1 : theme.colors.blue1;
+      const color = index % 2 === 0 ? theme.colors.orange1 : theme.colors.blue1;
       const pieceValue = index % 2 === redV ? (pieceAngle / 100) * redValue : (pieceAngle / 100) * (100 - redValue);
       const angle = pieceAngle * Math.floor(index / 2) + (index % 2 === redV ? 0 : (pieceAngle / 100) * redValue);
 
@@ -177,7 +177,7 @@ const Chart: React.FC<IChart> = ({ value, prize }) => {
       <ChartFrame1 />
 
       <ChartWrapper>
-        <PieBg color={Number(value) > 50 ? theme.colors.green1 : theme.colors.blue1} />
+        <PieBg color={Number(value) > 50 ? theme.colors.orange1 : theme.colors.blue1} />
         {data.map((item, index) => (
           <PiePiece angle={item.angle} color={item.color} key={index} value={item.value} />
         ))}

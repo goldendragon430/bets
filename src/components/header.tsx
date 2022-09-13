@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
-import LogoIcon from '../assets/images/logo.png';
+import LogoIcon from '../assets/images/logo.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
 import LinkButton from './common/link_button';
 import { Typography, TypographyType } from './common/typography';
@@ -56,7 +56,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Logo = styled.img`
-  height: 4rem;
+  height: 2rem;
 `;
 
 const ButtonWrapper = styled(Flex)`
@@ -122,12 +122,12 @@ const ROUTES = [
     route: '/',
   },
   {
-    name: 'Leaderboard',
-    route: '/leaderboard',
+    name: 'Rank',
+    route: '/rank',
   },
   {
-    name: 'Upcoming',
-    route: '/upcoming',
+    name: 'Events',
+    route: '/events',
   },
 ];
 
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
             <Flex key={key}>
               {key > 0 && (
                 <Typography shadow type={TypographyType.REGULAR}>
-                  /
+                  |
                 </Typography>
               )}
               <StyledLink to={link.route}>

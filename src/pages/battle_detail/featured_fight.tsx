@@ -80,7 +80,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
     <Container>
       <TeamSection
         battleInfo={battleInfo}
-        color={theme.colors.green1}
+        color={theme.colors.orange1}
         ethStaked={totalBetAmountA}
         firstTeam
         nftStaked={totalNftStakedA}
@@ -102,7 +102,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <BetModal
-        color={selectA ? theme.colors.green1 : theme.colors.blue1}
+        color={selectA ? theme.colors.orange1 : theme.colors.blue1}
         endTime={battleInfo.endDate}
         firstTeam={selectA}
         fontColor={theme.colors.black}
@@ -114,7 +114,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <StakeModal
-        color={selectA ? theme.colors.green1 : theme.colors.blue1}
+        color={selectA ? theme.colors.orange1 : theme.colors.blue1}
         endTime={battleInfo.endDate}
         fontColor={theme.colors.black}
         nftContractAddress={selectA ? battleInfo.projectL.contract : battleInfo.projectR.contract}
@@ -125,7 +125,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       />
 
       <SuccessModal
-        color={selectA ? theme.colors.green1 : theme.colors.blue1}
+        color={selectA ? theme.colors.orange1 : theme.colors.blue1}
         ethStaked={betAmount}
         nftStaked={stakedAmount}
         onClose={() => setShowSuccessModal(false)}

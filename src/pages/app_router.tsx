@@ -40,8 +40,8 @@ const AppRouter = () => {
       <Header />
       <Content>
         <Routes>
-          <Route element={<Battles />} path="/upcoming" />
-          <Route element={<Leaderboard />} path="/leaderboard" />
+          <Route element={<Battles />} path="/events" />
+          <Route element={<Leaderboard />} path="/rank" />
           <Route element={<BattleDetail />} path="/battle/:battleId" />
           <Route element={<ActiveBattle />} path="/" />
         </Routes>

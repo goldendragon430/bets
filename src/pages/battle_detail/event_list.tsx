@@ -2,7 +2,8 @@
 import styled from 'styled-components';
 
 import { Typography, TypographyType } from '../../components/common/typography';
-import { BattleEvent } from '../../types';
+import { useTheme } from '../../contexts/theme_context';
+import { BattleDetailType } from '../../types';
 import { getShortWalletAddress } from '../../utils';
 
 const Container = styled.div`
@@ -43,44 +44,59 @@ const EventItem = styled.div<{ color: string }>`
   padding: 1rem 3rem;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
   border-bottom: 1px solid ${({ color }) => color};
+`;
+
+const TeamLogo = styled.img<{ color: string }>`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  filter: drop-shadow(0px 0px 0.6875rem ${({ color }) => color});
+  margin-right: 1rem;
 `;
 
 const ContentText = styled(Typography)`
   // white-space: nowrap;
 `;
 
-const FilteredText = styled.span`
-  color: ${({ theme }) => theme.colors.blue2};
-`;
-
-interface IEventList {
-  battleEvents: BattleEvent[];
+interface IEventList extends BattleDetailType {
   color: string;
 }
 
-const EventList: React.FC<IEventList> = ({ battleEvents, color }) => (
-  <Container>
-    <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
-      Events
-    </Typography>
+const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo, color }) => {
+  const { theme } = useTheme();
 
-    <Wrapper color={color}>
-      {[...battleEvents].reverse().map((event, key) => (
-        <EventItem color={color} key={key}>
-          <ContentText type={TypographyType.REGULAR}>
-            <FilteredText>Alpha {getShortWalletAddress(event.user)}</FilteredText>
-            {event.action === 'Betted' ? ' bets ' : ' stakes '}
-            <FilteredText>{event.amount.toLocaleString()}</FilteredText>
-            {event.action === 'Betted' ? ' ETH ' : ' NFT(s) '}
-            on <FilteredText>{event.subTeamName}</FilteredText>
-          </ContentText>
-        </EventItem>
-      ))}
-    </Wrapper>
-  </Container>
-);
+  return (
+    <Container>
+      <Wrapper color={color}>
+        {[...battleEvents].reverse().map((event, key) => (
+          <EventItem color={color} key={key}>
+            {battleInfo && (
+              <TeamLogo
+                alt=""
+                color={
+                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
+                    ? theme.colors.orange1
+                    : theme.colors.blue1
+                }
+                src={
+                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
+                    ? battleInfo.projectL.logo
+                    : battleInfo.projectR.logo
+                }
+              />
+            )}
+
+            <ContentText type={TypographyType.REGULAR}>
+              Alpha {getShortWalletAddress(event.user)}
+              {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
+            </ContentText>
+          </EventItem>
+        ))}
+      </Wrapper>
+    </Container>
+  );
+};
 
 export default EventList;

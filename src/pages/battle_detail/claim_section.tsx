@@ -46,35 +46,32 @@ const BalanceImg = styled.img`
 `;
 
 const ClaimSection: React.FC<BattleDetailType> = (props) => {
-  const { winnerSet, battleInfo } = props;
+  const { winnerSet, battleInfo, refundStatus, userBetAmountA, userBetAmountB } = props;
   const { balance, account, updateBalance } = useWallet();
   const betContract = useBetContract();
 
   const [claimAmount, setClaimAmount] = useState(0);
   const [claimABPAmount, setClaimABPAmount] = useState(0);
+  const [refundClaimStatus, setRefundClaimStatus] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [loadingBp, setLoadingBp] = useState(false);
   const [showBetModal, setShowBetModal] = useState(false);
 
   const updateClaimInfo = async () => {
-    if (winnerSet) {
-      const res = await getUserClaimInfo(betContract, account, battleInfo);
+    const res = await getUserClaimInfo(betContract, account, battleInfo);
 
-      if (res.claimAmount !== undefined) {
-        setClaimAmount(res.claimAmount);
-      }
-      if (res.claimABPAmount !== undefined) {
-        setClaimABPAmount(res.claimABPAmount);
-      }
-    } else {
-      setClaimAmount(0);
-      setClaimABPAmount(0);
+    if (res.claimAmount !== undefined) {
+      setClaimAmount(res.claimAmount);
     }
+    if (res.claimABPAmount !== undefined) {
+      setClaimABPAmount(res.claimABPAmount);
+    }
+    setRefundClaimStatus(res.refundClaimStatus);
   };
 
   useEffect(() => {
     updateClaimInfo();
-  }, [winnerSet]);
+  }, [winnerSet, refundStatus]);
 
   const handleClaim = async (abpClaim: boolean) => {
     try {
@@ -106,6 +103,28 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
     setLoadingBp(false);
   };
 
+  const handleRefund = async () => {
+    try {
+      if (betContract && account && battleInfo) {
+        setLoading(true);
+        await betContract.estimateGas.claimRefund(battleInfo.battleId);
+        const tx = await betContract.claimRefund(battleInfo.battleId);
+        const receipt = await tx.wait();
+        if (receipt.status) {
+          updateClaimInfo();
+          updateBalance();
+          toast.success('Refund Success');
+        } else {
+          toast.error('Refund Error');
+        }
+      }
+    } catch (err: any) {
+      toast.error(err.reason || err.error?.message || err.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <Container>
       <BalanceWrapper onClick={() => setShowBetModal(true)}>
@@ -135,6 +154,18 @@ const ClaimSection: React.FC<BattleDetailType> = (props) => {
               </Button>
             </Wrapper>
           )}
+        </Wrapper>
+      )}
+
+      {refundStatus && refundClaimStatus === 0 && userBetAmountA + userBetAmountB > 0 && (
+        <Wrapper>
+          <Typography type={TypographyType.REGULAR_TITLE}>
+            {(userBetAmountA + userBetAmountB).toLocaleString()}
+          </Typography>
+          <EthImg alt="" src={EthIcon} />
+          <Button disabled={loading} onClick={handleRefund}>
+            {loading ? 'Refunding...' : 'Refund'}
+          </Button>
         </Wrapper>
       )}
 

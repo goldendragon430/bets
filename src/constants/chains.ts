@@ -12,4 +12,4 @@ export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(Support
   (id) => typeof id === 'number'
 ) as SupportedChainId[];
 
-export const DEFAULT_NETWORK = SupportedChainId.GOERLI;
+export const DEFAULT_NETWORK = SupportedChainId.MAINNET;

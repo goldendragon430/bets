@@ -68,6 +68,6 @@ export interface BattleEvent {
   txHash: string;
   user: string;
   amount: number;
-  teamName: string;
+  subTeamName: string;
   action: 'Betted' | 'Staked';
 }

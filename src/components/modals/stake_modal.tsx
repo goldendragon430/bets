@@ -230,7 +230,7 @@ const StakeModal: React.FC<IStakeModal> = ({
           )}
 
           <ButtonWrapper>
-            {openMarket ? (
+            {openMarket && (
               <Button
                 color={color}
                 disabled={new Date(endTime) < new Date() || loading || approveLoading}
@@ -238,15 +238,6 @@ const StakeModal: React.FC<IStakeModal> = ({
                 onClick={() => handleRevoke(false)}
               >
                 {approveLoading ? 'Revoking...' : `Revoke ${openMarket.name}`}
-              </Button>
-            ) : (
-              <Button
-                color={color}
-                disabled={new Date(endTime) < new Date() || loading || approveLoading}
-                fontColor={fontColor}
-                onClick={() => handleRevoke(true)}
-              >
-                {approveLoading ? 'Approving...' : `Approve OpenSea`}
               </Button>
             )}
           </ButtonWrapper>

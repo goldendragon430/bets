@@ -35,6 +35,7 @@ const BattleDetail: React.FC = () => {
   const [userNftListB, setUserNftListB] = useState<NFTMetadata[]>([]);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
+  const [refundStatus, setRefundStatus] = useState(false);
   const [battleEvents, setBattleEvents] = useState<BattleEvent[]>([]);
 
   const betContract = useBetContract();
@@ -105,6 +106,9 @@ const BattleDetail: React.FC = () => {
     }
     if (res.winner !== undefined) {
       setWinner(res.winner);
+    }
+    if (res.refundStatus !== undefined) {
+      setRefundStatus(res.refundStatus);
     }
   }, [betContract, battleInfo]);
 
@@ -306,6 +310,7 @@ const BattleDetail: React.FC = () => {
       getChance={getChance}
       getRewardPotential={getRewardPotential}
       placeBet={placeBet}
+      refundStatus={refundStatus}
       stakeNft={stakeNft}
       totalBetAmountA={totalBetAmountA}
       totalBetAmountB={totalBetAmountB}

@@ -120,6 +120,19 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
       return false;
     }
   };
+  const getRefundStatus = async () => {
+    if (betContract && battleInfo) {
+      try {
+        const _refundStatus = await betContract.refundStatus(battleInfo.battleId);
+        return _refundStatus;
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return false;
+    }
+  };
 
   const res = await Promise.all([
     getTotalBetAmountA(),
@@ -127,6 +140,7 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     getTotalNftStaked(),
     getWinnerSet(),
     getWinner(),
+    getRefundStatus(),
   ]);
   return {
     totalBetAmountA: res[0],
@@ -135,6 +149,7 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
     totalNftStakedB: res[2].totalNftStakedB,
     winnerSet: res[3],
     winner: res[4],
+    refundStatus: res[5],
   };
 };
 
@@ -252,10 +267,24 @@ export const getUserClaimInfo = async (
       return 0;
     }
   };
+  const getRefundClaimStatus = async () => {
+    if (betContract && account && battleInfo) {
+      try {
+        const amount = await betContract.refundClaimStatus(battleInfo.battleId, account);
+        return Number(ethers.utils.formatEther(amount));
+      } catch (err: any) {
+        console.error(err.reason || err.error?.message || err.message);
+        return undefined;
+      }
+    } else {
+      return 0;
+    }
+  };
 
-  const res = await Promise.all([getClaimableAmount(), getClaimableABPAmount()]);
+  const res = await Promise.all([getClaimableAmount(), getClaimableABPAmount(), getRefundClaimStatus()]);
   return {
     claimAmount: res[0],
     claimABPAmount: res[1],
+    refundClaimStatus: res[2],
   };
 };

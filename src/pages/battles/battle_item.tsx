@@ -129,6 +129,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
   const [totalNftStakedB, setTotalNftStakedB] = useState(0);
   const [winnerSet, setWinnerSet] = useState(false);
   const [winner, setWinner] = useState(false);
+  const [refundStatus, setRefundStatus] = useState(false);
 
   const updateBetInfo = useCallback(async () => {
     const res = await getBattleBetInfo(betContract, battleInfo);
@@ -151,6 +152,9 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
     if (res.winner !== undefined) {
       setWinner(res.winner);
     }
+    if (res.refundStatus !== undefined) {
+      setRefundStatus(res.refundStatus);
+    }
   }, [betContract, battleInfo]);
 
   useEffect(() => {
@@ -170,7 +174,9 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
 
         <InfoWrapper>
           <StatusText type={TypographyType.BOLD_SUBTITLE}>
-            {new Date(battleInfo.startDate) > new Date() ? (
+            {refundStatus ? (
+              <span>Refund Active</span>
+            ) : new Date(battleInfo.startDate) > new Date() ? (
               <span>Not Started</span>
             ) : (
               <Countdown date={new Date(battleInfo.endDate)}>

@@ -57,6 +57,7 @@ export interface BattleDetailType {
   updateUserNftList: () => void;
   winnerSet: boolean;
   winner: boolean;
+  refundStatus: boolean;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean, extraAmount: number) => number;
   getChance: (side: boolean) => number;

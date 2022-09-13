@@ -97,6 +97,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
   winnerSet,
   winner,
   battleInfo,
+  refundStatus,
 }) => {
   const { theme } = useTheme();
 
@@ -111,7 +112,9 @@ const InfoSection: React.FC<BattleDetailType> = ({
   return (
     <InfoWrapper>
       <NumberText type={TypographyType.BOLD_SUBTITLE}>
-        {!battleInfo || new Date(battleInfo.startDate) > new Date() ? (
+        {refundStatus ? (
+          <span>Refund Active</span>
+        ) : !battleInfo || new Date(battleInfo.startDate) > new Date() ? (
           <span>Not Started</span>
         ) : (
           <Countdown date={new Date(battleInfo.endDate)}>

@@ -46,6 +46,7 @@ const TeamImageWrapper = styled.div<{ color: string; image: string }>`
   background-size: cover;
   background-repeat: no-repeat;
   box-shadow: 0px 0px 3rem ${({ color }) => color};
+  border-radius: 2rem;
 `;
 
 const ButtonWrapper = styled.div`

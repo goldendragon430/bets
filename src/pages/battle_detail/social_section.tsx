@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
-import { BattleEvent } from '../../types';
+import { BattleDetailType } from '../../types';
 import EventList from './event_list';
 import TweetSection from './tweet_section';
 
@@ -45,11 +45,7 @@ const TabButton = styled(Button)<{ visible?: boolean }>`
 
 const Splitter = styled(Typography)``;
 
-interface ISocialSection {
-  battleEvents: BattleEvent[];
-}
-
-const SocialSection: React.FC<ISocialSection> = ({ battleEvents }) => {
+const SocialSection: React.FC<BattleDetailType> = (props) => {
   const { theme } = useTheme();
   const [showTweet, setShowTweet] = useState(false);
 
@@ -66,7 +62,7 @@ const SocialSection: React.FC<ISocialSection> = ({ battleEvents }) => {
       </ButtonWrapper>
 
       <Wrapper visible={!showTweet}>
-        <EventList battleEvents={battleEvents} color={theme.colors.grey2} />
+        <EventList color={theme.colors.grey2} {...props} />
       </Wrapper>
       <Wrapper visible={showTweet}>
         <TweetSection color={theme.colors.grey2} />

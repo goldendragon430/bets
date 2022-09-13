@@ -97,7 +97,7 @@ const WalletModal: React.FC<IWalletModal> = ({ visible, onClose }) => {
             {Object.keys(SUPPORTED_WALLETS).map((key) => {
               const option = SUPPORTED_WALLETS[key];
               return (
-                <OptionButton color={theme.colors.green1} key={key} onClick={() => handleSelect(key)}>
+                <OptionButton color={theme.colors.orange1} key={key} onClick={() => handleSelect(key)}>
                   <Typography type={TypographyType.REGULAR}>{option.name}</Typography>
                   <OptionImg alt="" src={option.icon} />
                 </OptionButton>

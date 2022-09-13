@@ -161,7 +161,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
     <Link to={`/battle/${battleInfo.id}`}>
       <Container>
         <TeamItem
-          color={theme.colors.green1}
+          color={theme.colors.orange1}
           ethStaked={totalBetAmountA}
           firstTeam
           nftStaked={totalNftStakedA}

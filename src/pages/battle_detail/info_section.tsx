@@ -39,7 +39,7 @@ const Wrapper = styled.div`
 const ChanceWrapper = styled(Wrapper)`
   background: linear-gradient(
     90deg,
-    ${({ theme }) => `${theme.colors.green1}80`} 0%,
+    ${({ theme }) => `${theme.colors.orange1}80`} 0%,
     rgba(0, 0, 0, 0) 50%,
     ${({ theme }) => `${theme.colors.blue1}80`} 100%
   );
@@ -77,7 +77,6 @@ const RightTeam = styled.div`
 const Stats = styled.div<{ color: string }>`
   width: 100%;
   background: ${({ color }) => `${color}80`};
-  box-shadow: 0px 0px 1rem ${({ color }) => color};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,7 +128,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
 
       <Wrapper>
         <LeftTeam>
-          <Stats color={theme.colors.green1}>
+          <Stats color={theme.colors.orange1}>
             <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
           </Stats>
         </LeftTeam>

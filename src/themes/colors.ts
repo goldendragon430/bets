@@ -11,6 +11,7 @@ export interface Colors {
   purple3: string;
   green1: string;
   green2: string;
+  orange1: string;
 }
 
 export const DARK_COLORS: Colors = {
@@ -26,4 +27,5 @@ export const DARK_COLORS: Colors = {
   purple3: '#76169E',
   green1: '#7BFF4D',
   green2: '#194B3E',
+  orange1: '#FF7D05',
 };

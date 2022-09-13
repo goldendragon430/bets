@@ -63,9 +63,9 @@ interface IEventList {
 
 const EventList: React.FC<IEventList> = ({ battleEvents, color }) => (
   <Container>
-    <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
+    {/* <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
       Events
-    </Typography>
+    </Typography> */}
 
     <Wrapper color={color}>
       {[...battleEvents].reverse().map((event, key) => (

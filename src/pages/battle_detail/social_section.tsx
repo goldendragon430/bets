@@ -1,7 +1,11 @@
 // import { useState } from 'react';
 
+import { useState } from 'react';
+
 import styled from 'styled-components';
 
+import Button from '../../components/common/button';
+import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { BattleEvent } from '../../types';
 import EventList from './event_list';
@@ -10,22 +14,36 @@ import TweetSection from './tweet_section';
 const Container = styled.div`
   width: 100%;
   padding: 4rem;
+`;
+
+const Wrapper = styled.div<{ visible?: boolean }>`
+  width: 100%;
+  display: ${({ visible }) => (visible ? 'block' : 'none')};
+`;
+
+const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    flex-direction: column;
-    align-items: center;
-  }`};
+  align-items: center;
 `;
 
-const Wrapper = styled.div`
-  flex: 1;
-
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    width: 100%;
-  }`};
+const TabButton = styled(Button)<{ visible?: boolean }>`
+  background: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.white};
+  text-transform: uppercase;
+  font-family: ${({ theme }) => theme.typography.boldSubTitle.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.boldSubTitle.fontWeight};
+  font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};
+  font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
+  ${({ visible, theme }) =>
+    !visible &&
+    `
+    color: ${theme.colors.grey2};
+    filter: none;
+  `}
 `;
+
+const Splitter = styled(Typography)``;
 
 interface ISocialSection {
   battleEvents: BattleEvent[];
@@ -33,17 +51,25 @@ interface ISocialSection {
 
 const SocialSection: React.FC<ISocialSection> = ({ battleEvents }) => {
   const { theme } = useTheme();
+  const [showTweet, setShowTweet] = useState(false);
 
   return (
     <Container>
-      <Wrapper>
-        <EventList battleEvents={battleEvents} color={theme.colors.green2} />
+      <ButtonWrapper>
+        <TabButton onClick={() => setShowTweet(false)} shadow visible={!showTweet}>
+          Live feed
+        </TabButton>
+        <Splitter type={TypographyType.BOLD_SUBTITLE}>|</Splitter>
+        <TabButton onClick={() => setShowTweet(true)} shadow visible={showTweet}>
+          Twitter feed
+        </TabButton>
+      </ButtonWrapper>
+
+      <Wrapper visible={!showTweet}>
+        <EventList battleEvents={battleEvents} color={theme.colors.grey2} />
       </Wrapper>
-
-      <div style={{ minWidth: '2rem', minHeight: '2rem' }} />
-
-      <Wrapper>
-        <TweetSection color={theme.colors.green2} />
+      <Wrapper visible={showTweet}>
+        <TweetSection color={theme.colors.grey2} />
       </Wrapper>
     </Container>
   );

@@ -98,9 +98,9 @@ interface ITweetList {
 
 const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
   <Container>
-    <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
+    {/* <Typography shadow type={TypographyType.BOLD_SUBTITLE}>
       Twitter Wall
-    </Typography>
+    </Typography> */}
     <Wrapper color={color}>
       {tweets.map((item, key) => {
         const parts = item.text.split(' ');

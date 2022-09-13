@@ -3,6 +3,7 @@ export interface Colors {
   black: string;
   text1: string;
   grey1: string;
+  grey2: string;
   red1: string;
   blue1: string;
   blue2: string;
@@ -19,6 +20,7 @@ export const DARK_COLORS: Colors = {
   black: '#000000',
   text1: '#FFFFFF',
   grey1: '#1A0404',
+  grey2: '#454545',
   red1: '#FE0000',
   blue1: '#02F0FF',
   blue2: '#3861FB',

@@ -40,7 +40,7 @@ interface IEventList extends BattleDetailType {
   color: string;
 }
 
-const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo, color }) => {
+const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
   const { theme } = useTheme();
 
   const columns: Column[] = useMemo(

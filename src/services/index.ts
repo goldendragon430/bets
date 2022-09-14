@@ -16,8 +16,8 @@ export const getBattleHistory = () => http.get(`/v1/battles/get_battle_histories
 
 export const getBattleById = (battleId: string) => http.get(`/v1/battles/get_battle_by_id/${battleId}`);
 
-export const getNftStakedStatus = (tokenIds: number[], contractAddress: string, battleId: string) =>
-  http.post(`/v1/battles/get_nft_staked_status`, { tokenIds, contractAddress, battleId });
+export const getNftStakedStatus = (tokenIds: number[], side: boolean, battleId: string) =>
+  http.post(`/v1/battles/get_nft_staked_status`, { tokenIds, side, battleId });
 
 export const getActiveTotalNftStakedAmount = (battleId: string) =>
   http.get(`/v1/battles/get_active_total_nft_staked_amount/${battleId}`);

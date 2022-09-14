@@ -75,16 +75,8 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo, color }) =>
             {battleInfo && (
               <TeamLogo
                 alt=""
-                color={
-                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
-                    ? theme.colors.orange1
-                    : theme.colors.blue1
-                }
-                src={
-                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
-                    ? battleInfo.projectL.logo
-                    : battleInfo.projectR.logo
-                }
+                color={!event.side ? theme.colors.orange1 : theme.colors.blue1}
+                src={!event.side ? battleInfo.projectL.logo : battleInfo.projectR.logo}
               />
             )}
 

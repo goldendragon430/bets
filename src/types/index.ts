@@ -68,7 +68,8 @@ export interface BattleDetailType {
 export interface BattleEvent {
   txHash: string;
   user: string;
+  side: boolean;
+  timestamp: number;
   amount: number;
-  subTeamName: string;
   action: 'Betted' | 'Staked';
 }

@@ -1,58 +1,30 @@
 /* eslint-disable react/no-array-index-key */
+import { useMemo } from 'react';
+import { Column } from 'react-table';
+
 import styled from 'styled-components';
 
+import EthIcon from '../../assets/images/eth_icon.svg';
+import Table from '../../components/common/table';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { BattleDetailType } from '../../types';
-import { getShortWalletAddress } from '../../utils';
+import { formatTime, getShortWalletAddress } from '../../utils';
 
 const Container = styled.div`
   width: 100%;
 `;
 
-const Wrapper = styled.div<{ color: string }>`
-  width: 100%;
-  height: 30rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${({ color }) => `${color}88`} 100%);
-
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #ffffff10;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #fff;
-    border-radius: 5px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
-  }
-`;
-
-const EventItem = styled.div<{ color: string }>`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem 3rem;
-  overflow: hidden;
+const EventItem = styled.div`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${({ color }) => color};
 `;
 
 const TeamLogo = styled.img<{ color: string }>`
   width: 2rem;
   height: 2rem;
   border-radius: 0.5rem;
-  filter: drop-shadow(0px 0px 0.6875rem ${({ color }) => color});
+  filter: drop-shadow(0px 0px 0.2rem ${({ color }) => color});
   margin-right: 1rem;
 `;
 
@@ -60,41 +32,64 @@ const ContentText = styled(Typography)`
   // white-space: nowrap;
 `;
 
+const EthImg = styled.img`
+  height: 2rem;
+`;
+
 interface IEventList extends BattleDetailType {
   color: string;
 }
 
-const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo, color }) => {
+const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
   const { theme } = useTheme();
 
-  return (
-    <Container>
-      <Wrapper color={color}>
-        {[...battleEvents].reverse().map((event, key) => (
-          <EventItem color={color} key={key}>
-            {battleInfo && (
-              <TeamLogo
-                alt=""
-                color={
-                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
-                    ? theme.colors.orange1
-                    : theme.colors.blue1
-                }
-                src={
-                  event.subTeamName.toLowerCase() === battleInfo.projectL.subName.toLowerCase()
-                    ? battleInfo.projectL.logo
-                    : battleInfo.projectR.logo
-                }
-              />
-            )}
-
+  const columns: Column[] = useMemo(
+    () => [
+      {
+        Header: 'Action',
+        width: 120,
+        accessor: (event: any) => (
+          <EventItem>
+            <TeamLogo
+              alt=""
+              color={!event.side ? theme.colors.orange1 : theme.colors.blue1}
+              src={!event.side ? battleInfo?.projectL.logo : battleInfo?.projectR.logo}
+            />
             <ContentText type={TypographyType.REGULAR}>
               Alpha {getShortWalletAddress(event.user)}
               {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
             </ContentText>
           </EventItem>
-        ))}
-      </Wrapper>
+        ),
+      },
+      {
+        Header: 'Amount',
+        width: 40,
+        accessor: (event: any) => (
+          <EventItem>
+            <ContentText type={TypographyType.REGULAR}>
+              {event.amount.toLocaleString()}
+              {event.action === 'Betted' ? <EthImg alt="" src={EthIcon} /> : ' NFT(s)'}
+            </ContentText>
+          </EventItem>
+        ),
+      },
+      {
+        Header: 'Time',
+        width: 40,
+        accessor: (event: any) => (
+          <EventItem>
+            <ContentText type={TypographyType.REGULAR}>{formatTime(new Date(event.timestamp))} ago</ContentText>
+          </EventItem>
+        ),
+      },
+    ],
+    [battleInfo, theme]
+  );
+
+  return (
+    <Container>
+      <Table columns={columns} data={[...battleEvents].reverse()} hideHeader itemSize="5rem" />
     </Container>
   );
 };

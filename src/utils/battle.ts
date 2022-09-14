@@ -193,12 +193,12 @@ export const getUserBetInfo = async (
 };
 
 export const getUserNftList = async (account: Maybe<string>, battleInfo: BattleInfo | null) => {
-  const getStakedNfts = async (nfts: NFTMetadata[], contractAddresses: string) => {
+  const getStakedNfts = async (nfts: NFTMetadata[], side: boolean) => {
     let result = nfts;
     try {
       const res = await getNftStakedStatus(
         nfts.map((item) => Number(item.tokenId)),
-        contractAddresses,
+        side,
         battleInfo?.id || ''
       );
       result = nfts.map((item, index) => ({ ...item, staked: res.data.data[index].status }));
@@ -217,13 +217,13 @@ export const getUserNftList = async (account: Maybe<string>, battleInfo: BattleI
         nfts.ownedNfts.filter(
           (item) => item.contract.address.toLowerCase() === battleInfo.projectL.contract.toLowerCase()
         ),
-        battleInfo.projectL.contract
+        false
       );
       const nftsB = await getStakedNfts(
         nfts.ownedNfts.filter(
           (item) => item.contract.address.toLowerCase() === battleInfo.projectR.contract.toLowerCase()
         ),
-        battleInfo.projectR.contract
+        true
       );
 
       return { userNftListA: nftsA, userNftListB: nftsB };

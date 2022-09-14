@@ -252,20 +252,16 @@ const BattleDetail: React.FC = () => {
 
     betContract.on(
       'NFTStaked',
-      async (_battleId: BigNumber, collectionAddress: string, user: string, tokenIds: BigNumber[], detail: any) => {
+      async (_battleId: BigNumber, side: boolean, user: string, tokenIds: BigNumber[], detail: any) => {
         if (_battleId.toString() === battleInfo.battleId.toString()) {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
-            const teamStr =
-              collectionAddress.toLowerCase() === battleInfo.projectL.contract.toLowerCase()
-                ? battleInfo.projectL.subName
-                : battleInfo.projectR.subName;
-
             const e: BattleEvent = {
               txHash,
               user,
+              side,
+              timestamp: Date.now(),
               amount: tokenIds.length,
-              subTeamName: teamStr,
               action: 'Staked',
             };
 
@@ -281,13 +277,12 @@ const BattleDetail: React.FC = () => {
         if (_battleId.toString() === battleInfo.battleId.toString()) {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
-            const teamStr = !side ? battleInfo.projectL.subName : battleInfo.projectR.subName;
-
             const e: BattleEvent = {
               txHash,
               user,
+              side,
+              timestamp: Date.now(),
               amount: Number(ethers.utils.formatEther(amount)),
-              subTeamName: teamStr,
               action: 'Betted',
             };
 

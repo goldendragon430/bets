@@ -9,9 +9,9 @@ const TableContainer = styled.div`
   box-sizing: border-box;
   display: inline-block;
   border-spacing: 0;
-  border: 2px solid ${({ theme }) => theme.colors.white};
-  border-radius: 12px;
-  background: radial-gradient(50.08% 49.91% at 50% 50%, #1d1d1b 46.65%, #181817 66.03%, #0a0a0a 88.29%, #000000 100%);
+  // border: 2px solid ${({ theme }) => theme.colors.white};
+  // border-radius: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${({ theme }) => `${theme.colors.grey2}88`} 100%);
   overflow-x: auto;
   overflow-y: hidden;
 
@@ -44,13 +44,27 @@ const HeaderCell = styled.div`
 const Body = styled.div`
   display: inline-block;
   min-width: 100%;
-  // height: 33rem;
+  height: 30rem;
   overflow-y: auto;
 
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ffffff10;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
   }
 `;
 
@@ -58,11 +72,9 @@ const Row = styled.div<{ itemSize?: string }>`
   width: 100% !important;
   display: flex;
   align-items: center;
-  ${({ itemSize }) => `height: ${itemSize};`}
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey2};
 
-  &:nth-child(odd) {
-    background: ${({ theme }) => theme.colors.grey1};
-  }
+  ${({ itemSize }) => `height: ${itemSize};`}
 `;
 
 const Cell = styled.div`
@@ -71,7 +83,7 @@ const Cell = styled.div`
   font-size: ${({ theme }) => theme.typography.regular.fontSize};
   // font-size: 24px;
   text-align: left;
-  overflow: hidden;
+  overflow-x: hidden;
 `;
 
 interface TableProps extends React.HTMLAttributes<HTMLDivElement> {

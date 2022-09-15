@@ -288,3 +288,20 @@ export const getUserClaimInfo = async (
     refundClaimStatus: res[2],
   };
 };
+
+export const getChanceValue = (
+  totalBetAmountA: number,
+  totalBetAmountB: number,
+  totalNftStakedA: number,
+  totalNftStakedB: number,
+  side: boolean
+) => {
+  const chanceA = totalNftStakedA * 100 + totalBetAmountA * 1000;
+  const chanceB = totalNftStakedB * 100 + totalBetAmountB * 1000;
+  const totalChance = chanceA + chanceB;
+
+  if (!side) {
+    return chanceA > 0 ? chanceA / totalChance : 0;
+  }
+  return chanceB > 0 ? chanceB / totalChance : 0;
+};

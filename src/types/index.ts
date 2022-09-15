@@ -60,7 +60,6 @@ export interface BattleDetailType {
   refundStatus: boolean;
   placeBet: (amount: number, side: boolean) => Promise<boolean>;
   getRewardPotential: (side: boolean, extraAmount: number) => number;
-  getChance: (side: boolean) => number;
   stakeNft: (tokenIds: number[], side: boolean) => Promise<boolean>;
   battleEvents: BattleEvent[];
 }

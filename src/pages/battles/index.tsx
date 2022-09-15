@@ -14,6 +14,18 @@ import BattleItem from './battle_item';
 const Container = styled.div`
   width: 100%;
   padding: 2rem;
+
+  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
+    padding: 0 15%;
+  }`};
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    zoom: 0.8;
+  }`};
+
+  ${({ theme }) => `${theme.media_width.upToExtraSmall} {
+    zoom: 0.6;
+  }`};
 `;
 
 const ListContainer = styled.div<{ visible?: boolean }>`

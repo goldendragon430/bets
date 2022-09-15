@@ -53,28 +53,28 @@ const Leaderboard = () => {
         width: 120,
         Cell: ({ value }) => <span>{getShortWalletAddress(value)}</span>,
       },
-      {
-        Header: 'WINS',
-        accessor: 'amount',
-        width: 80,
-        Cell: ({ value }) => (
-          <AmountWrapper>
-            <img alt="" src={EthIcon} />
-            <span>{value.toLocaleString()}</span>
-          </AmountWrapper>
-        ),
-      },
       // {
-      //   Header: '$ABP',
+      //   Header: 'WINS',
       //   accessor: 'amount',
       //   width: 80,
       //   Cell: ({ value }) => (
       //     <AmountWrapper>
-      //       <img alt="" src={AbpIcon} />
+      //       <img alt="" src={EthIcon} />
       //       <span>{value.toLocaleString()}</span>
       //     </AmountWrapper>
       //   ),
       // },
+      {
+        Header: '$ABP',
+        accessor: 'amount',
+        width: 80,
+        Cell: ({ value }) => (
+          <AmountWrapper>
+            <img alt="" src={AbpIcon} />
+            <span>{value.toLocaleString()}</span>
+          </AmountWrapper>
+        ),
+      },
     ],
     []
   );

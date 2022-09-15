@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useTheme } from '../../contexts/theme_context';
 import { getBattleHistory } from '../../services';
 import { BattleInfo } from '../../types';
 import { isInProgress } from '../../utils';
@@ -13,46 +14,102 @@ import BattleItem from './battle_item';
 const Container = styled.div`
   width: 100%;
   padding: 2rem;
+
+  ${({ theme }) => `${theme.media_width.upToExtraLarge} {
+    padding: 0 15%;
+  }`};
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    zoom: 0.8;
+  }`};
+
+  ${({ theme }) => `${theme.media_width.upToExtraSmall} {
+    zoom: 0.6;
+  }`};
 `;
 
-const Title = styled(Typography)`
-  margin: 1rem;
+const ListContainer = styled.div<{ visible?: boolean }>`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ${({ visible }) => !visible && 'display: none;'}
 `;
 
 const MoreButton = styled(Button)`
   margin: 0 1rem;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TabButton = styled(Button)<{ visible?: boolean }>`
+  background: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.white};
+  text-transform: uppercase;
+  font-family: ${({ theme }) => theme.typography.boldSubTitle.fontFamily};
+  font-weight: ${({ theme }) => theme.typography.boldSubTitle.fontWeight};
+  font-style: ${({ theme }) => theme.typography.boldSubTitle.fontStyle};
+  font-size: ${({ theme }) => theme.typography.boldSubTitle.fontSize};
+  ${({ visible, theme }) =>
+    !visible &&
+    `
+    color: ${theme.colors.grey2};
+    filter: none;
+  `}
+`;
+
+const Splitter = styled(Typography)``;
+
 interface IBattleList {
-  title: string;
+  loading: boolean;
+  visible?: boolean;
   battles: BattleInfo[];
 }
 
-const BattleList: React.FC<IBattleList> = ({ title, battles }) => {
+const BattleList: React.FC<IBattleList> = ({ loading, visible, battles }) => {
   const [showMore, setShowMore] = useState(false);
 
   return (
-    <>
-      <Title shadow type={TypographyType.BOLD_SUBTITLE}>
-        {title}
-      </Title>
+    <ListContainer visible={visible}>
+      {!loading && battles.length === 0 && (
+        <Typography shadow style={{ marginTop: '2rem' }} type={TypographyType.BOLD_TITLE}>
+          No Battles
+        </Typography>
+      )}
       {(showMore ? battles : battles.slice(0, 4)).map((battle) => (
         <BattleItem battleInfo={battle} key={battle.id} />
       ))}
       {battles.length > 4 && (
         <MoreButton onClick={() => setShowMore(!showMore)}>{showMore ? 'Show less' : 'Show More'}</MoreButton>
       )}
-    </>
+    </ListContainer>
   );
 };
 
+enum BattleStatus {
+  ACTIVE,
+  UPCOMING,
+  PAST,
+}
+
 const Battles = () => {
+  const { theme } = useTheme();
+
+  const [tab, setTab] = useState<BattleStatus>(BattleStatus.ACTIVE);
+  const [loading, setLoading] = useState(true);
   const [ongoingBattles, setOngoingBattles] = useState<BattleInfo[]>([]);
   const [upcomingBattles, setUpcomingBattles] = useState<BattleInfo[]>([]);
   const [completedBattles, setCompletedBattles] = useState<BattleInfo[]>([]);
 
   const updateBattles = async () => {
     try {
+      setLoading(true);
       const res = await getBattleHistory();
       if (res.data.data) {
         const battles = res.data.data.reverse() as BattleInfo[];
@@ -65,6 +122,7 @@ const Battles = () => {
     } catch (err: any) {
       console.error(err.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -73,9 +131,29 @@ const Battles = () => {
 
   return (
     <Container>
-      <BattleList battles={ongoingBattles} title="Ongoing" />
-      <BattleList battles={upcomingBattles} title="Upcoming" />
-      <BattleList battles={completedBattles} title="Completed" />
+      <ButtonWrapper>
+        <TabButton onClick={() => setTab(BattleStatus.ACTIVE)} shadow visible={tab === BattleStatus.ACTIVE}>
+          Active
+        </TabButton>
+        <Splitter color={theme.colors.grey2} type={TypographyType.BOLD_SUBTITLE}>
+          |
+        </Splitter>
+        <TabButton onClick={() => setTab(BattleStatus.UPCOMING)} shadow visible={tab === BattleStatus.UPCOMING}>
+          Upcoming
+        </TabButton>
+        <Splitter color={theme.colors.grey2} type={TypographyType.BOLD_SUBTITLE}>
+          |
+        </Splitter>
+        <TabButton onClick={() => setTab(BattleStatus.PAST)} shadow visible={tab === BattleStatus.PAST}>
+          PAST
+        </TabButton>
+      </ButtonWrapper>
+
+      <>
+        <BattleList battles={ongoingBattles} loading={loading} visible={tab === BattleStatus.ACTIVE} />
+        <BattleList battles={upcomingBattles} loading={loading} visible={tab === BattleStatus.UPCOMING} />
+        <BattleList battles={completedBattles} loading={loading} visible={tab === BattleStatus.PAST} />
+      </>
     </Container>
   );
 };

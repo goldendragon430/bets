@@ -55,7 +55,9 @@ const SocialSection: React.FC<BattleDetailType> = (props) => {
         <TabButton onClick={() => setShowTweet(false)} shadow visible={!showTweet}>
           Live feed
         </TabButton>
-        <Splitter type={TypographyType.BOLD_SUBTITLE}>|</Splitter>
+        <Splitter color={theme.colors.grey2} type={TypographyType.BOLD_SUBTITLE}>
+          |
+        </Splitter>
         <TabButton onClick={() => setShowTweet(true)} shadow visible={showTweet}>
           Twitter feed
         </TabButton>

@@ -10,6 +10,7 @@ import Chart from '../../components/chart';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { BattleDetailType } from '../../types';
+import { getChanceValue } from '../../utils/battle';
 
 const InfoWrapper = styled.div`
   flex: 1;
@@ -89,7 +90,6 @@ const Stats = styled.div<{ color: string }>`
 
 const InfoSection: React.FC<BattleDetailType> = ({
   getRewardPotential,
-  getChance,
   totalBetAmountA,
   totalBetAmountB,
   totalNftStakedA,
@@ -105,8 +105,8 @@ const InfoSection: React.FC<BattleDetailType> = ({
   const [chanceB, setChanceB] = useState(0);
 
   useEffect(() => {
-    setChanceA(getChance(false));
-    setChanceB(getChance(true));
+    setChanceA(getChanceValue(totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB, false));
+    setChanceB(getChanceValue(totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB, true));
   }, [totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB]);
 
   return (

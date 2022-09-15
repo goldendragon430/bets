@@ -162,20 +162,6 @@ const BattleDetail: React.FC = () => {
     return betAmountB > 0 ? betsReward / betAmountB : 0;
   };
 
-  const getChance = useCallback(
-    (side: boolean) => {
-      const chanceA = totalNftStakedA * 100 + totalBetAmountA * 1000;
-      const chanceB = totalNftStakedB * 100 + totalBetAmountB * 1000;
-      const totalChance = chanceA + chanceB;
-
-      if (!side) {
-        return chanceA > 0 ? chanceA / totalChance : 0;
-      }
-      return chanceB > 0 ? chanceB / totalChance : 0;
-    },
-    [totalBetAmountA, totalBetAmountB, totalNftStakedA, totalNftStakedB]
-  );
-
   const placeBet = async (amount: number, side: boolean) => {
     try {
       if (betContract && account && battleInfo) {
@@ -302,7 +288,6 @@ const BattleDetail: React.FC = () => {
     <BattlePage
       battleEvents={battleEvents}
       battleInfo={battleInfo}
-      getChance={getChance}
       getRewardPotential={getRewardPotential}
       placeBet={placeBet}
       refundStatus={refundStatus}

@@ -67,16 +67,17 @@ const TabButton = styled(Button)<{ visible?: boolean }>`
 const Splitter = styled(Typography)``;
 
 interface IBattleList {
+  loading: boolean;
   visible?: boolean;
   battles: BattleInfo[];
 }
 
-const BattleList: React.FC<IBattleList> = ({ visible, battles }) => {
+const BattleList: React.FC<IBattleList> = ({ loading, visible, battles }) => {
   const [showMore, setShowMore] = useState(false);
 
   return (
     <ListContainer visible={visible}>
-      {battles.length === 0 && (
+      {!loading && battles.length === 0 && (
         <Typography shadow style={{ marginTop: '2rem' }} type={TypographyType.BOLD_TITLE}>
           No Battles
         </Typography>
@@ -101,12 +102,14 @@ const Battles = () => {
   const { theme } = useTheme();
 
   const [tab, setTab] = useState<BattleStatus>(BattleStatus.ACTIVE);
+  const [loading, setLoading] = useState(true);
   const [ongoingBattles, setOngoingBattles] = useState<BattleInfo[]>([]);
   const [upcomingBattles, setUpcomingBattles] = useState<BattleInfo[]>([]);
   const [completedBattles, setCompletedBattles] = useState<BattleInfo[]>([]);
 
   const updateBattles = async () => {
     try {
+      setLoading(true);
       const res = await getBattleHistory();
       if (res.data.data) {
         const battles = res.data.data.reverse() as BattleInfo[];
@@ -119,6 +122,7 @@ const Battles = () => {
     } catch (err: any) {
       console.error(err.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -146,9 +150,9 @@ const Battles = () => {
       </ButtonWrapper>
 
       <>
-        <BattleList battles={ongoingBattles} visible={tab === BattleStatus.ACTIVE} />
-        <BattleList battles={upcomingBattles} visible={tab === BattleStatus.UPCOMING} />
-        <BattleList battles={completedBattles} visible={tab === BattleStatus.PAST} />
+        <BattleList battles={ongoingBattles} loading={loading} visible={tab === BattleStatus.ACTIVE} />
+        <BattleList battles={upcomingBattles} loading={loading} visible={tab === BattleStatus.UPCOMING} />
+        <BattleList battles={completedBattles} loading={loading} visible={tab === BattleStatus.PAST} />
       </>
     </Container>
   );

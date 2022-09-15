@@ -29,8 +29,9 @@ const Header = styled.div`
 
 const HeaderRow = styled.div`
   width: 100% !important;
-  background: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.white};
   border-bottom: 2px solid ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const HeaderCell = styled.div`

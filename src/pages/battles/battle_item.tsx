@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -23,6 +23,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   color: ${({ theme }) => theme.colors.white};
+  cursor: pointer;
 `;
 
 const TeamWrapper = styled.div<{ firstTeam?: boolean }>`
@@ -122,6 +123,7 @@ interface IBattleItem {
 const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
   const betContract = useBetContract();
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
@@ -162,44 +164,42 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
   }, [betContract, battleInfo]);
 
   return (
-    <Link to={`/battle/${battleInfo.id}`}>
-      <Container>
-        <TeamItem
-          color={theme.colors.orange1}
-          ethStaked={totalBetAmountA}
-          firstTeam
-          nftStaked={totalNftStakedA}
-          project={battleInfo.projectL}
-        />
+    <Container onClick={() => navigate(`/battle/${battleInfo.id}`)}>
+      <TeamItem
+        color={theme.colors.orange1}
+        ethStaked={totalBetAmountA}
+        firstTeam
+        nftStaked={totalNftStakedA}
+        project={battleInfo.projectL}
+      />
 
-        <InfoWrapper>
-          <StatusText type={TypographyType.BOLD_SUBTITLE}>
-            {refundStatus ? (
-              <span>Refund Active</span>
-            ) : new Date(battleInfo.startDate) > new Date() ? (
-              <span>Not Started</span>
-            ) : (
-              <Countdown date={new Date(battleInfo.endDate)}>
-                <span>
-                  {winnerSet
-                    ? !winner
-                      ? `${battleInfo?.projectL.subName} wins`
-                      : `${battleInfo?.projectR.subName} wins`
-                    : 'Finalizing...'}
-                </span>
-              </Countdown>
-            )}
-          </StatusText>
-        </InfoWrapper>
+      <InfoWrapper>
+        <StatusText type={TypographyType.BOLD_SUBTITLE}>
+          {refundStatus ? (
+            <span>Refund Active</span>
+          ) : new Date(battleInfo.startDate) > new Date() ? (
+            <span>Not Started</span>
+          ) : (
+            <Countdown date={new Date(battleInfo.endDate)}>
+              <span>
+                {winnerSet
+                  ? !winner
+                    ? `${battleInfo?.projectL.subName} wins`
+                    : `${battleInfo?.projectR.subName} wins`
+                  : 'Finalizing...'}
+              </span>
+            </Countdown>
+          )}
+        </StatusText>
+      </InfoWrapper>
 
-        <TeamItem
-          color={theme.colors.blue1}
-          ethStaked={totalBetAmountB}
-          nftStaked={totalNftStakedB}
-          project={battleInfo.projectR}
-        />
-      </Container>
-    </Link>
+      <TeamItem
+        color={theme.colors.blue1}
+        ethStaked={totalBetAmountB}
+        nftStaked={totalNftStakedB}
+        project={battleInfo.projectR}
+      />
+    </Container>
   );
 };
 

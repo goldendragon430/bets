@@ -24,6 +24,7 @@ const TeamWrapper = styled.div<{ firstTeam?: boolean; winnerSet: boolean; isWinn
     !firstTeam &&
     `
     flex-direction: row-reverse;
+    text-align: right;
   `}
 `;
 
@@ -82,6 +83,7 @@ interface ITeamItem {
   winnerSet: boolean;
   winner: boolean;
   firstTeam?: boolean;
+  upcoming?: boolean;
 }
 
 const TeamItem: React.FC<ITeamItem> = ({
@@ -93,22 +95,37 @@ const TeamItem: React.FC<ITeamItem> = ({
   winner,
   winnerSet,
   firstTeam,
+  upcoming,
 }) => (
   <TeamWrapper color={color} firstTeam={firstTeam} isWinner={winnerSet && winner === !firstTeam} winnerSet={winnerSet}>
     <TeamImageWrapper color={color} image={project.headerImage} />
-    <StatsWrapper>
-      <StatsItem firstTeam={firstTeam}>
-        <NumberText type={TypographyType.REGULAR}>{nftStaked.toLocaleString()}</NumberText>
-        <TeamLogo alt="" color={color} src={project.logo} />
-      </StatsItem>
-      <StatsItem firstTeam={firstTeam}>
-        <NumberText type={TypographyType.REGULAR}>{ethStaked.toLocaleString()}</NumberText>
-        <EthImg alt="" src={EthIcon} />
-      </StatsItem>
-      <StatsItem firstTeam={firstTeam}>
-        <NumberText type={TypographyType.REGULAR}>{chance}%</NumberText>
-      </StatsItem>
-    </StatsWrapper>
+    {upcoming ? (
+      <StatsWrapper>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{project.collectionSize.toLocaleString()} items</NumberText>
+        </StatsItem>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{project.num_owners.toLocaleString()} owners</NumberText>
+        </StatsItem>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{project.floor_price} floor price</NumberText>
+        </StatsItem>
+      </StatsWrapper>
+    ) : (
+      <StatsWrapper>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{nftStaked.toLocaleString()}</NumberText>
+          <TeamLogo alt="" color={color} src={project.logo} />
+        </StatsItem>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{ethStaked.toLocaleString()}</NumberText>
+          <EthImg alt="" src={EthIcon} />
+        </StatsItem>
+        <StatsItem firstTeam={firstTeam}>
+          <NumberText type={TypographyType.REGULAR}>{chance}%</NumberText>
+        </StatsItem>
+      </StatsWrapper>
+    )}
   </TeamWrapper>
 );
 

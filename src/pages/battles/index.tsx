@@ -70,9 +70,10 @@ interface IBattleList {
   loading: boolean;
   visible?: boolean;
   battles: BattleInfo[];
+  upcoming?: boolean;
 }
 
-const BattleList: React.FC<IBattleList> = ({ loading, visible, battles }) => {
+const BattleList: React.FC<IBattleList> = ({ loading, visible, battles, upcoming }) => {
   const [showMore, setShowMore] = useState(false);
 
   return (
@@ -83,7 +84,7 @@ const BattleList: React.FC<IBattleList> = ({ loading, visible, battles }) => {
         </Typography>
       )}
       {(showMore ? battles : battles.slice(0, 4)).map((battle) => (
-        <BattleItem battleInfo={battle} key={battle.id} />
+        <BattleItem battleInfo={battle} key={battle.id} upcoming={upcoming} />
       ))}
       {battles.length > 4 && (
         <MoreButton onClick={() => setShowMore(!showMore)}>{showMore ? 'Show less' : 'Show More'}</MoreButton>
@@ -151,7 +152,7 @@ const Battles = () => {
 
       <>
         <BattleList battles={ongoingBattles} loading={loading} visible={tab === BattleStatus.ACTIVE} />
-        <BattleList battles={upcomingBattles} loading={loading} visible={tab === BattleStatus.UPCOMING} />
+        <BattleList battles={upcomingBattles} loading={loading} upcoming visible={tab === BattleStatus.UPCOMING} />
         <BattleList battles={completedBattles} loading={loading} visible={tab === BattleStatus.PAST} />
       </>
     </Container>

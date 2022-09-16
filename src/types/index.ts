@@ -31,6 +31,8 @@ export interface ProjectInfo {
   openSeaLink: string;
   subName: string;
   twitterID: string;
+  num_owners: number;
+  floor_price: number;
 }
 
 export interface BattleInfo {

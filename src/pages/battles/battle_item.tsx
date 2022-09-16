@@ -78,9 +78,10 @@ const WinnerWrapper = styled.div`
 
 interface IBattleItem {
   battleInfo: BattleInfo;
+  upcoming?: boolean;
 }
 
-const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
+const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
   const betContract = useBetContract();
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -140,6 +141,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
           firstTeam
           nftStaked={totalNftStakedA}
           project={battleInfo.projectL}
+          upcoming={upcoming}
           winner={winner}
           winnerSet={winnerSet}
         />
@@ -150,6 +152,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo }) => {
           ethStaked={totalBetAmountB}
           nftStaked={totalNftStakedB}
           project={battleInfo.projectR}
+          upcoming={upcoming}
           winner={winner}
           winnerSet={winnerSet}
         />

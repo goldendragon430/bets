@@ -6,10 +6,13 @@ import styled from 'styled-components';
 
 import CloseIcon from '../assets/images/close.svg';
 import DiscordIcon from '../assets/images/discord.svg';
+import EthIcon from '../assets/images/eth_icon1.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
+import SolIcon from '../assets/images/sol_icon.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
 import LinkButton from './common/link_button';
+import Toggle from './common/toggle';
 import { Typography, TypographyType } from './common/typography';
 import WalletButton from './wallet_button';
 
@@ -138,8 +141,20 @@ const Header: React.FC = () => {
     setShowMobileView(false);
   };
 
+  const handleToggleChange = (value: number) => {
+    if (value === 1) {
+      window.location.href = 'https://sol.alphabets.gg/';
+    }
+  };
+
   const getSocialIcons = () => (
     <Flex style={{ padding: '2rem' }}>
+      <Toggle
+        contents={[<img alt="" src={EthIcon} />, <img alt="" src={SolIcon} />]}
+        onValueChange={handleToggleChange}
+        style={{ margin: '0 0.5rem' }}
+        value={0}
+      />
       <SocialIcon href="https://twitter.com/AlphaBetsGG">
         <img alt="" src={TwitterIcon} />
       </SocialIcon>

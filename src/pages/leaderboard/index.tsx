@@ -53,20 +53,20 @@ const Leaderboard = () => {
         width: 120,
         Cell: ({ value }) => <span>{getShortWalletAddress(value)}</span>,
       },
-      // {
-      //   Header: 'WINS',
-      //   accessor: 'amount',
-      //   width: 80,
-      //   Cell: ({ value }) => (
-      //     <AmountWrapper>
-      //       <img alt="" src={EthIcon} />
-      //       <span>{value.toLocaleString()}</span>
-      //     </AmountWrapper>
-      //   ),
-      // },
+      {
+        Header: 'WINS',
+        accessor: 'ethAmount',
+        width: 80,
+        Cell: ({ value }) => (
+          <AmountWrapper>
+            <img alt="" src={EthIcon} />
+            <span>{value.toLocaleString()}</span>
+          </AmountWrapper>
+        ),
+      },
       {
         Header: '$ABP',
-        accessor: 'amount',
+        accessor: 'abpAmount',
         width: 80,
         Cell: ({ value }) => (
           <AmountWrapper>
@@ -81,6 +81,7 @@ const Leaderboard = () => {
 
   const [sortByAbp, setSortByAbp] = useState(false);
   const [data, setData] = useState<any[]>([]);
+  const [dispData, setDispData] = useState<any[]>([]);
 
   const updateLeaderboardData = async () => {
     try {
@@ -96,6 +97,11 @@ const Leaderboard = () => {
   useEffect(() => {
     updateLeaderboardData();
   }, []);
+
+  useEffect(() => {
+    const newData = [...data].sort((a, b) => (sortByAbp ? b.abpAmount - a.abpAmount : b.ethAmount - a.ethAmount));
+    setDispData(newData);
+  }, [data, sortByAbp]);
 
   return (
     <Container>
@@ -114,7 +120,7 @@ const Leaderboard = () => {
         </Wrapper>
       </Wrapper>
 
-      <Table columns={columns} data={data} itemSize="5rem" />
+      <Table columns={columns} data={dispData} itemSize="5rem" />
     </Container>
   );
 };

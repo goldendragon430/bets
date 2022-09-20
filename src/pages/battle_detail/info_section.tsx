@@ -121,8 +121,8 @@ const InfoSection: React.FC<BattleDetailType> = ({
             <span>
               {winnerSet
                 ? !winner
-                  ? `${battleInfo?.projectL.subName} wins`
-                  : `${battleInfo?.projectR.subName} wins`
+                  ? `${battleInfo?.projectL.displayName} wins`
+                  : `${battleInfo?.projectR.displayName} wins`
                 : 'Finalizing...'}
             </span>
           </Countdown>

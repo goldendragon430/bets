@@ -30,6 +30,7 @@ export interface ProjectInfo {
   name: string;
   openSeaLink: string;
   subName: string;
+  displayName: string;
   twitterID: string;
   num_owners: number;
   floor_price: number;

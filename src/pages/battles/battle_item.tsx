@@ -49,7 +49,7 @@ const TeamWrapper = styled.div`
 `;
 
 const InfoWrapper = styled(TeamWrapper)`
-  flex: 2;
+  flex: 1;
 `;
 
 const SocialWrapper = styled.div`
@@ -74,6 +74,11 @@ const WinnerWrapper = styled.div`
   img {
     height: 5rem;
   }
+`;
+
+const TeamName = styled(Typography)`
+  white-space: nowrap;
+  text-align: center;
 `;
 
 interface IBattleItem {
@@ -160,9 +165,9 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
 
       <Content>
         <TeamWrapper>
-          <Typography color={theme.colors.orange1} shadow type={TypographyType.BOLD_TITLE}>
-            {battleInfo.projectL.subName}
-          </Typography>
+          <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_TITLE}>
+            {battleInfo.projectL.displayName}
+          </TeamName>
           <SocialWrapper>
             <SocialButton href={battleInfo.projectL.twitterID}>
               <img alt="" src={SocialIcon1} />
@@ -188,8 +193,8 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
                 <span>
                   {winnerSet
                     ? !winner
-                      ? `${battleInfo?.projectL.subName} wins`
-                      : `${battleInfo?.projectR.subName} wins`
+                      ? `${battleInfo?.projectL.displayName} wins`
+                      : `${battleInfo?.projectR.displayName} wins`
                     : 'Finalizing...'}
                 </span>
               </Countdown>
@@ -207,9 +212,9 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
         </InfoWrapper>
 
         <TeamWrapper>
-          <Typography color={theme.colors.blue1} shadow type={TypographyType.BOLD_TITLE}>
-            {battleInfo.projectR.subName}
-          </Typography>
+          <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_TITLE}>
+            {battleInfo.projectR.displayName}
+          </TeamName>
           <SocialWrapper>
             <SocialButton href={battleInfo.projectR.twitterID}>
               <img alt="" src={SocialIcon1} />

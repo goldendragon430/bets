@@ -27,7 +27,9 @@ const BattlePage: React.FC<BattleDetailType> = (props) => {
     <Container>
       <ClaimSection {...props} />
       <FeaturedFight {...props} />
-      {battleInfo && <MintNFT battleInfo={battleInfo} updateUserNftList={updateUserNftList} />}
+      {process.env.REACT_APP_NETWORK !== 'mainnet' && battleInfo && (
+        <MintNFT battleInfo={battleInfo} updateUserNftList={updateUserNftList} />
+      )}
       <SocialSection {...props} />
     </Container>
   );

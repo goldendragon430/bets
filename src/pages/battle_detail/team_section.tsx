@@ -163,7 +163,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         style={{ textAlign: firstTeam ? 'right' : 'left' }}
         type={TypographyType.BOLD_TITLE}
       >
-        {project.subName}
+        {project.displayName}
       </Typography>
 
       <SocialWrapper firstTeam={firstTeam}>

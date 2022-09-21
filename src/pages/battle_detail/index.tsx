@@ -11,20 +11,20 @@ import { toast } from 'react-toastify';
 import { BigNumber, ethers } from 'ethers';
 
 import { mixpanelTracker } from '../../config/mixpanel';
+import { useBattle } from '../../contexts/battle_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
 import { getBattleById, getBattleEventsById } from '../../services';
 import { BattleEvent, BattleInfo, NFTMetadata } from '../../types';
-import { getBattleBetInfo, getBattleInitInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
+import { getBattleBetInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
 import BattlePage from './battle';
 
 const BattleDetail: React.FC = () => {
   const { battleId } = useParams();
   const { account, updateBalance } = useWallet();
+  const { rakePercentage, nftStakersPercentage } = useBattle();
 
   const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
-  const [rakePercentage, setRakePercentage] = useState(0);
-  const [nftStakersPercentage, setNftStakersPercentage] = useState(0);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
   const [totalBetAmountB, setTotalBetAmountB] = useState(0);
   const [totalNftStakedA, setTotalNftStakedA] = useState(0);
@@ -56,21 +56,6 @@ const BattleDetail: React.FC = () => {
   useEffect(() => {
     updateBattleInfo();
   }, [battleId]);
-
-  const updateInitInfo = useCallback(async () => {
-    const res = await getBattleInitInfo(betContract);
-
-    if (res.rakePercentage !== undefined) {
-      setRakePercentage(res.rakePercentage);
-    }
-    if (res.nftStakersPercentage !== undefined) {
-      setNftStakersPercentage(res.nftStakersPercentage);
-    }
-  }, [betContract]);
-
-  useEffect(() => {
-    updateInitInfo();
-  }, [betContract]);
 
   const updateTotalInfo = () => {
     updateBalance();

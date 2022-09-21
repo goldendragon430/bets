@@ -60,3 +60,10 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 export function isInProgress(startTime: Date, endTime: Date) {
   return startTime <= new Date() && endTime >= new Date();
 }
+
+export const getNftImageUrl = (url: string) => {
+  if (url.startsWith('ipfs://')) {
+    return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  }
+  return url;
+};

@@ -10,8 +10,11 @@ import ProfileIcon from '../../assets/images/profile.svg';
 import { useProfile } from '../../contexts/profile_context';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
-import { getShortWalletAddress } from '../../utils';
+import { NFTMetadata } from '../../types';
+import { getNftImageUrl, getShortWalletAddress } from '../../utils';
+import Button from '../common/button';
 import { Typography, TypographyType } from '../common/typography';
+import NftList from '../nft_list';
 
 const ModalWrapper = styled(Modal)<{ color: string }>`
   color: ${({ theme }) => theme.colors.text1};
@@ -168,6 +171,11 @@ const EthImg = styled.img`
   height: 2rem;
 `;
 
+const NftActionButton = styled(Button)`
+  flex: 1;
+  margin-top: 1rem;
+`;
+
 interface IProfileModal {
   visible: boolean;
   onClose: () => void;
@@ -176,17 +184,37 @@ interface IProfileModal {
 const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
   const { account } = useWallet();
   const { theme } = useTheme();
-  const { username, userImg, winnerRank, abpRank, battlesInProgress, battlesWon, totalEthEarned, updateUsername } =
-    useProfile();
+  const {
+    username,
+    selNft,
+    winnerRank,
+    abpRank,
+    battlesInProgress,
+    battlesWon,
+    totalEthEarned,
+    updateUsername,
+    userNfts,
+    selectNft,
+  } = useProfile();
 
   const [name, setName] = useState(username);
   const [isEdit, setEdit] = useState(false);
+  const [showNft, setShowNft] = useState(false);
+  const [selectedNft, setSelectedNft] = useState<NFTMetadata | undefined>(selNft);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    setShowNft(false);
+  }, [visible]);
+
+  useEffect(() => {
     setName(username);
   }, [username]);
+
+  useEffect(() => {
+    setSelectedNft(selNft);
+  }, [selNft]);
 
   const handleEditName = () => {
     inputRef.current?.focus();
@@ -196,6 +224,28 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
   const handleSaveName = () => {
     setEdit(false);
     updateUsername(name);
+  };
+
+  const handleSelectNft = (metadata: NFTMetadata) => {
+    if (
+      selectedNft &&
+      selectedNft.contract.address.toLowerCase() === metadata.contract.address.toLowerCase() &&
+      selectedNft.tokenId === metadata.tokenId
+    ) {
+      setSelectedNft(undefined);
+    } else {
+      setSelectedNft(metadata);
+    }
+  };
+
+  const handleSaveNft = () => {
+    setShowNft(false);
+    selectNft(selectedNft);
+  };
+
+  const handleCloseNft = () => {
+    setShowNft(false);
+    setSelectedNft(selNft);
   };
 
   return (
@@ -212,64 +262,84 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
       visible={visible}
       width="70rem"
     >
-      <Container>
-        <Content>
-          <Row>
-            <ProfileNameWrapper>
-              <ProfileImgWrapper>
-                <ProfileImg userImg={userImg} />
-              </ProfileImgWrapper>
-              <div>
-                <ProfileInput
-                  onBlur={handleSaveName}
-                  onChange={(e) => setName(e.target.value)}
-                  readOnly={!isEdit}
-                  ref={inputRef}
-                  value={name}
-                />
-                <Typography type={TypographyType.REGULAR}>{getShortWalletAddress(account || '')}</Typography>
-              </div>
-              {!isEdit && <EditButton alt="" onClick={handleEditName} src={EditIcon} />}
-            </ProfileNameWrapper>
-          </Row>
-          <Row>
-            <NumberWrapper>
-              <Typography type={TypographyType.BOLD_TITLE}>{winnerRank.toLocaleString()}</Typography>
-            </NumberWrapper>
-            <Typography type={TypographyType.REGULAR}>WINNERS RANK</Typography>
-          </Row>
-          <Row>
-            <NumberWrapper>
-              <Typography type={TypographyType.BOLD_TITLE}>{abpRank.toLocaleString()}</Typography>
-            </NumberWrapper>
-            <Typography type={TypographyType.REGULAR}>ABP RANK</Typography>
-          </Row>
-        </Content>
+      {!showNft ? (
+        <Container>
+          <Content>
+            <Row>
+              <ProfileNameWrapper>
+                <ProfileImgWrapper onClick={() => setShowNft(true)}>
+                  <ProfileImg userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')} />
+                </ProfileImgWrapper>
+                <div>
+                  <ProfileInput
+                    onBlur={handleSaveName}
+                    onChange={(e) => setName(e.target.value)}
+                    readOnly={!isEdit}
+                    ref={inputRef}
+                    value={name}
+                  />
+                  <Typography type={TypographyType.REGULAR}>{getShortWalletAddress(account || '')}</Typography>
+                </div>
+                {!isEdit && <EditButton alt="" onClick={handleEditName} src={EditIcon} />}
+              </ProfileNameWrapper>
+            </Row>
+            <Row>
+              <NumberWrapper>
+                <Typography type={TypographyType.BOLD_TITLE}>{winnerRank.toLocaleString()}</Typography>
+              </NumberWrapper>
+              <Typography type={TypographyType.REGULAR}>WINNERS RANK</Typography>
+            </Row>
+            <Row>
+              <NumberWrapper>
+                <Typography type={TypographyType.BOLD_TITLE}>{abpRank.toLocaleString()}</Typography>
+              </NumberWrapper>
+              <Typography type={TypographyType.REGULAR}>ABP RANK</Typography>
+            </Row>
+          </Content>
 
-        <div style={{ minWidth: '1rem', minHeight: '1rem' }} />
+          <div style={{ minWidth: '1rem', minHeight: '1rem' }} />
 
-        <Content>
-          <StatsWrapper>
-            <StatsRow>
-              <Typography type={TypographyType.REGULAR}>Battles in process</Typography>
-              <Typography type={TypographyType.REGULAR}>{battlesInProgress.toLocaleString()}</Typography>
-            </StatsRow>
+          <Content>
+            <StatsWrapper>
+              <StatsRow>
+                <Typography type={TypographyType.REGULAR}>Battles in process</Typography>
+                <Typography type={TypographyType.REGULAR}>{battlesInProgress.toLocaleString()}</Typography>
+              </StatsRow>
 
-            <StatsRow>
-              <Typography type={TypographyType.REGULAR}>Battles won</Typography>
-              <Typography type={TypographyType.REGULAR}>{battlesWon.toLocaleString()}</Typography>
-            </StatsRow>
+              <StatsRow>
+                <Typography type={TypographyType.REGULAR}>Battles won</Typography>
+                <Typography type={TypographyType.REGULAR}>{battlesWon.toLocaleString()}</Typography>
+              </StatsRow>
 
-            <StatsRow>
-              <Typography type={TypographyType.REGULAR}>Total Eth Earned</Typography>
-              <Flex>
-                <EthImg alt="" src={EthIcon} />
-                <Typography type={TypographyType.REGULAR}>{totalEthEarned.toLocaleString()}</Typography>
-              </Flex>
-            </StatsRow>
-          </StatsWrapper>
-        </Content>
-      </Container>
+              <StatsRow>
+                <Typography type={TypographyType.REGULAR}>Total Eth Earned</Typography>
+                <Flex>
+                  <EthImg alt="" src={EthIcon} />
+                  <Typography type={TypographyType.REGULAR}>{totalEthEarned.toLocaleString()}</Typography>
+                </Flex>
+              </StatsRow>
+            </StatsWrapper>
+          </Content>
+        </Container>
+      ) : (
+        <>
+          <NftList
+            color={theme.colors.red1}
+            nfts={userNfts}
+            onSelect={handleSelectNft}
+            selectedNfts={selectedNft ? [selectedNft] : []}
+          />
+          <Flex style={{ width: '100%' }}>
+            <NftActionButton color={theme.colors.red1} onClick={handleCloseNft}>
+              Cancel
+            </NftActionButton>
+            <div style={{ minWidth: '1rem' }} />
+            <NftActionButton color={theme.colors.blue1} onClick={handleSaveNft}>
+              Save
+            </NftActionButton>
+          </Flex>
+        </>
+      )}
     </ModalWrapper>
   );
 };

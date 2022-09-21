@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Modal } from 'antd';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import EditIcon from '../../assets/images/edit.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
 import ProfileIcon from '../../assets/images/profile.svg';
+import { useProfile } from '../../contexts/profile_context';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { getShortWalletAddress } from '../../utils';
@@ -175,11 +176,17 @@ interface IProfileModal {
 const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
   const { account } = useWallet();
   const { theme } = useTheme();
+  const { username, userImg, winnerRank, abpRank, battlesInProgress, battlesWon, totalEthEarned, updateUsername } =
+    useProfile();
 
-  const [username, setUsername] = useState('PROFILE NAME');
+  const [name, setName] = useState(username);
   const [isEdit, setEdit] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    setName(username);
+  }, [username]);
 
   const handleEditName = () => {
     inputRef.current?.focus();
@@ -188,6 +195,7 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
 
   const handleSaveName = () => {
     setEdit(false);
+    updateUsername(name);
   };
 
   return (
@@ -209,15 +217,15 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
           <Row>
             <ProfileNameWrapper>
               <ProfileImgWrapper>
-                <ProfileImg />
+                <ProfileImg userImg={userImg} />
               </ProfileImgWrapper>
               <div>
                 <ProfileInput
                   onBlur={handleSaveName}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   readOnly={!isEdit}
                   ref={inputRef}
-                  value={username}
+                  value={name}
                 />
                 <Typography type={TypographyType.REGULAR}>{getShortWalletAddress(account || '')}</Typography>
               </div>
@@ -226,13 +234,13 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
           </Row>
           <Row>
             <NumberWrapper>
-              <Typography type={TypographyType.BOLD_TITLE}>346</Typography>
+              <Typography type={TypographyType.BOLD_TITLE}>{winnerRank.toLocaleString()}</Typography>
             </NumberWrapper>
             <Typography type={TypographyType.REGULAR}>WINNERS RANK</Typography>
           </Row>
           <Row>
             <NumberWrapper>
-              <Typography type={TypographyType.BOLD_TITLE}>572</Typography>
+              <Typography type={TypographyType.BOLD_TITLE}>{abpRank.toLocaleString()}</Typography>
             </NumberWrapper>
             <Typography type={TypographyType.REGULAR}>ABP RANK</Typography>
           </Row>
@@ -244,19 +252,19 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
           <StatsWrapper>
             <StatsRow>
               <Typography type={TypographyType.REGULAR}>Battles in process</Typography>
-              <Typography type={TypographyType.REGULAR}>4</Typography>
+              <Typography type={TypographyType.REGULAR}>{battlesInProgress.toLocaleString()}</Typography>
             </StatsRow>
 
             <StatsRow>
               <Typography type={TypographyType.REGULAR}>Battles won</Typography>
-              <Typography type={TypographyType.REGULAR}>15</Typography>
+              <Typography type={TypographyType.REGULAR}>{battlesWon.toLocaleString()}</Typography>
             </StatsRow>
 
             <StatsRow>
               <Typography type={TypographyType.REGULAR}>Total Eth Earned</Typography>
               <Flex>
                 <EthImg alt="" src={EthIcon} />
-                <Typography type={TypographyType.REGULAR}>543</Typography>
+                <Typography type={TypographyType.REGULAR}>{totalEthEarned.toLocaleString()}</Typography>
               </Flex>
             </StatsRow>
           </StatsWrapper>

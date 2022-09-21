@@ -9,6 +9,7 @@ import DiscordIcon from '../assets/images/discord.svg';
 import EthIcon from '../assets/images/eth_icon1.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
+import ProfileIcon from '../assets/images/profile.svg';
 import SolIcon from '../assets/images/sol_icon.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
 import LinkButton from './common/link_button';
@@ -78,11 +79,17 @@ const MenuButton = styled.img`
 `;
 
 const SocialIcon = styled(LinkButton)`
-  margin: 0 0.5rem;
+  margin: 0 1rem;
 
   img {
     height: 2rem;
   }
+`;
+
+const ProfileImg = styled.img`
+  margin: 0 1rem;
+  height: 2rem;
+  cursor: pointer;
 `;
 
 const MobileView = styled.div<{ show: boolean }>`
@@ -147,12 +154,16 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleClickProfile = () => {
+    handleClose();
+  };
+
   const getSocialIcons = () => (
     <Flex style={{ padding: '2rem' }}>
       <Toggle
         contents={[<img alt="" src={EthIcon} />, <img alt="" src={SolIcon} />]}
         onValueChange={handleToggleChange}
-        style={{ margin: '0 0.5rem' }}
+        style={{ margin: '0 1rem' }}
         value={0}
       />
       <SocialIcon href="https://twitter.com/AlphaBetsGG">
@@ -161,6 +172,7 @@ const Header: React.FC = () => {
       <SocialIcon href="https://discord.gg/alphabets">
         <img alt="" src={DiscordIcon} />
       </SocialIcon>
+      <ProfileImg alt="" onClick={handleClickProfile} src={ProfileIcon} />
     </Flex>
   );
 

@@ -60,6 +60,10 @@ const Container = styled.div`
     ${({ theme }) => `${theme.colors.grey2}00`} 100%
   );
   display: flex;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    flex-direction: column;
+  }`};
 `;
 
 const Content = styled.div`

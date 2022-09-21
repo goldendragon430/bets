@@ -98,6 +98,7 @@ const ProfileImgWrapper = styled.div`
   border: 0.25rem solid ${({ theme }) => theme.colors.white};
   background: ${({ theme }) => theme.colors.grey2};
   cursor: pointer;
+  filter: drop-shadow(0px 0px 0.6875rem ${({ theme }) => theme.colors.white});
 `;
 
 const ProfileImg = styled.div<{ userImg?: string }>`

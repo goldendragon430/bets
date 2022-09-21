@@ -12,9 +12,11 @@ import LogoIcon from '../assets/images/logo.svg';
 import ProfileIcon from '../assets/images/profile.svg';
 import SolIcon from '../assets/images/sol_icon.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
+import { useWallet } from '../contexts/wallet_context';
 import LinkButton from './common/link_button';
 import Toggle from './common/toggle';
 import { Typography, TypographyType } from './common/typography';
+import ProfileModal from './modals/profile_modal';
 import WalletButton from './wallet_button';
 
 const Container = styled.div`
@@ -142,7 +144,10 @@ const ROUTES = [
 ];
 
 const Header: React.FC = () => {
+  const { account } = useWallet();
+
   const [showMobileView, setShowMobileView] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleClose = () => {
     setShowMobileView(false);
@@ -156,6 +161,7 @@ const Header: React.FC = () => {
 
   const handleClickProfile = () => {
     handleClose();
+    setShowProfileModal(true);
   };
 
   const getSocialIcons = () => (
@@ -172,7 +178,7 @@ const Header: React.FC = () => {
       <SocialIcon href="https://discord.gg/alphabets">
         <img alt="" src={DiscordIcon} />
       </SocialIcon>
-      <ProfileImg alt="" onClick={handleClickProfile} src={ProfileIcon} />
+      {account && <ProfileImg alt="" onClick={handleClickProfile} src={ProfileIcon} />}
     </Flex>
   );
 
@@ -225,6 +231,8 @@ const Header: React.FC = () => {
 
         <CloseButton alt="" onClick={handleClose} src={CloseIcon} />
       </MobileView>
+
+      <ProfileModal onClose={() => setShowProfileModal(false)} visible={showProfileModal} />
     </Container>
   );
 };

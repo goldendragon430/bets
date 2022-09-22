@@ -192,9 +192,8 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
     battlesInProgress,
     battlesWon,
     totalEthEarned,
-    updateUsername,
     userNfts,
-    selectNft,
+    updateProfile,
   } = useProfile();
 
   const [name, setName] = useState(username);
@@ -223,7 +222,7 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
 
   const handleSaveName = () => {
     setEdit(false);
-    updateUsername(name);
+    updateProfile(name, selNft);
   };
 
   const handleSelectNft = (metadata: NFTMetadata) => {
@@ -240,7 +239,7 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
 
   const handleSaveNft = () => {
     setShowNft(false);
-    selectNft(selectedNft);
+    updateProfile(username, selectedNft);
   };
 
   const handleCloseNft = () => {

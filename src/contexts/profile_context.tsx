@@ -5,6 +5,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import alchemy from '../constants/alchemy';
+import { getProfile, updateProfileInfo } from '../services';
 import { NFTMetadata } from '../types';
 import { useWallet } from './wallet_context';
 
@@ -17,8 +18,7 @@ export interface IProfileContext {
   battlesWon: number;
   totalEthEarned: number;
   userNfts: NFTMetadata[];
-  updateUsername: (name: string) => void;
-  selectNft: (metadata: NFTMetadata | undefined) => void;
+  updateProfile: (name: string, metadata: NFTMetadata | undefined) => void;
 }
 
 const ProfileContext = React.createContext<Maybe<IProfileContext>>(null);
@@ -26,7 +26,7 @@ const ProfileContext = React.createContext<Maybe<IProfileContext>>(null);
 export const ProfileProvider = ({ children = null as any }) => {
   const { account } = useWallet();
 
-  const [username, setUsername] = useState<string>('PROFILE NAME');
+  const [username, setUsername] = useState<string>('User');
   const [selNft, setSelNft] = useState<NFTMetadata | undefined>(undefined);
   const [winnerRank, setWinnerRank] = useState(346);
   const [abpRank, setAbpRank] = useState(543);
@@ -37,15 +37,16 @@ export const ProfileProvider = ({ children = null as any }) => {
 
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const updateTotalInfo = () => {
-    updateUserNftList();
+  const updateTotalInfo = async () => {
+    const res = await updateUserNftList();
+    getProfileInfo(res);
 
     if (updateTimer.current) {
       clearTimeout(updateTimer.current);
     }
     updateTimer.current = setTimeout(() => {
       updateTotalInfo();
-    }, 10000);
+    }, 20000);
   };
 
   useEffect(() => {
@@ -54,19 +55,59 @@ export const ProfileProvider = ({ children = null as any }) => {
 
   const updateUserNftList = useCallback(async () => {
     if (account) {
-      const res = await alchemy.nft.getNftsForOwner(account);
-      setUserNfts(res.ownedNfts);
-    } else {
-      setUserNfts([]);
+      try {
+        const res = await alchemy.nft.getNftsForOwner(account);
+        setUserNfts(res.ownedNfts);
+        return res.ownedNfts;
+      } catch (e) {
+        console.error(e);
+      }
     }
+
+    setUserNfts([]);
+    return [] as NFTMetadata[];
   }, [account]);
 
-  const updateUsername = (name: string) => {
-    setUsername(name);
-  };
+  const getProfileInfo = useCallback(
+    async (nfts: NFTMetadata[]) => {
+      if (account) {
+        try {
+          const res = await getProfile(account);
+          if (res.data.data) {
+            setUsername(res.data.data.username);
+            if (res.data.data.selectedNFT) {
+              const result = nfts.find(
+                (item) =>
+                  item.contract.address.toLowerCase() === res.data.data.selectedNFT.contract?.toLowerCase() &&
+                  item.tokenId === res.data.data.selectedNFT.tokenId
+              );
+              setSelNft(result);
+            } else {
+              setSelNft(undefined);
+            }
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
 
-  const selectNft = (metadata: NFTMetadata | undefined) => {
+        setUsername(account);
+        setSelNft(undefined);
+      }
+    },
+    [account]
+  );
+
+  const updateProfile = async (name: string, metadata: NFTMetadata | undefined) => {
+    setUsername(name);
     setSelNft(metadata);
+    console.log(metadata);
+    await updateProfileInfo(account || '', {
+      username: name,
+      contract: metadata?.contract.address.toLowerCase(),
+      tokenId: metadata?.tokenId,
+      image: metadata?.rawMetadata?.image,
+    });
   };
 
   return (
@@ -80,8 +121,7 @@ export const ProfileProvider = ({ children = null as any }) => {
         battlesWon,
         totalEthEarned,
         userNfts,
-        updateUsername,
-        selectNft,
+        updateProfile,
       }}
     >
       {children}

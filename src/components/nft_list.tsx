@@ -3,6 +3,7 @@
 import styled from 'styled-components';
 
 import { NFTMetadata } from '../types';
+import { getNftImageUrl } from '../utils';
 
 const Container = styled.div<{ color: string }>`
   overflow-y: auto;
@@ -82,26 +83,20 @@ interface INftList {
   onSelect: (metadata: NFTMetadata) => void;
 }
 
-const NftList: React.FC<INftList> = ({ color, nfts, selectedNfts, onSelect }) => {
-  const getImageUrl = (url: string) => {
-    if (url.startsWith('ipfs://')) {
-      return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
-    }
-    return url;
-  };
-
-  return (
-    <Container color={color}>
-      {nfts.map((metadata, index) => (
-        <NftItem key={index} onClick={() => onSelect(metadata)}>
-          <NftImage alt="" src={getImageUrl(metadata.rawMetadata?.image || '')} />
-          {(metadata.staked || selectedNfts.findIndex((item) => item.tokenId === metadata.tokenId) > -1) && (
-            <NftSelected color={color} staked={metadata.staked} />
-          )}
-        </NftItem>
-      ))}
-    </Container>
-  );
-};
+const NftList: React.FC<INftList> = ({ color, nfts, selectedNfts, onSelect }) => (
+  <Container color={color}>
+    {nfts.map((metadata, index) => (
+      <NftItem key={index} onClick={() => onSelect(metadata)}>
+        <NftImage alt="" src={getNftImageUrl(metadata.rawMetadata?.image || '')} />
+        {(metadata.staked ||
+          selectedNfts.findIndex(
+            (item) =>
+              item.tokenId === metadata.tokenId &&
+              item.contract.address.toLowerCase() === metadata.contract.address.toLowerCase()
+          ) > -1) && <NftSelected color={color} staked={metadata.staked} />}
+      </NftItem>
+    ))}
+  </Container>
+);
 
 export default NftList;

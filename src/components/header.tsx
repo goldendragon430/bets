@@ -9,11 +9,14 @@ import DiscordIcon from '../assets/images/discord.svg';
 import EthIcon from '../assets/images/eth_icon1.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
+import ProfileIcon from '../assets/images/profile.svg';
 import SolIcon from '../assets/images/sol_icon.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
+import { useWallet } from '../contexts/wallet_context';
 import LinkButton from './common/link_button';
 import Toggle from './common/toggle';
 import { Typography, TypographyType } from './common/typography';
+import ProfileModal from './modals/profile_modal';
 import WalletButton from './wallet_button';
 
 const Container = styled.div`
@@ -78,11 +81,17 @@ const MenuButton = styled.img`
 `;
 
 const SocialIcon = styled(LinkButton)`
-  margin: 0 0.5rem;
+  margin: 0 1rem;
 
   img {
     height: 2rem;
   }
+`;
+
+const ProfileImg = styled.img`
+  margin: 0 1rem;
+  height: 2rem;
+  cursor: pointer;
 `;
 
 const MobileView = styled.div<{ show: boolean }>`
@@ -135,7 +144,10 @@ const ROUTES = [
 ];
 
 const Header: React.FC = () => {
+  const { account } = useWallet();
+
   const [showMobileView, setShowMobileView] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleClose = () => {
     setShowMobileView(false);
@@ -147,12 +159,17 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleClickProfile = () => {
+    handleClose();
+    setShowProfileModal(true);
+  };
+
   const getSocialIcons = () => (
     <Flex style={{ padding: '2rem' }}>
       <Toggle
         contents={[<img alt="" src={EthIcon} />, <img alt="" src={SolIcon} />]}
         onValueChange={handleToggleChange}
-        style={{ margin: '0 0.5rem' }}
+        style={{ margin: '0 1rem' }}
         value={0}
       />
       <SocialIcon href="https://twitter.com/AlphaBetsGG">
@@ -161,6 +178,7 @@ const Header: React.FC = () => {
       <SocialIcon href="https://discord.gg/alphabets">
         <img alt="" src={DiscordIcon} />
       </SocialIcon>
+      {account && <ProfileImg alt="" onClick={handleClickProfile} src={ProfileIcon} />}
     </Flex>
   );
 
@@ -213,6 +231,8 @@ const Header: React.FC = () => {
 
         <CloseButton alt="" onClick={handleClose} src={CloseIcon} />
       </MobileView>
+
+      <ProfileModal onClose={() => setShowProfileModal(false)} visible={showProfileModal} />
     </Container>
   );
 };

@@ -3,17 +3,11 @@
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 
-import { Alchemy, Network } from 'alchemy-sdk';
 import { ethers } from 'ethers';
 
+import alchemy from '../constants/alchemy';
 import { getActiveTotalNftStakedAmount, getNftStakedStatus } from '../services';
 import { BattleInfo, NFTMetadata } from '../types';
-
-const config = {
-  apiKey: process.env.REACT_APP_ALCHEMY_KEY,
-  network: process.env.REACT_APP_NETWORK === 'mainnet' ? Network.ETH_MAINNET : Network.ETH_GOERLI,
-};
-const alchemy = new Alchemy(config);
 
 export const getBattleInitInfo = async (betContract: ethers.Contract | null) => {
   const getRakePercentage = async () => {

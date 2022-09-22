@@ -25,3 +25,7 @@ export const getActiveTotalNftStakedAmount = (battleId: string) =>
 export const getLeaderboard = () => http.get(`/v1/battles/get_leaderboard`);
 
 export const getBattleEventsById = (battleId: string) => http.get(`/v1/battles/get_battle_events/${battleId}`);
+
+export const getProfile = (account: string) => http.get(`/v1/users/get_profile/${account}`);
+
+export const updateProfileInfo = (account: string, data: any) => http.post(`/v1/users/update_profile/${account}`, data);

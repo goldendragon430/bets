@@ -37,7 +37,8 @@ const StatusText = styled(Typography)<{ textColor: string }>`
   -webkit-text-stroke: 2px ${({ textColor }) => textColor};
   color: ${({ theme }) => theme.colors.black};
   text-align: center;
-  white-space: nowrap;
+  font-size: 2rem;
+  line-height: 2.5rem;
 `;
 
 const TeamWrapper = styled.div`
@@ -165,7 +166,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
 
       <Content>
         <TeamWrapper>
-          <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_TITLE}>
+          <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_SUBTITLE}>
             {battleInfo.projectL.displayName}
           </TeamName>
           <SocialWrapper>
@@ -204,7 +205,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
           {!refundStatus && winnerSet && (
             <WinnerWrapper>
               <img alt="" src={EthIcon} />
-              <Typography type={TypographyType.BOLD_TITLE}>
+              <Typography type={TypographyType.BOLD_SUBTITLE}>
                 {(totalBetAmountA + totalBetAmountB).toLocaleString()}
               </Typography>
             </WinnerWrapper>
@@ -212,7 +213,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
         </InfoWrapper>
 
         <TeamWrapper>
-          <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_TITLE}>
+          <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_SUBTITLE}>
             {battleInfo.projectR.displayName}
           </TeamName>
           <SocialWrapper>

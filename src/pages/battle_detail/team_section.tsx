@@ -17,6 +17,7 @@ import { isInProgress } from '../../utils';
 
 const TeamWrapper = styled.div`
   flex: 1;
+  min-width: 33%;
   // overflow: hidden;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
@@ -161,7 +162,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         color={color}
         shadow
         style={{ textAlign: firstTeam ? 'right' : 'left' }}
-        type={TypographyType.BOLD_TITLE}
+        type={TypographyType.BOLD_SUBTITLE}
       >
         {project.displayName}
       </Typography>

@@ -3,9 +3,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+
+import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
 
 import alchemy from '../constants/alchemy';
-import { getProfile, updateProfileInfo } from '../services';
+import { getNonce, getProfile, updateProfileInfo } from '../services';
 import { NFTMetadata } from '../types';
 import { useWallet } from './wallet_context';
 
@@ -18,12 +22,13 @@ export interface IProfileContext {
   battlesWon: number;
   totalEthEarned: number;
   userNfts: NFTMetadata[];
-  updateProfile: (name: string, metadata: NFTMetadata | undefined) => void;
+  updateProfile: (name: string, metadata: NFTMetadata | undefined) => Promise<boolean>;
 }
 
 const ProfileContext = React.createContext<Maybe<IProfileContext>>(null);
 
 export const ProfileProvider = ({ children = null as any }) => {
+  const { library } = useWeb3React();
   const { account } = useWallet();
 
   const [username, setUsername] = useState<string>('User');
@@ -99,15 +104,30 @@ export const ProfileProvider = ({ children = null as any }) => {
   );
 
   const updateProfile = async (name: string, metadata: NFTMetadata | undefined) => {
-    setUsername(name);
-    setSelNft(metadata);
-    console.log(metadata);
-    await updateProfileInfo(account || '', {
-      username: name,
-      contract: metadata?.contract.address.toLowerCase(),
-      tokenId: metadata?.tokenId,
-      image: metadata?.rawMetadata?.image,
-    });
+    try {
+      const {
+        data: { data: nonce },
+      } = await getNonce(account || '');
+
+      const signer = library.getSigner();
+      const signature = await signer.signMessage(ethers.utils.toUtf8Bytes(`Nonce: ${nonce}`));
+
+      await updateProfileInfo(account || '', {
+        username: name,
+        contract: metadata?.contract.address.toLowerCase(),
+        tokenId: metadata?.tokenId,
+        image: metadata?.rawMetadata?.image,
+        signature,
+      });
+
+      setUsername(name);
+      setSelNft(metadata);
+
+      return true;
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+    return false;
   };
 
   return (

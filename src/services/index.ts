@@ -8,7 +8,7 @@ const http = axios.create({
   },
 });
 
-export const getTwitterFeeds = (tweet_id: string) => http.get(`/v1/twitter/get?tweet_id=${tweet_id}`);
+export const getTwitterFeeds = (keyword: string) => http.get(`/v1/twitter/get?keyword=${keyword}`);
 
 export const getActiveBattleIds = () => http.get(`/v1/battles/get_active_battle_ids`);
 
@@ -25,6 +25,8 @@ export const getActiveTotalNftStakedAmount = (battleId: string) =>
 export const getLeaderboard = () => http.get(`/v1/battles/get_leaderboard`);
 
 export const getBattleEventsById = (battleId: string) => http.get(`/v1/battles/get_battle_events/${battleId}`);
+
+export const getNonce = (account: string) => http.get(`/v1/users/get_nonce/${account}/nonce`);
 
 export const getProfile = (account: string) => http.get(`/v1/users/get_profile/${account}`);
 

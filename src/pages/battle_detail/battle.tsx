@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { BattleDetailType } from '../../types';
 import ClaimSection from './claim_section';
 import FeaturedFight from './featured_fight';
-import MintNFT from './mint_nft';
+// import MintNFT from './mint_nft';
 import SocialSection from './social_section';
 
 const Container = styled.div`
@@ -20,19 +20,16 @@ const Container = styled.div`
   }`};
 `;
 
-const BattlePage: React.FC<BattleDetailType> = (props) => {
-  const { battleInfo, updateUserNftList } = props;
+const BattlePage: React.FC<BattleDetailType> = (props) => (
+  // const { battleInfo, updateUserNftList } = props;
 
-  return (
-    <Container>
-      <ClaimSection {...props} />
-      <FeaturedFight {...props} />
-      {process.env.REACT_APP_NETWORK !== 'mainnet' && battleInfo && (
+  <Container>
+    <ClaimSection {...props} />
+    <FeaturedFight {...props} />
+    {/* {process.env.REACT_APP_NETWORK !== 'mainnet' && battleInfo && (
         <MintNFT battleInfo={battleInfo} updateUserNftList={updateUserNftList} />
-      )}
-      <SocialSection {...props} />
-    </Container>
-  );
-};
-
+      )} */}
+    <SocialSection {...props} />
+  </Container>
+);
 export default BattlePage;

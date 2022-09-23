@@ -45,7 +45,7 @@ const HeaderCell = styled.div`
 const Body = styled.div`
   display: inline-block;
   min-width: 100%;
-  height: 30rem;
+  height: 60rem;
   overflow-y: auto;
 
   ::-webkit-scrollbar {

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import styled from 'styled-components';
 
 import Button from './button';
@@ -34,7 +35,7 @@ interface IToggle extends React.HTMLAttributes<HTMLDivElement> {
 const Toggle: React.FC<IToggle> = ({ value, contents, onValueChange, ...props }) => (
   <Container {...props}>
     {contents.map((content, index) => (
-      <ToggleButton isActive={value === index} onClick={() => onValueChange(index)}>
+      <ToggleButton isActive={value === index} key={index} onClick={() => onValueChange(index)}>
         {content}
       </ToggleButton>
     ))}

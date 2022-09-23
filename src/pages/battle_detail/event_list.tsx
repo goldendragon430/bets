@@ -107,7 +107,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
               src={!event.side ? battleInfo?.projectL.logo : battleInfo?.projectR.logo}
             />
             <ContentText type={TypographyType.REGULAR}>
-              Alpha {getShortWalletAddress(event.user)}
+              {getShortWalletAddress(event.userInfo?.username || event.user)}
               {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
             </ContentText>
           </EventItem>
@@ -115,7 +115,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
       },
       {
         Header: 'Amount',
-        width: 100,
+        width: 120,
         accessor: (event: any) => (
           <EventItem flexEnd>
             <ContentText type={TypographyType.REGULAR}>
@@ -148,7 +148,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
       },
       {
         Header: 'Time',
-        width: 100,
+        width: 120,
         accessor: (event: any) => (
           <EventItem flexEnd>
             <ContentText type={TypographyType.REGULAR}>{formatTime(new Date(event.timestamp))} ago</ContentText>

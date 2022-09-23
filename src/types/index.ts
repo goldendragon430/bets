@@ -94,4 +94,7 @@ export interface BattleEvent {
   timestamp: number;
   amount: number;
   action: 'Betted' | 'Staked';
+  userInfo?: {
+    username: string;
+  };
 }

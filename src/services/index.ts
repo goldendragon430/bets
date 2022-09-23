@@ -8,7 +8,7 @@ const http = axios.create({
   },
 });
 
-export const getTwitterFeeds = (tweet_id: string) => http.get(`/v1/twitter/get?tweet_id=${tweet_id}`);
+export const getTwitterFeeds = (keyword: string) => http.get(`/v1/twitter/get?keyword=${keyword}`);
 
 export const getActiveBattleIds = () => http.get(`/v1/battles/get_active_battle_ids`);
 

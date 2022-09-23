@@ -55,10 +55,11 @@ const StatsItem = styled.div<{ firstTeam?: boolean }>`
 
 const NumberText = styled(Typography)`
   font-size: 1.5rem;
+  white-space: nowrap;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
-  font-size: 1.875rem;
-}`}
+    font-size: 1.875rem;
+  }`}
 `;
 
 const TeamLogo = styled.img<{ color: string }>`

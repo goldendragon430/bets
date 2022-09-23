@@ -115,7 +115,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
       },
       {
         Header: 'Amount',
-        width: 100,
+        width: 120,
         accessor: (event: any) => (
           <EventItem flexEnd>
             <ContentText type={TypographyType.REGULAR}>
@@ -148,7 +148,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
       },
       {
         Header: 'Time',
-        width: 100,
+        width: 120,
         accessor: (event: any) => (
           <EventItem flexEnd>
             <ContentText type={TypographyType.REGULAR}>{formatTime(new Date(event.timestamp))} ago</ContentText>

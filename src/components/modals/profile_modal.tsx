@@ -220,9 +220,18 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
     setEdit(true);
   };
 
-  const handleSaveName = () => {
-    setEdit(false);
-    updateProfile(name, selNft);
+  const handleSaveName = async () => {
+    const res = await updateProfile(name, selNft);
+    if (res) {
+      setEdit(false);
+    }
+  };
+
+  const handleSaveNft = async () => {
+    const res = await updateProfile(username, selectedNft);
+    if (res) {
+      setShowNft(false);
+    }
   };
 
   const handleSelectNft = (metadata: NFTMetadata) => {
@@ -235,11 +244,6 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
     } else {
       setSelectedNft(metadata);
     }
-  };
-
-  const handleSaveNft = () => {
-    setShowNft(false);
-    updateProfile(username, selectedNft);
   };
 
   const handleCloseNft = () => {

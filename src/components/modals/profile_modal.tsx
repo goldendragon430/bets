@@ -276,13 +276,17 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
             </Row>
             <Row>
               <NumberWrapper>
-                <Typography type={TypographyType.BOLD_TITLE}>{winnerRank.toLocaleString()}</Typography>
+                <Typography type={TypographyType.BOLD_SUBTITLE}>
+                  {winnerRank > 0 ? winnerRank.toLocaleString() : 'Unavailable'}
+                </Typography>
               </NumberWrapper>
               <Typography type={TypographyType.REGULAR}>WINNERS RANK</Typography>
             </Row>
             <Row>
               <NumberWrapper>
-                <Typography type={TypographyType.BOLD_TITLE}>{abpRank.toLocaleString()}</Typography>
+                <Typography type={TypographyType.BOLD_SUBTITLE}>
+                  {abpRank > 0 ? abpRank.toLocaleString() : 'Unavailable'}
+                </Typography>
               </NumberWrapper>
               <Typography type={TypographyType.REGULAR}>ABP RANK</Typography>
             </Row>

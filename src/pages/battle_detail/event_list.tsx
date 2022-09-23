@@ -107,7 +107,7 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
               src={!event.side ? battleInfo?.projectL.logo : battleInfo?.projectR.logo}
             />
             <ContentText type={TypographyType.REGULAR}>
-              Alpha {getShortWalletAddress(event.user)}
+              {getShortWalletAddress(event.userInfo?.username || event.user)}
               {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
             </ContentText>
           </EventItem>

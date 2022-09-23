@@ -14,7 +14,7 @@ import { mixpanelTracker } from '../../config/mixpanel';
 import { useBattle } from '../../contexts/battle_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { useBetContract } from '../../hooks/useContract';
-import { getBattleById, getBattleEventsById } from '../../services';
+import { getBattleById, getBattleEventsById, getProfile } from '../../services';
 import { BattleEvent, BattleInfo, NFTMetadata } from '../../types';
 import { getBattleBetInfo, getUserBetInfo, getUserNftList } from '../../utils/battle';
 import BattlePage from './battle';
@@ -227,6 +227,12 @@ const BattleDetail: React.FC = () => {
         if (_battleId.toString() === battleInfo.battleId.toString()) {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
+            let userInfo;
+            const res = await getProfile(user);
+            if (res.data.data) {
+              userInfo = { username: res.data.data.username };
+            }
+
             const e: BattleEvent = {
               txHash,
               user,
@@ -234,6 +240,7 @@ const BattleDetail: React.FC = () => {
               timestamp: Date.now(),
               amount: tokenIds.length,
               action: 'Staked',
+              userInfo,
             };
 
             setBattleEvents([...battleEvents, e]);
@@ -248,6 +255,12 @@ const BattleDetail: React.FC = () => {
         if (_battleId.toString() === battleInfo.battleId.toString()) {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
+            let userInfo;
+            const res = await getProfile(user);
+            if (res.data.data) {
+              userInfo = { username: res.data.data.username };
+            }
+
             const e: BattleEvent = {
               txHash,
               user,
@@ -255,6 +268,7 @@ const BattleDetail: React.FC = () => {
               timestamp: Date.now(),
               amount: Number(ethers.utils.formatEther(amount)),
               action: 'Betted',
+              userInfo,
             };
 
             setBattleEvents([...battleEvents, e]);

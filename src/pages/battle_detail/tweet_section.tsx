@@ -23,15 +23,16 @@ const TweetSection: React.FC<ITweetSection> = ({ color }) => {
         const { data, includes } = res.data.data;
         setListA(
           data.map((item: any) => {
-            const user = includes.users.find((_user: any) => _user.id === item.author_id);
+            const userInfo = includes.users.find((_user: any) => _user.id === item.author_id);
+            const media =
+              includes.media?.filter((_media: any) => item.attachments?.media_keys.includes(_media.media_key)) || [];
             return {
               id: item.id,
               text: item.text,
               createdAt: new Date(item.created_at),
-              name: user.name,
-              username: user.username,
-              profileImg: user.profile_image_url,
-            };
+              userInfo,
+              media,
+            } as TwitterFeed;
           })
         );
       } else {

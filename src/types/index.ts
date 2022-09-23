@@ -1,12 +1,32 @@
 import { OwnedNft } from 'alchemy-sdk';
 
+interface TwitterFeedUserInfo {
+  id: string;
+  name: string;
+  username: string;
+  profile_image_url: string;
+}
+
+interface TwitterFeedMediaInfo {
+  type: string;
+  media_key: string;
+  width: number;
+  height: number;
+  url?: string;
+  preview_image_url?: string;
+  variants?: {
+    bit_rate: number;
+    content_type: string;
+    url: string;
+  }[];
+}
+
 export interface TwitterFeed {
   id: string;
   text: string;
   createdAt: Date;
-  name: string;
-  username: string;
-  profileImg: string;
+  userInfo: TwitterFeedUserInfo;
+  media: TwitterFeedMediaInfo[];
 }
 
 export interface TeamInfo {

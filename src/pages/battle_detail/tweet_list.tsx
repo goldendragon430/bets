@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react/no-array-index-key */
 import styled from 'styled-components';
 
@@ -11,7 +12,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div<{ color: string }>`
   width: 100%;
-  height: 30rem;
+  height: 60rem;
   overflow-x: hidden;
   overflow-y: auto;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${({ color }) => `${color}88`} 100%);
@@ -91,6 +92,30 @@ const FilteredText = styled.span<{ blue?: boolean }>`
   color: ${({ theme, blue }) => (blue ? theme.colors.blue2 : theme.colors.white)};
 `;
 
+const MediaContent = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  video,
+  img {
+    width: 30%;
+
+    ${({ theme }) => `${theme.media_width.upToMedium} {
+      width: 50%;
+    }`};
+
+    ${({ theme }) => `${theme.media_width.upToSmall} {
+      width: 70%;
+    }`};
+
+    ${({ theme }) => `${theme.media_width.upToExtraSmall} {
+      width: 100%;
+    }`};
+  }
+`;
+
 interface ITweetList {
   tweets: TwitterFeed[];
   color: string;
@@ -104,16 +129,17 @@ const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
         return (
           <TweetItem color={color} key={key}>
             <UserContent>
-              <UserImage userImg={item.profileImg} />
+              <UserImage userImg={item.userInfo.profile_image_url} />
               <div>
                 <NameContent>
-                  <Typography type={TypographyType.REGULAR}>{item.name}</Typography>
+                  <Typography type={TypographyType.REGULAR}>{item.userInfo.name}</Typography>
                   &nbsp;
                   <UsernameText type={TypographyType.REGULAR_BODY2}> · {formatTime(item.createdAt)}</UsernameText>
                 </NameContent>
-                <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.username}</UsernameText>
+                <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.userInfo.username}</UsernameText>
               </div>
             </UserContent>
+
             <ContentText type={TypographyType.REGULAR}>
               {parts.map((word, index) =>
                 word.startsWith('https://') || word.startsWith('http://') ? (
@@ -127,6 +153,20 @@ const TweetList: React.FC<ITweetList> = ({ tweets, color }) => (
                 )
               )}
             </ContentText>
+
+            {item.media.length > 0 && (
+              <MediaContent>
+                {item.media[0].type === 'video' ? (
+                  <video controls poster={item.media[0].preview_image_url}>
+                    {item.media[0].variants?.map((variant, index) => (
+                      <source key={index} src={variant.url} type={variant.content_type} />
+                    ))}
+                  </video>
+                ) : (
+                  <img alt="" src={item.media[0].url} />
+                )}
+              </MediaContent>
+            )}
           </TweetItem>
         );
       })}

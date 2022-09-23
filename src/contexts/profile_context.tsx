@@ -80,6 +80,11 @@ export const ProfileProvider = ({ children = null as any }) => {
           const res = await getProfile(account);
           if (res.data.data) {
             setUsername(res.data.data.username);
+            setWinnerRank(res.data.data.winnerRank);
+            setAbpRank(res.data.data.abpRank);
+            setBattlesInProgress(res.data.data.battlesInProgress);
+            setBattlesWon(res.data.data.battlesWon);
+            setTotalEthEarned(res.data.data.totalEthEarned);
             if (res.data.data.selectedNFT) {
               const result = nfts.find(
                 (item) =>

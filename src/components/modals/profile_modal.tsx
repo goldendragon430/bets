@@ -6,13 +6,13 @@ import styled from 'styled-components';
 
 import EditIcon from '../../assets/images/edit.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
-import ProfileIcon from '../../assets/images/profile.svg';
 import { useProfile } from '../../contexts/profile_context';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
 import { NFTMetadata } from '../../types';
 import { getNftImageUrl, getShortWalletAddress } from '../../utils';
 import Button from '../common/button';
+import ProfileImage from '../common/profile_image';
 import { Typography, TypographyType } from '../common/typography';
 import NftList from '../nft_list';
 
@@ -92,26 +92,13 @@ const ProfileNameWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const ProfileImgWrapper = styled.div`
+const UserProfileImage = styled(ProfileImage)`
   position: absolute;
   width: 8rem;
   height: 8rem;
   left: -4rem;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 0.25rem solid ${({ theme }) => theme.colors.white};
-  background: ${({ theme }) => theme.colors.grey2};
-  cursor: pointer;
   filter: drop-shadow(0px 0px 0.6875rem ${({ theme }) => theme.colors.white});
-`;
-
-const ProfileImg = styled.div<{ userImg?: string }>`
-  width: 100%;
-  height: 100%;
-  background: ${({ userImg }) => (userImg ? `url(${userImg})` : `url(${ProfileIcon})`)};
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  border-width: 0.25rem;
 `;
 
 const ProfileInput = styled.input`
@@ -270,9 +257,10 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
           <Content>
             <Row>
               <ProfileNameWrapper>
-                <ProfileImgWrapper onClick={() => setShowNft(true)}>
-                  <ProfileImg userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')} />
-                </ProfileImgWrapper>
+                <UserProfileImage
+                  onClick={() => setShowNft(true)}
+                  userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')}
+                />
                 <div>
                   <ProfileInput
                     onBlur={handleSaveName}

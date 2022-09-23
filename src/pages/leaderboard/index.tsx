@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-console */
 import { useEffect, useMemo, useState } from 'react';
 import { Column } from 'react-table';
@@ -7,10 +8,11 @@ import styled from 'styled-components';
 import AbpIcon from '../../assets/images/abp_icon.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
 import Button from '../../components/common/button';
+import ProfileImage from '../../components/common/profile_image';
 import Table from '../../components/common/table';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { getLeaderboard } from '../../services';
-import { getShortWalletAddress } from '../../utils';
+import { getNftImageUrl, getShortWalletAddress } from '../../utils';
 
 const Container = styled.div`
   width: 100%;
@@ -39,6 +41,17 @@ const TabButton = styled(Button)<{ isActive: boolean }>`
   ${({ isActive }) => !isActive && `opacity: 0.5;`}
 `;
 
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const UserProfile = styled(ProfileImage)`
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  margin-right: 1rem;
+`;
+
 const Leaderboard = () => {
   const columns: Column[] = useMemo(
     () => [
@@ -49,9 +62,13 @@ const Leaderboard = () => {
       },
       {
         Header: 'USER',
-        accessor: 'user',
         width: 120,
-        Cell: ({ value }) => <span>{getShortWalletAddress(value)}</span>,
+        accessor: (info: any) => (
+          <Flex>
+            <UserProfile userImg={info.userInfo?.selectedNFT && getNftImageUrl(info.userInfo.selectedNFT.image)} />
+            {getShortWalletAddress(info.userInfo?.username || info.user)}
+          </Flex>
+        ),
       },
       {
         Header: 'WINS',

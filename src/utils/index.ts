@@ -4,8 +4,14 @@ import { AddressZero } from '@ethersproject/constants';
 import { Contract } from '@ethersproject/contracts';
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
-export const getShortWalletAddress = (account: string) => `${account.slice(0, 6)}...${account.slice(-4)}`;
+export const getShortWalletAddress = (account: string) => {
+  if (ethers.utils.isAddress(account)) {
+    return `${account.slice(0, 6)}...${account.slice(-4)}`;
+  }
+  return account;
+};
 
 export const bnToDec = (bn: BigNumber, decimals = 18) => bn.dividedBy(new BigNumber(10).pow(decimals)).toNumber();
 

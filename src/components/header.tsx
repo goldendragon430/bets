@@ -9,11 +9,13 @@ import DiscordIcon from '../assets/images/discord.svg';
 import EthIcon from '../assets/images/eth_icon1.svg';
 import HamburgerIcon from '../assets/images/hamburger.svg';
 import LogoIcon from '../assets/images/logo.svg';
-import ProfileIcon from '../assets/images/profile.svg';
 import SolIcon from '../assets/images/sol_icon.svg';
 import TwitterIcon from '../assets/images/twitter.svg';
+import { useProfile } from '../contexts/profile_context';
 import { useWallet } from '../contexts/wallet_context';
+import { getNftImageUrl } from '../utils';
 import LinkButton from './common/link_button';
+import ProfileImage from './common/profile_image';
 import Toggle from './common/toggle';
 import { Typography, TypographyType } from './common/typography';
 import ProfileModal from './modals/profile_modal';
@@ -88,12 +90,6 @@ const SocialIcon = styled(LinkButton)`
   }
 `;
 
-const ProfileImg = styled.img`
-  margin: 0 1rem;
-  height: 2rem;
-  cursor: pointer;
-`;
-
 const MobileView = styled.div<{ show: boolean }>`
   display: none;
   background: ${({ theme }) => theme.colors.black};
@@ -128,6 +124,12 @@ const CloseButton = styled.img`
   right: calc(4rem + 12px);
 `;
 
+const UserProfile = styled(ProfileImage)`
+  margin: 0 1rem;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+`;
+
 const ROUTES = [
   {
     name: 'Main',
@@ -145,6 +147,7 @@ const ROUTES = [
 
 const Header: React.FC = () => {
   const { account } = useWallet();
+  const { selNft } = useProfile();
 
   const [showMobileView, setShowMobileView] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -178,7 +181,9 @@ const Header: React.FC = () => {
       <SocialIcon href="https://discord.gg/alphabets">
         <img alt="" src={DiscordIcon} />
       </SocialIcon>
-      {account && <ProfileImg alt="" onClick={handleClickProfile} src={ProfileIcon} />}
+      {account && (
+        <UserProfile onClick={handleClickProfile} userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')} />
+      )}
     </Flex>
   );
 

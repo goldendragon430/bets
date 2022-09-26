@@ -88,6 +88,10 @@ const Stats = styled.div<{ color: string }>`
   }
 `;
 
+const StyledA = styled.a`
+  color: ${({ theme }) => theme.colors.white};
+`;
+
 const InfoSection: React.FC<BattleDetailType> = ({
   getRewardPotential,
   totalBetAmountA,
@@ -136,7 +140,14 @@ const InfoSection: React.FC<BattleDetailType> = ({
           </Stats>
         </LeftTeam>
         <MidTeam>
-          <Typography type={TypographyType.REGULAR_BODY}>reward potential</Typography>
+          <Typography type={TypographyType.REGULAR_BODY}>
+            <StyledA
+              href="https://alphabetsgg.notion.site/alphabetsgg/How-to-Play-a21b75c6b65c4bb9828c1fd9d0962424#d1584553cf974f54b3384ae3a188e173"
+              target="_blank"
+            >
+              reward potential
+            </StyledA>
+          </Typography>
         </MidTeam>
         <RightTeam>
           <Stats color={theme.colors.blue1}>
@@ -150,7 +161,14 @@ const InfoSection: React.FC<BattleDetailType> = ({
           <Typography type={TypographyType.BOLD_SUBTITLE}>{Math.round(chanceA * 100)}%</Typography>
         </LeftTeam>
         <MidTeam>
-          <Typography type={TypographyType.REGULAR_BODY}>chances</Typography>
+          <Typography type={TypographyType.REGULAR_BODY}>
+            <StyledA
+              href="https://alphabetsgg.notion.site/alphabetsgg/How-to-Play-a21b75c6b65c4bb9828c1fd9d0962424#46563f41d1e0442f8ad3bd725fae2785"
+              target="_blank"
+            >
+              chances
+            </StyledA>
+          </Typography>
         </MidTeam>
         <RightTeam>
           <Typography type={TypographyType.BOLD_SUBTITLE}>

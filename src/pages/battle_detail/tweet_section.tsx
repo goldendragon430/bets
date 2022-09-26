@@ -18,7 +18,7 @@ const TweetSection: React.FC<ITweetSection> = ({ color }) => {
 
   const fetchTwitterA = async () => {
     try {
-      const res = await getTwitterFeeds('funny');
+      const res = await getTwitterFeeds('alphabets');
       if (res && res.data && res.data.data) {
         const { data, includes } = res.data.data;
         setListA(

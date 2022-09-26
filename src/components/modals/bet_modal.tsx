@@ -103,7 +103,7 @@ const StatsWrapper = styled.div`
 `;
 
 const StyledA = styled.a`
-  text-decoration: underline;
+  text-decoration: underline !important;
 `;
 
 interface IBetModal {
@@ -218,17 +218,17 @@ const BetModal: React.FC<IBetModal> = ({
       </BetButton>
 
       <Typography color={color} type={TypographyType.REGULAR_TITLE}>
-        if you lose you will earn {getABPAmount()}{' '}
+        if you lose you will earn {getABPAmount()} ABP
+      </Typography>
+      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+        find out more about ABP{' '}
         <StyledA
           href="https://alphabetsgg.notion.site/alphabetsgg/How-to-Play-a21b75c6b65c4bb9828c1fd9d0962424#0ea15198d9b14bf8960f802e454f454f"
           target="_blank"
         >
-          ABP
+          here
         </StyledA>
       </Typography>
-      {/* <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
-        find out more about ABP <a>here</a>
-      </Typography> */}
     </ModalWrapper>
   );
 };

@@ -141,6 +141,8 @@ const UserProfile = styled(ProfileImage)`
   margin: 0 1rem;
   width: 2.5rem !important;
   height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
 `;
 
 const ROUTES = [
@@ -175,8 +177,8 @@ const Header: React.FC = () => {
   };
 
   const handleToggleChange = (value: number) => {
-    if (value === 1) {
-      window.location.href = 'https://sol.alphabets.gg/';
+    if (value === 1 && process.env.REACT_APP_SOL_VERSION_LINK) {
+      window.location.href = process.env.REACT_APP_SOL_VERSION_LINK;
     }
   };
 

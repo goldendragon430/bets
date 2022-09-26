@@ -3,7 +3,7 @@ import { Modal } from 'antd';
 import styled from 'styled-components';
 
 import EthIcon from '../../assets/images/eth_icon.svg';
-// import TwitterIcon from '../../assets/images/twitter.svg';
+import TwitterIcon from '../../assets/images/twitter.svg';
 import { Typography, TypographyType } from '../common/typography';
 
 const ModalWrapper = styled(Modal)<{ color: string }>`
@@ -83,79 +83,100 @@ const BalanceImg = styled.img`
   height: 8rem;
 `;
 
-// const CommentWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
+const CommentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-// const TwitterImg = styled.img`
-//   height: 3rem;
-//   margin-right: 2rem;
-// `;
+const TwitterImg = styled.img`
+  height: 3rem;
+  margin-right: 2rem;
+`;
 
 interface ISuccessModal {
   visible: boolean;
   onClose: () => void;
+  teamName: string;
   teamLogo: string;
   color: string;
   ethStaked: number;
   nftStaked: number;
 }
 
-const SuccessModal: React.FC<ISuccessModal> = ({ visible, onClose, teamLogo, color, ethStaked, nftStaked }) => (
-  <ModalWrapper
-    centered
-    color={color}
-    footer={null}
-    onCancel={onClose}
-    title={
-      <HeaderWrapper>
-        <Typography type={TypographyType.REGULAR_TITLE}>Successful</Typography>
-      </HeaderWrapper>
-    }
-    visible={visible}
-    width="55rem"
-  >
-    <Typography style={{ fontSize: '3rem' }} type={TypographyType.REGULAR_TITLE}>
-      Congrats!
-    </Typography>
+const SuccessModal: React.FC<ISuccessModal> = ({
+  visible,
+  onClose,
+  teamName,
+  teamLogo,
+  color,
+  ethStaked,
+  nftStaked,
+}) => {
+  const amount = ethStaked > 0 ? ethStaked : nftStaked;
+  const tweetUrl = `https://twitter.com/intent/tweet?text=I ${
+    ethStaked > 0 ? 'betted' : 'staked'
+  } ${amount.toLocaleString()} ${ethStaked > 0 ? 'ETH' : 'NFT(s)'} on ${teamName} &hashtags=alphabets,${teamName
+    .split(' ')
+    .join('')}`;
 
-    <TeamLogo alt="" color={color} src={teamLogo} />
-
-    <Wrapper>
-      {ethStaked > 0 && (
-        <BalanceWrapper color={color}>
-          <BalanceImg alt="" src={EthIcon} />
-          <div style={{ marginRight: '2rem' }}>
-            <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
-              {ethStaked.toLocaleString()}
-            </Typography>
-            <Typography type={TypographyType.REGULAR}>NEW BET</Typography>
-          </div>
-        </BalanceWrapper>
-      )}
-
-      {/* <div style={{ minWidth: '2rem' }} /> */}
-
-      {nftStaked > 0 && (
-        <BalanceWrapper color={color}>
-          <div style={{ textAlign: 'center' }}>
-            <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
-              {nftStaked.toLocaleString()}
-            </Typography>
-            <Typography type={TypographyType.REGULAR}>NEW NFT STAKED</Typography>
-          </div>
-        </BalanceWrapper>
-      )}
-    </Wrapper>
-
-    {/* <CommentWrapper>
-      <TwitterImg alt="" src={TwitterIcon} />
-      <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
-        <a>Share</a> with friends to win a free bet
+  return (
+    <ModalWrapper
+      centered
+      color={color}
+      footer={null}
+      onCancel={onClose}
+      title={
+        <HeaderWrapper>
+          <Typography type={TypographyType.REGULAR_TITLE}>Successful</Typography>
+        </HeaderWrapper>
+      }
+      visible={visible}
+      width="55rem"
+    >
+      <Typography style={{ fontSize: '3rem' }} type={TypographyType.REGULAR_TITLE}>
+        Congrats!
       </Typography>
-    </CommentWrapper> */}
-  </ModalWrapper>
-);
+
+      <TeamLogo alt="" color={color} src={teamLogo} />
+
+      <Wrapper>
+        {ethStaked > 0 && (
+          <BalanceWrapper color={color}>
+            <BalanceImg alt="" src={EthIcon} />
+            <div style={{ marginRight: '2rem' }}>
+              <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
+                {ethStaked.toLocaleString()}
+              </Typography>
+              <Typography type={TypographyType.REGULAR}>NEW BET</Typography>
+            </div>
+          </BalanceWrapper>
+        )}
+
+        {/* <div style={{ minWidth: '2rem' }} /> */}
+
+        {nftStaked > 0 && (
+          <BalanceWrapper color={color}>
+            <div style={{ textAlign: 'center' }}>
+              <Typography color={color} style={{ lineHeight: '3rem' }} type={TypographyType.BOLD_SUBTITLE}>
+                {nftStaked.toLocaleString()}
+              </Typography>
+              <Typography type={TypographyType.REGULAR}>NEW NFT STAKED</Typography>
+            </div>
+          </BalanceWrapper>
+        )}
+      </Wrapper>
+
+      <CommentWrapper>
+        <TwitterImg alt="" src={TwitterIcon} />
+        <Typography style={{ textTransform: 'uppercase' }} type={TypographyType.REGULAR}>
+          <a href={tweetUrl} rel="noreferrer" target="_blank">
+            Share
+          </a>{' '}
+          with friends to win a free bet
+        </Typography>
+      </CommentWrapper>
+    </ModalWrapper>
+  );
+};
 
 export default SuccessModal;

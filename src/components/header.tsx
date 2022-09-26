@@ -160,7 +160,7 @@ const ROUTES = [
   },
   {
     name: 'How it works',
-    route: 'https://docs.google.com/document/d/1cUeNmyEy4bUgCO_5VYJyRrB-ktaYA8mb4RaOYCxUkok/edit',
+    route: 'https://alphabetsgg.notion.site/alphabetsgg/How-to-Play-a21b75c6b65c4bb9828c1fd9d0962424',
     href: true,
   },
 ];

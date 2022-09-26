@@ -5,6 +5,8 @@ import ProfileIcon from '../../assets/images/profile.svg';
 const ProfileImgWrapper = styled.div`
   width: 8rem;
   height: 8rem;
+  min-width: 8rem;
+  min-height: 8rem;
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid ${({ theme }) => theme.colors.white};

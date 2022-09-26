@@ -23,6 +23,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    flex-direction: column;
+  }`};
 `;
 
 const AmountWrapper = styled.div`
@@ -39,6 +43,12 @@ const TabButton = styled(Button)<{ isActive: boolean }>`
   margin-left: 1rem;
   font-size: 1.5rem;
   ${({ isActive }) => !isActive && `opacity: 0.5;`}
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    margin-left: 0;
+    margin-top: 1rem;
+    width: 100%;
+  }`};
 `;
 
 const Flex = styled.div`
@@ -47,6 +57,8 @@ const Flex = styled.div`
 `;
 
 const UserProfile = styled(ProfileImage)`
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
   width: 2.5rem !important;
   height: 2.5rem !important;
   margin-right: 1rem;
@@ -65,7 +77,9 @@ const Leaderboard = () => {
         width: 120,
         accessor: (info: any) => (
           <Flex>
-            <UserProfile userImg={info.userInfo?.selectedNFT && getNftImageUrl(info.userInfo.selectedNFT.image)} />
+            <UserProfile
+              userImg={info.userInfo?.selectedNFT && getNftImageUrl(info.userInfo.selectedNFT.image || '')}
+            />
             {getShortWalletAddress(info.userInfo?.username || info.user)}
           </Flex>
         ),

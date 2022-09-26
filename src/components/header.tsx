@@ -63,6 +63,19 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const StyledA = styled.a`
+  text-decoration: none;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.text1};
+  padding: 1rem;
+  white-space: nowrap;
+
+  &:active,
+  &:hover {
+    color: ${({ theme }) => theme.colors.text1};
+  }
+`;
+
 const Logo = styled.img`
   height: 2rem;
 `;
@@ -128,6 +141,8 @@ const UserProfile = styled(ProfileImage)`
   margin: 0 1rem;
   width: 2.5rem !important;
   height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
 `;
 
 const ROUTES = [
@@ -143,6 +158,11 @@ const ROUTES = [
     name: 'Events',
     route: '/events',
   },
+  {
+    name: 'How it works',
+    route: 'https://docs.google.com/document/d/1cUeNmyEy4bUgCO_5VYJyRrB-ktaYA8mb4RaOYCxUkok/edit',
+    href: true,
+  },
 ];
 
 const Header: React.FC = () => {
@@ -157,8 +177,8 @@ const Header: React.FC = () => {
   };
 
   const handleToggleChange = (value: number) => {
-    if (value === 1) {
-      window.location.href = 'https://sol.alphabets.gg/';
+    if (value === 1 && process.env.REACT_APP_SOL_VERSION_LINK) {
+      window.location.href = process.env.REACT_APP_SOL_VERSION_LINK;
     }
   };
 
@@ -202,11 +222,19 @@ const Header: React.FC = () => {
                   |
                 </Typography>
               )}
-              <StyledLink to={link.route}>
-                <Typography shadow type={TypographyType.REGULAR}>
-                  {link.name}
-                </Typography>
-              </StyledLink>
+              {link.href ? (
+                <StyledA href={link.route} target="_blank">
+                  <Typography shadow type={TypographyType.REGULAR}>
+                    {link.name}
+                  </Typography>
+                </StyledA>
+              ) : (
+                <StyledLink to={link.route}>
+                  <Typography shadow type={TypographyType.REGULAR}>
+                    {link.name}
+                  </Typography>
+                </StyledLink>
+              )}
             </Flex>
           ))}
         </LinkWrapper>
@@ -221,13 +249,21 @@ const Header: React.FC = () => {
 
       <MobileView show={showMobileView}>
         <MobileLinkWrapper>
-          {ROUTES.map((link, key) => (
-            <StyledLink key={key} onClick={handleClose} to={link.route}>
-              <Typography shadow type={TypographyType.REGULAR_TITLE}>
-                {link.name}
-              </Typography>
-            </StyledLink>
-          ))}
+          {ROUTES.map((link, key) =>
+            link.href ? (
+              <StyledA href={link.route} key={key} onClick={handleClose} target="_blank">
+                <Typography shadow type={TypographyType.REGULAR_TITLE}>
+                  {link.name}
+                </Typography>
+              </StyledA>
+            ) : (
+              <StyledLink key={key} onClick={handleClose} to={link.route}>
+                <Typography shadow type={TypographyType.REGULAR_TITLE}>
+                  {link.name}
+                </Typography>
+              </StyledLink>
+            )
+          )}
         </MobileLinkWrapper>
 
         {getSocialIcons()}

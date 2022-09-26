@@ -96,6 +96,8 @@ const UserProfileImage = styled(ProfileImage)`
   position: absolute;
   width: 8rem;
   height: 8rem;
+  min-width: 8rem;
+  min-height: 8rem;
   left: -4rem;
   filter: drop-shadow(0px 0px 0.6875rem ${({ theme }) => theme.colors.white});
   border-width: 0.25rem;

@@ -183,7 +183,7 @@ const BattleDetail: React.FC = () => {
         if (receipt.status) {
           mixpanelTracker.track('STAKE_NFT', {
             battleId: battleInfo.id,
-            tokenIds,
+            amount: tokenIds.length,
             side,
           });
           updateTotalInfo();

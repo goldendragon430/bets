@@ -15,6 +15,7 @@ import TeamSection from './team_section';
 const Container = styled.div`
   width: 100%;
   display: flex;
+  justify-content: center;
   padding: 0 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {

@@ -45,7 +45,7 @@ const Flex = styled.div`
 const LinkWrapper = styled(Flex)`
   // margin-left: 1rem;
 
-  ${({ theme }) => `${theme.media_width.upToSmall} {
+  ${({ theme }) => `${theme.media_width.upToMedium} {
     display: none;
   }`}
 `;
@@ -80,10 +80,12 @@ const Logo = styled.img`
   height: 2rem;
 `;
 
-const ButtonWrapper = styled(Flex)`
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    display: none;
-  }`}
+const ButtonWrapper = styled(Flex)``;
+
+const SocialButtons = styled(Flex)`
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+  display: none;
+}`}
 `;
 
 const MenuButton = styled.img`
@@ -195,15 +197,20 @@ const Header: React.FC = () => {
         style={{ margin: '0 1rem' }}
         value={0}
       />
-      <SocialIcon href="https://twitter.com/AlphaBetsGG">
-        <img alt="" src={TwitterIcon} />
-      </SocialIcon>
-      <SocialIcon href="https://discord.gg/alphabets">
-        <img alt="" src={DiscordIcon} />
-      </SocialIcon>
-      {account && (
-        <UserProfile onClick={handleClickProfile} userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')} />
-      )}
+      <SocialButtons>
+        <SocialIcon href="https://twitter.com/AlphaBetsGG">
+          <img alt="" src={TwitterIcon} />
+        </SocialIcon>
+        <SocialIcon href="https://discord.gg/alphabets">
+          <img alt="" src={DiscordIcon} />
+        </SocialIcon>
+        {account && (
+          <UserProfile
+            onClick={handleClickProfile}
+            userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')}
+          />
+        )}
+      </SocialButtons>
     </Flex>
   );
 

@@ -8,7 +8,6 @@ import styled from 'styled-components';
 
 import Chart from '../../components/chart';
 import { Typography, TypographyType } from '../../components/common/typography';
-import { useTheme } from '../../contexts/theme_context';
 import { BattleDetailType } from '../../types';
 import { getChanceValue } from '../../utils/battle';
 
@@ -52,6 +51,7 @@ const LeftTeam = styled.div`
   text-align: right;
 
   p {
+    text-transform: none;
     font-size: 2rem;
   }
 `;
@@ -71,20 +71,8 @@ const RightTeam = styled.div`
   text-align: left;
 
   p {
-    font-size: 2rem;
-  }
-`;
-
-const Stats = styled.div<{ color: string }>`
-  width: 100%;
-  background: ${({ color }) => `${color}80`};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-
-  p {
     text-transform: none;
+    font-size: 2rem;
   }
 `;
 
@@ -103,8 +91,6 @@ const InfoSection: React.FC<BattleDetailType> = ({
   battleInfo,
   refundStatus,
 }) => {
-  const { theme } = useTheme();
-
   const [chanceA, setChanceA] = useState(0);
   const [chanceB, setChanceB] = useState(0);
 
@@ -133,11 +119,9 @@ const InfoSection: React.FC<BattleDetailType> = ({
         )}
       </NumberText>
 
-      <Wrapper>
+      <ChanceWrapper>
         <LeftTeam>
-          <Stats color={theme.colors.orange1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
-          </Stats>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
         </LeftTeam>
         <MidTeam>
           <Typography type={TypographyType.REGULAR_BODY}>
@@ -150,11 +134,9 @@ const InfoSection: React.FC<BattleDetailType> = ({
           </Typography>
         </MidTeam>
         <RightTeam>
-          <Stats color={theme.colors.blue1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true, 0).toFixed(2)}x</Typography>
-          </Stats>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true, 0).toFixed(2)}x</Typography>
         </RightTeam>
-      </Wrapper>
+      </ChanceWrapper>
 
       <ChanceWrapper>
         <LeftTeam>

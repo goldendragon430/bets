@@ -46,7 +46,7 @@ const AppRouter = () => {
           <Route element={<ActiveBattle />} path="/" />
         </Routes>
       </Content>
-      {account && <Roomlio />}
+      {account && !(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i)) && <Roomlio />}
       <ToastContainer />
     </Container>
   );

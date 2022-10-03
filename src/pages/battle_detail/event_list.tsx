@@ -1,12 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import { useEffect, useMemo, useState } from 'react';
-import { Column } from 'react-table';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
 import ArrowIcon from '../../assets/images/arrow.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
-import Table from '../../components/common/table';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { BattleDetailType, BattleEvent } from '../../types';
@@ -15,18 +13,79 @@ import { getChanceValue } from '../../utils/battle';
 
 const Container = styled.div`
   width: 100%;
+  height: 30rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${({ theme }) => `${theme.colors.grey2}88`} 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ffffff10;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+`;
+
+const EventItemWrapper = styled.div`
+  width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey2};
 `;
 
 const EventItem = styled.div<{ flexEnd?: boolean }>`
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   ${({ flexEnd }) => flexEnd && `justify-content: flex-end; text-align: right`}
 `;
 
+const ItemWrapper = styled(EventItem)`
+  width: 100%;
+  justify-content: space-between;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    flex-direction: column;
+    align-items: flex-start;
+  }`};
+`;
+
+const StatsWrapper = styled(EventItem)`
+  flex: 3;
+  justify-content: space-between;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    width: 100%;
+    border-top: 1px solid ${theme.colors.grey2};
+
+    >:first-child {
+      justify-content: flex-start !important;
+      text-align: left !important;
+    }
+  }`};
+`;
+
 const TeamLogo = styled.img<{ color: string }>`
   width: 2rem;
   height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
   border-radius: 0.5rem;
   filter: drop-shadow(0px 0px 0.2rem ${({ color }) => color});
   margin-right: 1rem;
@@ -94,74 +153,55 @@ const EventList: React.FC<IEventList> = ({ battleEvents, battleInfo }) => {
     setData([...newData].reverse());
   }, [battleEvents]);
 
-  const columns: Column[] = useMemo(
-    () => [
-      {
-        Header: 'Action',
-        width: 250,
-        accessor: (event: any) => (
-          <EventItem>
-            <TeamLogo
-              alt=""
-              color={!event.side ? theme.colors.orange1 : theme.colors.blue1}
-              src={!event.side ? battleInfo?.projectL.logo : battleInfo?.projectR.logo}
-            />
-            <ContentText type={TypographyType.REGULAR}>
-              {getShortWalletAddress(event.userInfo?.username || event.user)}
-              {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
-            </ContentText>
-          </EventItem>
-        ),
-      },
-      {
-        Header: 'Amount',
-        width: 120,
-        accessor: (event: any) => (
-          <EventItem flexEnd>
-            <ContentText type={TypographyType.REGULAR}>
-              {event.amount.toLocaleString()}
-              {event.action === 'Betted' ? <EthImg alt="" src={EthIcon} /> : ' NFT(s)'}
-            </ContentText>
-          </EventItem>
-        ),
-      },
-      {
-        Header: 'Chance',
-        width: 100,
-        accessor: (event: any) => (
-          <EventItem flexEnd>
-            <ContentText type={TypographyType.REGULAR}>
-              {Math.round(
-                getChanceValue(
-                  event.totalBetAmountA,
-                  event.totalBetAmountB,
-                  event.totalNftStakedA,
-                  event.totalNftStakedB,
-                  event.side
-                ) * 100
-              )}
-              %
-            </ContentText>
-            <ArrowImg side={event.side} />
-          </EventItem>
-        ),
-      },
-      {
-        Header: 'Time',
-        width: 120,
-        accessor: (event: any) => (
-          <EventItem flexEnd>
-            <ContentText type={TypographyType.REGULAR}>{formatTime(new Date(event.timestamp))} ago</ContentText>
-          </EventItem>
-        ),
-      },
-    ],
-    [battleInfo, theme]
-  );
-
   return (
     <Container>
-      <Table columns={columns} data={data} hideHeader itemSize="5rem" />
+      {data.map((event, key) => (
+        <EventItemWrapper key={key}>
+          <TeamLogo
+            alt=""
+            color={!event.side ? theme.colors.orange1 : theme.colors.blue1}
+            src={!event.side ? battleInfo?.projectL.logo : battleInfo?.projectR.logo}
+          />
+
+          <ItemWrapper>
+            <EventItem style={{ flex: 2 }}>
+              <ContentText type={TypographyType.REGULAR}>
+                {getShortWalletAddress(event.userInfo?.username || event.user)}
+                {event.action === 'Betted' ? ' placed a bet' : ' staked NFT(s)'}
+              </ContentText>
+            </EventItem>
+
+            <StatsWrapper>
+              <EventItem flexEnd>
+                <ContentText type={TypographyType.REGULAR}>
+                  {event.amount.toLocaleString()}
+                  {event.action === 'Betted' ? <EthImg alt="" src={EthIcon} /> : ' NFT(s)'}
+                </ContentText>
+              </EventItem>
+
+              <EventItem flexEnd>
+                <ContentText type={TypographyType.REGULAR}>
+                  {Math.round(
+                    getChanceValue(
+                      event.totalBetAmountA,
+                      event.totalBetAmountB,
+                      event.totalNftStakedA,
+                      event.totalNftStakedB,
+                      event.side
+                    ) * 100
+                  )}
+                  %
+                </ContentText>
+                <ArrowImg side={event.side} />
+              </EventItem>
+
+              <EventItem flexEnd>
+                <ContentText type={TypographyType.REGULAR}>{formatTime(new Date(event.timestamp))} ago</ContentText>
+              </EventItem>
+            </StatsWrapper>
+          </ItemWrapper>
+        </EventItemWrapper>
+      ))}
     </Container>
   );
 };

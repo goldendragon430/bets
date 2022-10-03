@@ -14,6 +14,10 @@ import TweetSection from './tweet_section';
 const Container = styled.div`
   width: 100%;
   padding: 4rem;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    padding: 2rem;
+  }`}
 `;
 
 const Wrapper = styled.div<{ visible?: boolean }>`
@@ -41,6 +45,9 @@ const TabButton = styled(Button)<{ visible?: boolean }>`
     color: ${theme.colors.grey2};
     filter: none;
   `}
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    font-size: 1.5rem;
+  }`}
 `;
 
 const Splitter = styled(Typography)``;

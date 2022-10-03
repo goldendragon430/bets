@@ -41,6 +41,10 @@ const ModalWrapper = styled(Modal)`
       display: flex;
       align-items: center;
       flex-direction: column;
+
+      ${({ theme }) => `${theme.media_width.upToSmall} {
+        padding: 2rem;
+      }`}
     }
   }
 `;
@@ -117,7 +121,7 @@ const MyBetModal: React.FC<IMyBetModal> = ({ visible, onClose, ...props }) => {
         {battleInfo &&
           [battleInfo.projectL, battleInfo.projectR].map((team, key) => (
             <TeamWrapper key={key}>
-              <TeamLogo alt="" color={key === 0 ? theme.colors.orange1 : theme.colors.blue1} src={team.logo} />
+              <TeamLogo alt="" color={key === 0 ? theme.colors.orange1 : theme.colors.blue1} src={team.headerImage} />
               <Wrapper>
                 <TeamLogo2 alt="" color={key === 0 ? theme.colors.orange1 : theme.colors.blue1} src={team.logo} />
                 <Typography type={TypographyType.REGULAR_TITLE}>

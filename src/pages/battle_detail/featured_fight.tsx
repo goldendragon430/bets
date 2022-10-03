@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
+import NumberText from '../../components/common/number_text';
 import BetModal from '../../components/modals/bet_modal';
 import StakeModal from '../../components/modals/stake_modal';
 import SuccessModal from '../../components/modals/success_modal';
@@ -12,15 +13,37 @@ import { BattleDetailType } from '../../types';
 import InfoSection from './info_section';
 import TeamSection from './team_section';
 
-const Container = styled.div`
-  width: 100%;
+const Flex = styled.div`
   display: flex;
+  justify-content: center;
+`;
+
+const DesktopContainer = styled(Flex)`
+  width: 100%;
   padding: 0 2rem;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: none;
+  }`};
+`;
+
+const MobileContainer = styled(Flex)`
+  width: 100%;
+  padding: 0 2rem;
+  display: none;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0;
+  }`};
+`;
+
+const NumberTextWrapper = styled(NumberText)`
+  display: none !important;
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: flex !important;
   }`};
 `;
 
@@ -36,6 +59,9 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
     userNftListA,
     userNftListB,
     stakeNft,
+    refundStatus,
+    winnerSet,
+    winner,
   } = props;
   const { theme } = useTheme();
 
@@ -77,29 +103,59 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
   };
 
   return battleInfo ? (
-    <Container>
-      <TeamSection
-        battleInfo={battleInfo}
-        color={theme.colors.orange1}
-        ethStaked={totalBetAmountA}
-        firstTeam
-        nftStaked={totalNftStakedA}
-        onBet={() => handleShowBet(true)}
-        onStake={() => handleShowStake(true)}
-        project={battleInfo.projectL}
-      />
+    <>
+      <DesktopContainer>
+        <TeamSection
+          battleInfo={battleInfo}
+          color={theme.colors.orange1}
+          ethStaked={totalBetAmountA}
+          firstTeam
+          nftStaked={totalNftStakedA}
+          onBet={() => handleShowBet(true)}
+          onStake={() => handleShowStake(true)}
+          project={battleInfo.projectL}
+        />
 
-      <InfoSection {...props} />
+        <InfoSection onBet={handleShowBet} onStake={handleShowStake} {...props} />
 
-      <TeamSection
-        battleInfo={battleInfo}
-        color={theme.colors.blue1}
-        ethStaked={totalBetAmountB}
-        nftStaked={totalNftStakedB}
-        onBet={() => handleShowBet(false)}
-        onStake={() => handleShowStake(false)}
-        project={battleInfo.projectR}
-      />
+        <TeamSection
+          battleInfo={battleInfo}
+          color={theme.colors.blue1}
+          ethStaked={totalBetAmountB}
+          nftStaked={totalNftStakedB}
+          onBet={() => handleShowBet(false)}
+          onStake={() => handleShowStake(false)}
+          project={battleInfo.projectR}
+        />
+      </DesktopContainer>
+
+      <MobileContainer>
+        <NumberTextWrapper battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
+        <Flex style={{ width: '100%' }}>
+          <TeamSection
+            battleInfo={battleInfo}
+            color={theme.colors.orange1}
+            ethStaked={totalBetAmountA}
+            firstTeam
+            nftStaked={totalNftStakedA}
+            onBet={() => handleShowBet(true)}
+            onStake={() => handleShowStake(true)}
+            project={battleInfo.projectL}
+          />
+          <div style={{ minWidth: '1px', borderRight: '1px solid white', margin: '1rem 1rem 5rem 1rem' }} />
+          <TeamSection
+            battleInfo={battleInfo}
+            color={theme.colors.blue1}
+            ethStaked={totalBetAmountB}
+            nftStaked={totalNftStakedB}
+            onBet={() => handleShowBet(false)}
+            onStake={() => handleShowStake(false)}
+            project={battleInfo.projectR}
+          />
+        </Flex>
+
+        <InfoSection onBet={handleShowBet} onStake={handleShowStake} {...props} />
+      </MobileContainer>
 
       <BetModal
         color={selectA ? theme.colors.orange1 : theme.colors.blue1}
@@ -109,7 +165,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         getRewardPotential={getRewardPotential}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
-        teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
+        teamLogo={selectA ? battleInfo.projectL.headerImage : battleInfo.projectR.headerImage}
         visible={showBetModal}
       />
 
@@ -133,7 +189,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         teamName={selectA ? battleInfo.projectL.displayName : battleInfo.projectR.displayName}
         visible={showSuccessModal}
       />
-    </Container>
+    </>
   ) : null;
 };
 

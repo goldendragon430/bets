@@ -45,7 +45,7 @@ const Flex = styled.div`
 const LinkWrapper = styled(Flex)`
   // margin-left: 1rem;
 
-  ${({ theme }) => `${theme.media_width.upToSmall} {
+  ${({ theme }) => `${theme.media_width.upToMedium} {
     display: none;
   }`}
 `;
@@ -80,8 +80,10 @@ const Logo = styled.img`
   height: 2rem;
 `;
 
-const ButtonWrapper = styled(Flex)`
-  ${({ theme }) => `${theme.media_width.upToMedium} {
+const ButtonWrapper = styled(Flex)``;
+
+const SocialButtons = styled(Flex)<{ show: boolean }>`
+  ${({ theme, show }) => `${!show && theme.media_width.upToSmall} {
     display: none;
   }`}
 `;
@@ -138,7 +140,7 @@ const CloseButton = styled.img`
 `;
 
 const UserProfile = styled(ProfileImage)`
-  margin: 0 1rem;
+  margin-left 1rem;
   width: 2.5rem !important;
   height: 2.5rem !important;
   min-width: 2.5rem !important;
@@ -187,7 +189,7 @@ const Header: React.FC = () => {
     setShowProfileModal(true);
   };
 
-  const getSocialIcons = () => (
+  const getSocialIcons = (show: boolean) => (
     <Flex style={{ padding: '2rem' }}>
       <Toggle
         contents={[<img alt="" src={EthIcon} />, <img alt="" src={SolIcon} />]}
@@ -195,12 +197,14 @@ const Header: React.FC = () => {
         style={{ margin: '0 1rem' }}
         value={0}
       />
-      <SocialIcon href="https://twitter.com/AlphaBetsGG">
-        <img alt="" src={TwitterIcon} />
-      </SocialIcon>
-      <SocialIcon href="https://discord.gg/alphabets">
-        <img alt="" src={DiscordIcon} />
-      </SocialIcon>
+      <SocialButtons show={show}>
+        <SocialIcon href="https://twitter.com/AlphaBetsGG">
+          <img alt="" src={TwitterIcon} />
+        </SocialIcon>
+        <SocialIcon href="https://discord.gg/alphabets">
+          <img alt="" src={DiscordIcon} />
+        </SocialIcon>
+      </SocialButtons>
       {account && (
         <UserProfile onClick={handleClickProfile} userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')} />
       )}
@@ -241,7 +245,7 @@ const Header: React.FC = () => {
       </Flex>
 
       <ButtonWrapper>
-        {getSocialIcons()}
+        {getSocialIcons(false)}
         <WalletButton />
       </ButtonWrapper>
 
@@ -266,7 +270,7 @@ const Header: React.FC = () => {
           )}
         </MobileLinkWrapper>
 
-        {getSocialIcons()}
+        {getSocialIcons(true)}
 
         <WalletButton />
 

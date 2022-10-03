@@ -2,14 +2,17 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import Countdown from 'react-countdown';
 
 import styled from 'styled-components';
 
 import Chart from '../../components/chart';
+import Button from '../../components/common/button';
+import NumberText from '../../components/common/number_text';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
+import { useWallet } from '../../contexts/wallet_context';
 import { BattleDetailType } from '../../types';
+import { isInProgress } from '../../utils';
 import { getChanceValue } from '../../utils/battle';
 
 const InfoWrapper = styled.div`
@@ -18,16 +21,10 @@ const InfoWrapper = styled.div`
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }`}
-`;
-
-const NumberText = styled(Typography)`
-  -webkit-text-stroke: 2px ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.black};
-  text-align: center;
-  white-space: nowrap;
-  padding: 0.8rem 0;
-  height: 6rem;
 `;
 
 const Wrapper = styled.div`
@@ -35,6 +32,10 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 1.5rem 0;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    margin: 0;
+  }`};
 `;
 
 const ChanceWrapper = styled(Wrapper)`
@@ -52,6 +53,7 @@ const LeftTeam = styled.div`
   text-align: right;
 
   p {
+    text-transform: none;
     font-size: 2rem;
   }
 `;
@@ -71,20 +73,8 @@ const RightTeam = styled.div`
   text-align: left;
 
   p {
-    font-size: 2rem;
-  }
-`;
-
-const Stats = styled.div<{ color: string }>`
-  width: 100%;
-  background: ${({ color }) => `${color}80`};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-
-  p {
     text-transform: none;
+    font-size: 2rem;
   }
 `;
 
@@ -92,7 +82,51 @@ const StyledA = styled.a`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-const InfoSection: React.FC<BattleDetailType> = ({
+const NumberTextWrapper = styled(NumberText)`
+  margin-bottom: 3rem;
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    margin-bottom: 0;
+    display: none !important;
+  }`};
+`;
+
+const BottomWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ChartWrapper = styled(Wrapper)`
+  width: 80%;
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    width: 40%;
+  }`}
+`;
+
+const ButtonWrapper = styled.div`
+  width: 25%;
+  margin: 0 2%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: flex;
+  }`}
+
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+`;
+
+interface IInfoSection extends BattleDetailType {
+  onBet: (firstTeam: boolean) => void;
+  onStake: (firstTeam: boolean) => void;
+}
+
+const InfoSection: React.FC<IInfoSection> = ({
   getRewardPotential,
   totalBetAmountA,
   totalBetAmountB,
@@ -102,8 +136,11 @@ const InfoSection: React.FC<BattleDetailType> = ({
   winner,
   battleInfo,
   refundStatus,
+  onBet,
+  onStake,
 }) => {
   const { theme } = useTheme();
+  const { account } = useWallet();
 
   const [chanceA, setChanceA] = useState(0);
   const [chanceB, setChanceB] = useState(0);
@@ -115,29 +152,11 @@ const InfoSection: React.FC<BattleDetailType> = ({
 
   return (
     <InfoWrapper>
-      <NumberText type={TypographyType.BOLD_SUBTITLE}>
-        {refundStatus ? (
-          <span>Refund Active</span>
-        ) : !battleInfo || new Date(battleInfo.startDate) > new Date() ? (
-          <span>Not Started</span>
-        ) : (
-          <Countdown date={new Date(battleInfo.endDate)}>
-            <span>
-              {winnerSet
-                ? !winner
-                  ? `${battleInfo?.projectL.displayName} wins`
-                  : `${battleInfo?.projectR.displayName} wins`
-                : 'Finalizing...'}
-            </span>
-          </Countdown>
-        )}
-      </NumberText>
+      <NumberTextWrapper battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
 
-      <Wrapper>
+      <ChanceWrapper>
         <LeftTeam>
-          <Stats color={theme.colors.orange1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
-          </Stats>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(false, 0).toFixed(2)}x</Typography>
         </LeftTeam>
         <MidTeam>
           <Typography type={TypographyType.REGULAR_BODY}>
@@ -150,11 +169,9 @@ const InfoSection: React.FC<BattleDetailType> = ({
           </Typography>
         </MidTeam>
         <RightTeam>
-          <Stats color={theme.colors.blue1}>
-            <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true, 0).toFixed(2)}x</Typography>
-          </Stats>
+          <Typography type={TypographyType.BOLD_SUBTITLE}>{getRewardPotential(true, 0).toFixed(2)}x</Typography>
         </RightTeam>
-      </Wrapper>
+      </ChanceWrapper>
 
       <ChanceWrapper>
         <LeftTeam>
@@ -177,12 +194,56 @@ const InfoSection: React.FC<BattleDetailType> = ({
         </RightTeam>
       </ChanceWrapper>
 
-      <Wrapper style={{ width: '80%', marginLeft: '10%' }}>
-        <Chart
-          prize={totalBetAmountA + totalBetAmountB}
-          value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}
-        />
-      </Wrapper>
+      <BottomWrapper>
+        {battleInfo && account && (
+          <ButtonWrapper>
+            <Button
+              color={theme.colors.orange1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onStake(true)}
+            >
+              Stake
+            </Button>
+            <Button
+              color={theme.colors.orange1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onBet(true)}
+            >
+              Bet
+            </Button>
+          </ButtonWrapper>
+        )}
+
+        <ChartWrapper>
+          <Chart
+            prize={totalBetAmountA + totalBetAmountB}
+            value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}
+          />
+        </ChartWrapper>
+
+        {battleInfo && account && (
+          <ButtonWrapper>
+            <Button
+              color={theme.colors.blue1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onStake(false)}
+            >
+              Stake
+            </Button>
+            <Button
+              color={theme.colors.blue1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onBet(false)}
+            >
+              Bet
+            </Button>
+          </ButtonWrapper>
+        )}
+      </BottomWrapper>
     </InfoWrapper>
   );
 };

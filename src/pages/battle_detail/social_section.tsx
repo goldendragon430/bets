@@ -41,6 +41,9 @@ const TabButton = styled(Button)<{ visible?: boolean }>`
     color: ${theme.colors.grey2};
     filter: none;
   `}
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    font-size: 1.5rem;
+  }`}
 `;
 
 const Splitter = styled(Typography)``;

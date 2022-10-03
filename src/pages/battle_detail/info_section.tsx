@@ -32,6 +32,10 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 1.5rem 0;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    margin: 0;
+  }`};
 `;
 
 const ChanceWrapper = styled(Wrapper)`
@@ -79,7 +83,9 @@ const StyledA = styled.a`
 `;
 
 const NumberTextWrapper = styled(NumberText)`
+  margin-bottom: 3rem;
   ${({ theme }) => `${theme.media_width.upToMedium} {
+    margin-bottom: 0;
     display: none !important;
   }`};
 `;

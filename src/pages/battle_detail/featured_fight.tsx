@@ -132,7 +132,6 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
       <MobileContainer>
         <NumberTextWrapper battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
         <Flex style={{ width: '100%' }}>
-          <div style={{ minWidth: '1rem' }} />
           <TeamSection
             battleInfo={battleInfo}
             color={theme.colors.orange1}
@@ -143,7 +142,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
             onStake={() => handleShowStake(true)}
             project={battleInfo.projectL}
           />
-          <div style={{ minWidth: '1rem' }} />
+          <div style={{ minWidth: '1px', borderRight: '1px solid white', margin: '1rem 1rem 5rem 1rem' }} />
           <TeamSection
             battleInfo={battleInfo}
             color={theme.colors.blue1}
@@ -153,7 +152,6 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
             onStake={() => handleShowStake(false)}
             project={battleInfo.projectR}
           />
-          <div style={{ minWidth: '1rem' }} />
         </Flex>
 
         <InfoSection onBet={handleShowBet} onStake={handleShowStake} {...props} />

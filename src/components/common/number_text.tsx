@@ -17,7 +17,6 @@ const NumberTextWrapper = styled(Typography)<{ textColor: string }>`
   -webkit-text-stroke: 2px ${({ textColor }) => textColor};
   color: ${({ theme }) => theme.colors.black};
   text-align: center;
-  padding: 0.8rem 0;
 `;
 
 interface INumberText extends React.InputHTMLAttributes<HTMLDivElement> {
@@ -25,15 +24,16 @@ interface INumberText extends React.InputHTMLAttributes<HTMLDivElement> {
   winner: boolean;
   battleInfo: BattleInfo | null;
   refundStatus: boolean;
+  small?: boolean;
 }
 
-const NumberText: React.FC<INumberText> = ({ winnerSet, winner, battleInfo, refundStatus, ...props }) => {
+const NumberText: React.FC<INumberText> = ({ winnerSet, winner, battleInfo, refundStatus, small, ...props }) => {
   const { theme } = useTheme();
   return (
     <Container {...props}>
       <NumberTextWrapper
         textColor={winnerSet ? (winner ? theme.colors.blue1 : theme.colors.orange1) : theme.colors.white}
-        type={TypographyType.BOLD_SUBTITLE}
+        type={small ? TypographyType.BOLD_REGULAR : TypographyType.BOLD_SUBTITLE}
       >
         {refundStatus ? (
           <span>Refund Active</span>

@@ -4,7 +4,13 @@ import EthIcon from '../../assets/images/eth_icon.svg';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { ProjectInfo } from '../../types';
 
-const TeamWrapper = styled.div<{ firstTeam?: boolean; winnerSet: boolean; isWinner: boolean; color: string }>`
+const TeamWrapper = styled.div<{
+  firstTeam?: boolean;
+  winnerSet: boolean;
+  isWinner: boolean;
+  color: string;
+  upcoming?: boolean;
+}>`
   flex: 1;
   display: flex;
   align-items: center;
@@ -26,6 +32,14 @@ const TeamWrapper = styled.div<{ firstTeam?: boolean; winnerSet: boolean; isWinn
     flex-direction: row-reverse;
     text-align: right;
   `}
+
+  ${({ upcoming }) =>
+    upcoming &&
+    `
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  `}
 `;
 
 const TeamImageWrapper = styled.div<{ color: string; image: string }>`
@@ -45,12 +59,7 @@ const StatsItem = styled.div<{ firstTeam?: boolean }>`
   display: flex;
   align-items: center;
   margin: 1rem 2rem;
-
-  ${({ firstTeam }) =>
-    !firstTeam &&
-    `
-  justify-content: flex-end;
-`}
+  justify-content: center;
 `;
 
 const NumberText = styled(Typography)`
@@ -98,7 +107,13 @@ const TeamItem: React.FC<ITeamItem> = ({
   firstTeam,
   upcoming,
 }) => (
-  <TeamWrapper color={color} firstTeam={firstTeam} isWinner={winnerSet && winner === !firstTeam} winnerSet={winnerSet}>
+  <TeamWrapper
+    color={color}
+    firstTeam={firstTeam}
+    isWinner={winnerSet && winner === !firstTeam}
+    upcoming={upcoming}
+    winnerSet={winnerSet}
+  >
     <TeamImageWrapper color={color} image={project.headerImage} />
     {upcoming ? (
       <StatsWrapper>

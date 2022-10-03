@@ -63,9 +63,11 @@ const SocialButton = styled(LinkButton)`
 const WinnerWrapper = styled.div`
   display: flex;
   align-items: center;
+  height: 24px;
+  margin: 1rem 0;
 
   img {
-    height: 5rem;
+    height: 4rem;
   }
 `;
 
@@ -158,7 +160,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
 
       <Content>
         <TeamWrapper>
-          <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_SUBTITLE}>
+          <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_REGULAR}>
             {battleInfo.projectL.displayName}
           </TeamName>
           <SocialWrapper>
@@ -173,7 +175,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
         </TeamWrapper>
 
         <InfoWrapper>
-          <NumberText battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
+          <NumberText battleInfo={battleInfo} refundStatus={refundStatus} small winner={winner} winnerSet={winnerSet} />
 
           {!refundStatus && winnerSet && (
             <WinnerWrapper>
@@ -186,7 +188,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
         </InfoWrapper>
 
         <TeamWrapper>
-          <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_SUBTITLE}>
+          <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_REGULAR}>
             {battleInfo.projectR.displayName}
           </TeamName>
           <SocialWrapper>

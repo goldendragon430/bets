@@ -2,11 +2,11 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import Countdown from 'react-countdown';
 
 import styled from 'styled-components';
 
 import Chart from '../../components/chart';
+import NumberText from '../../components/common/number_text';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { BattleDetailType } from '../../types';
 import { getChanceValue } from '../../utils/battle';
@@ -18,15 +18,6 @@ const InfoWrapper = styled.div`
   ${({ theme }) => `${theme.media_width.upToMedium} {
     width: 100%;
   }`}
-`;
-
-const NumberText = styled(Typography)`
-  -webkit-text-stroke: 2px ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.black};
-  text-align: center;
-  white-space: nowrap;
-  padding: 0.8rem 0;
-  height: 6rem;
 `;
 
 const Wrapper = styled.div`
@@ -80,6 +71,12 @@ const StyledA = styled.a`
   color: ${({ theme }) => theme.colors.white};
 `;
 
+const NumberTextWrapper = styled(NumberText)`
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: none !important;
+  }`};
+`;
+
 const InfoSection: React.FC<BattleDetailType> = ({
   getRewardPotential,
   totalBetAmountA,
@@ -101,23 +98,7 @@ const InfoSection: React.FC<BattleDetailType> = ({
 
   return (
     <InfoWrapper>
-      <NumberText type={TypographyType.BOLD_SUBTITLE}>
-        {refundStatus ? (
-          <span>Refund Active</span>
-        ) : !battleInfo || new Date(battleInfo.startDate) > new Date() ? (
-          <span>Not Started</span>
-        ) : (
-          <Countdown date={new Date(battleInfo.endDate)}>
-            <span>
-              {winnerSet
-                ? !winner
-                  ? `${battleInfo?.projectL.displayName} wins`
-                  : `${battleInfo?.projectR.displayName} wins`
-                : 'Finalizing...'}
-            </span>
-          </Countdown>
-        )}
-      </NumberText>
+      <NumberTextWrapper battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
 
       <ChanceWrapper>
         <LeftTeam>

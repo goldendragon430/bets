@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react';
-import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -10,6 +9,7 @@ import EthIcon from '../../assets/images/eth_icon.svg';
 import SocialIcon1 from '../../assets/images/social1.svg';
 import SocialIcon2 from '../../assets/images/social2.svg';
 import LinkButton from '../../components/common/link_button';
+import NumberText from '../../components/common/number_text';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import { useBetContract } from '../../hooks/useContract';
@@ -31,14 +31,6 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-const StatusText = styled(Typography)<{ textColor: string }>`
-  -webkit-text-stroke: 2px ${({ textColor }) => textColor};
-  color: ${({ theme }) => theme.colors.black};
-  text-align: center;
-  font-size: 2rem;
-  line-height: 2.5rem;
 `;
 
 const TeamWrapper = styled.div`
@@ -181,26 +173,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
         </TeamWrapper>
 
         <InfoWrapper>
-          <StatusText
-            textColor={winnerSet ? (winner ? theme.colors.blue1 : theme.colors.orange1) : theme.colors.white}
-            type={TypographyType.BOLD_SUBTITLE}
-          >
-            {refundStatus ? (
-              <span>Refund Active</span>
-            ) : new Date(battleInfo.startDate) > new Date() ? (
-              <span>Not Started</span>
-            ) : (
-              <Countdown date={new Date(battleInfo.endDate)}>
-                <span>
-                  {winnerSet
-                    ? !winner
-                      ? `${battleInfo?.projectL.displayName} wins`
-                      : `${battleInfo?.projectR.displayName} wins`
-                    : 'Finalizing...'}
-                </span>
-              </Countdown>
-            )}
-          </StatusText>
+          <NumberText battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
 
           {!refundStatus && winnerSet && (
             <WinnerWrapper>

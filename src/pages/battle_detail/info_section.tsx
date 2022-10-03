@@ -6,9 +6,13 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Chart from '../../components/chart';
+import Button from '../../components/common/button';
 import NumberText from '../../components/common/number_text';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { useTheme } from '../../contexts/theme_context';
+import { useWallet } from '../../contexts/wallet_context';
 import { BattleDetailType } from '../../types';
+import { isInProgress } from '../../utils';
 import { getChanceValue } from '../../utils/battle';
 
 const InfoWrapper = styled.div`
@@ -17,6 +21,9 @@ const InfoWrapper = styled.div`
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }`}
 `;
 
@@ -77,7 +84,43 @@ const NumberTextWrapper = styled(NumberText)`
   }`};
 `;
 
-const InfoSection: React.FC<BattleDetailType> = ({
+const BottomWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ChartWrapper = styled(Wrapper)`
+  width: 80%;
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    width: 40%;
+  }`}
+`;
+
+const ButtonWrapper = styled.div`
+  width: 25%;
+  margin: 0 2%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: flex;
+  }`}
+
+  button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+`;
+
+interface IInfoSection extends BattleDetailType {
+  onBet: (firstTeam: boolean) => void;
+  onStake: (firstTeam: boolean) => void;
+}
+
+const InfoSection: React.FC<IInfoSection> = ({
   getRewardPotential,
   totalBetAmountA,
   totalBetAmountB,
@@ -87,7 +130,12 @@ const InfoSection: React.FC<BattleDetailType> = ({
   winner,
   battleInfo,
   refundStatus,
+  onBet,
+  onStake,
 }) => {
+  const { theme } = useTheme();
+  const { account } = useWallet();
+
   const [chanceA, setChanceA] = useState(0);
   const [chanceB, setChanceB] = useState(0);
 
@@ -140,12 +188,56 @@ const InfoSection: React.FC<BattleDetailType> = ({
         </RightTeam>
       </ChanceWrapper>
 
-      <Wrapper style={{ width: '80%', marginLeft: '10%' }}>
-        <Chart
-          prize={totalBetAmountA + totalBetAmountB}
-          value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}
-        />
-      </Wrapper>
+      <BottomWrapper>
+        {battleInfo && account && (
+          <ButtonWrapper>
+            <Button
+              color={theme.colors.orange1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onStake(true)}
+            >
+              Stake
+            </Button>
+            <Button
+              color={theme.colors.orange1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onBet(true)}
+            >
+              Bet
+            </Button>
+          </ButtonWrapper>
+        )}
+
+        <ChartWrapper>
+          <Chart
+            prize={totalBetAmountA + totalBetAmountB}
+            value={chanceA === 0 && chanceB === 0 ? 50 : Math.round(chanceA * 100)}
+          />
+        </ChartWrapper>
+
+        {battleInfo && account && (
+          <ButtonWrapper>
+            <Button
+              color={theme.colors.blue1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onStake(false)}
+            >
+              Stake
+            </Button>
+            <Button
+              color={theme.colors.blue1}
+              disabled={!isInProgress(new Date(battleInfo.startDate), new Date(battleInfo.endDate))}
+              fontColor={theme.colors.black}
+              onClick={() => onBet(false)}
+            >
+              Bet
+            </Button>
+          </ButtonWrapper>
+        )}
+      </BottomWrapper>
     </InfoWrapper>
   );
 };

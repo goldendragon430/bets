@@ -99,12 +99,8 @@ const ValueText = styled(BoldText)`
   top: 50%;
   font-size: 3rem;
 
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    font-size: 5rem;
-  }`}
-
   ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 4rem;
+    font-size: 2.5rem;
   }`}
 `;
 
@@ -112,12 +108,8 @@ const PrizeText = styled(BoldText)`
   top: 62%;
   font-size: 2rem;
 
-  ${({ theme }) => `${theme.media_width.upToMedium} {
-    font-size: 3.5rem;
-  }`}
-
   ${({ theme }) => `${theme.media_width.upToExtraSmall} {
-    font-size: 3rem;
+    font-size: 1.5rem;
   }`}
 `;
 

@@ -21,7 +21,8 @@ const TeamWrapper = styled.div`
   // overflow: hidden;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
-    width: 50%;
+    flex: none;
+    width: 40%;
   }`}
 `;
 
@@ -63,6 +64,10 @@ const ButtonWrapper = styled.div`
     padding: 0.4rem 0.6rem;
     font-size: 1rem;
   }
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: none;
+  }`};
 `;
 
 const TeamName = styled(Typography)<{ firstTeam?: boolean }>`

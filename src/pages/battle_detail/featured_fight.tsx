@@ -116,7 +116,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
           project={battleInfo.projectL}
         />
 
-        <InfoSection {...props} />
+        <InfoSection onBet={handleShowBet} onStake={handleShowStake} {...props} />
 
         <TeamSection
           battleInfo={battleInfo}
@@ -156,7 +156,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
           <div style={{ minWidth: '1rem' }} />
         </Flex>
 
-        <InfoSection {...props} />
+        <InfoSection onBet={handleShowBet} onStake={handleShowStake} {...props} />
       </MobileContainer>
 
       <BetModal

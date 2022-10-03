@@ -167,7 +167,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         getRewardPotential={getRewardPotential}
         onBet={handleBet}
         onClose={() => setShowBetModal(false)}
-        teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
+        teamLogo={selectA ? battleInfo.projectL.headerImage : battleInfo.projectR.headerImage}
         visible={showBetModal}
       />
 

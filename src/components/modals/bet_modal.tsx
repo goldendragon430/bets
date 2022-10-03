@@ -45,6 +45,10 @@ const ModalWrapper = styled(Modal)<{ color: string }>`
       display: flex;
       align-items: center;
       flex-direction: column;
+
+      ${({ theme }) => `${theme.media_width.upToSmall} {
+        padding: 2rem;
+      }`}
     }
   }
 `;

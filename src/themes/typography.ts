@@ -15,6 +15,7 @@ export interface Typography {
   boldHeading: FontStyle;
   boldTitle: FontStyle;
   boldSubTitle: FontStyle;
+  boldRegular: FontStyle;
 }
 
 export const MainTypography: Typography = {
@@ -69,6 +70,14 @@ export const MainTypography: Typography = {
     fontStyle: 'normal',
     fontSize: '2.5rem',
     lineHeight: '4.5rem',
+    uppercase: true,
+  },
+  boldRegular: {
+    fontFamily: 'Conthrax',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontSize: '2rem',
+    lineHeight: '2.5rem',
     uppercase: true,
   },
 };

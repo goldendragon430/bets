@@ -38,6 +38,7 @@ export enum TypographyType {
   BOLD_HEADING = 'boldHeading',
   BOLD_TITLE = 'boldTitle',
   BOLD_SUBTITLE = 'boldSubTitle',
+  BOLD_REGULAR = 'boldRegular',
 }
 
 interface ITypography extends React.HTMLAttributes<HTMLDivElement> {

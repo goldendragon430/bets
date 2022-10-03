@@ -131,7 +131,7 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
 
       <MobileContainer>
         <NumberTextWrapper battleInfo={battleInfo} refundStatus={refundStatus} winner={winner} winnerSet={winnerSet} />
-        <Flex>
+        <Flex style={{ width: '100%' }}>
           <div style={{ minWidth: '1rem' }} />
           <TeamSection
             battleInfo={battleInfo}

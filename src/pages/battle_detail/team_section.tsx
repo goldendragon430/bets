@@ -21,7 +21,7 @@ const TeamWrapper = styled.div`
   // overflow: hidden;
 
   ${({ theme }) => `${theme.media_width.upToMedium} {
-    width: 60%;
+    width: 50%;
   }`}
 `;
 
@@ -65,6 +65,13 @@ const ButtonWrapper = styled.div`
   }
 `;
 
+const TeamName = styled(Typography)<{ firstTeam?: boolean }>`
+  text-align: ${({ firstTeam }) => (firstTeam ? 'right' : 'left')};
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    text-align: center;
+  }`}
+`;
+
 const TeamLogo = styled.img<{ color: string }>`
   width: 2rem;
   height: 2rem;
@@ -97,6 +104,16 @@ const SocialWrapper = styled.div<{ firstTeam?: boolean }>`
     height: 2rem;
     ${({ firstTeam }) => (firstTeam ? 'margin-left: 1rem;' : 'margin-right: 1rem;')}
   }
+
+  ${({ theme }) => `${theme.media_width.upToMedium} {
+    display: flex;
+    justify-content: center;
+
+    img {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  }`};
 `;
 
 interface ITeamSection {
@@ -158,14 +175,9 @@ const TeamSection: React.FC<ITeamSection> = ({
         </ButtonWrapper>
       </TeamImageWrapper>
 
-      <Typography
-        color={color}
-        shadow
-        style={{ textAlign: firstTeam ? 'right' : 'left' }}
-        type={TypographyType.BOLD_SUBTITLE}
-      >
+      <TeamName color={color} shadow type={TypographyType.BOLD_REGULAR}>
         {project.displayName}
-      </Typography>
+      </TeamName>
 
       <SocialWrapper firstTeam={firstTeam}>
         <LinkButton href={project.twitterID}>

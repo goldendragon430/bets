@@ -58,7 +58,7 @@ const TweetItem = styled.div<{ color: string }>`
 
 const UserContent = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   margin-bottom: 0.5rem;
 `;
@@ -90,7 +90,7 @@ const ContentText = styled(Typography)`
 `;
 
 const FilteredText = styled.span<{ blue?: boolean }>`
-  color: ${({ theme, blue }) => (blue ? theme.colors.blue2 : theme.colors.white)};
+  color: ${({ theme, blue }) => (blue ? '#1DA1F2' : theme.colors.white)};
 `;
 
 const MediaContent = styled.div`
@@ -140,39 +140,40 @@ const TweetList: React.FC<ITweetList> = ({ tweets, color }) => {
                   <NameContent>
                     <Typography type={TypographyType.REGULAR}>{item.userInfo.name}</Typography>
                     &nbsp;
+                    <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.userInfo.username}</UsernameText>
+                    &nbsp;
                     <UsernameText type={TypographyType.REGULAR_BODY2}> · {formatTime(item.createdAt)}</UsernameText>
                   </NameContent>
-                  <UsernameText type={TypographyType.REGULAR_BODY2}>@{item.userInfo.username}</UsernameText>
+
+                  <ContentText type={TypographyType.REGULAR}>
+                    {parts.map((word, index) =>
+                      word.startsWith('https://') || word.startsWith('http://') ? (
+                        <a href={word} key={index} rel="noreferrer" target="_blank">
+                          <FilteredText style={{ textDecoration: 'underline' }}>{word} </FilteredText>
+                        </a>
+                      ) : (
+                        <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
+                          {word}{' '}
+                        </FilteredText>
+                      )
+                    )}
+                  </ContentText>
+
+                  {item.media.length > 0 && (
+                    <MediaContent>
+                      {item.media[0].type === 'video' ? (
+                        <video controls poster={item.media[0].preview_image_url}>
+                          {item.media[0].variants?.map((variant, index) => (
+                            <source key={index} src={variant.url} type={variant.content_type} />
+                          ))}
+                        </video>
+                      ) : (
+                        <img alt="" src={item.media[0].url} />
+                      )}
+                    </MediaContent>
+                  )}
                 </div>
               </UserContent>
-
-              <ContentText type={TypographyType.REGULAR}>
-                {parts.map((word, index) =>
-                  word.startsWith('https://') || word.startsWith('http://') ? (
-                    <a href={word} key={index} rel="noreferrer" target="_blank">
-                      <FilteredText style={{ textDecoration: 'underline' }}>{word} </FilteredText>
-                    </a>
-                  ) : (
-                    <FilteredText blue={word[0] === '@' || word[0] === '#'} key={index}>
-                      {word}{' '}
-                    </FilteredText>
-                  )
-                )}
-              </ContentText>
-
-              {item.media.length > 0 && (
-                <MediaContent>
-                  {item.media[0].type === 'video' ? (
-                    <video controls poster={item.media[0].preview_image_url}>
-                      {item.media[0].variants?.map((variant, index) => (
-                        <source key={index} src={variant.url} type={variant.content_type} />
-                      ))}
-                    </video>
-                  ) : (
-                    <img alt="" src={item.media[0].url} />
-                  )}
-                </MediaContent>
-              )}
             </TweetItem>
           );
         })}

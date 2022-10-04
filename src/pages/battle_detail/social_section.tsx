@@ -16,7 +16,7 @@ const Container = styled.div`
   padding: 4rem;
 
   ${({ theme }) => `${theme.media_width.upToSmall} {
-    padding: 2rem;
+    padding: 0;
   }`}
 `;
 

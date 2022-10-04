@@ -14,6 +14,7 @@ import { getChanceValue } from '../../utils/battle';
 const Container = styled.div`
   width: 100%;
   height: 30rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.white};
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, ${({ theme }) => `${theme.colors.grey2}88`} 100%);
   overflow-x: hidden;
   overflow-y: auto;
@@ -89,6 +90,13 @@ const TeamLogo = styled.img<{ color: string }>`
   border-radius: 0.5rem;
   filter: drop-shadow(0px 0px 0.2rem ${({ color }) => color});
   margin-right: 1rem;
+
+  ${({ theme }) => `${theme.media_width.upToSmall} {
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    min-height: 3rem;
+  }`};
 `;
 
 const ContentText = styled(Typography)`

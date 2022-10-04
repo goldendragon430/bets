@@ -64,7 +64,6 @@ const MidTeam = styled.div`
   padding: 0 0.5rem;
   p {
     text-transform: uppercase;
-    font-style: italic;
   }
 `;
 

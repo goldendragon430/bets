@@ -142,6 +142,14 @@ const BetModal: React.FC<IBetModal> = ({
     setAmount('');
   }, [visible]);
 
+  const handleAmountChange = (_amount: string) => {
+    const parts = _amount.split('.');
+    if (parts.length > 1) {
+      parts[1] = parts[1].slice(0, 2);
+    }
+    setAmount(parts.join('.'));
+  };
+
   const getMaxAmount = () => Math.max(0, balance - 0.01);
 
   const handleMax = () => {
@@ -190,7 +198,7 @@ const BetModal: React.FC<IBetModal> = ({
 
       <Input
         disabled={loading || new Date(endTime) < new Date()}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) => handleAmountChange(e.target.value)}
         onMax={handleMax}
         placeholder={balance.toLocaleString()}
         point={balance}

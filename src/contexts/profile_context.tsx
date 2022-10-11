@@ -9,6 +9,7 @@ import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 
 import alchemy from '../constants/alchemy';
+import useActiveWeb3React from '../hooks/useActiveWeb3React';
 import { getNonce, getProfile, updateProfileInfo } from '../services';
 import { NFTMetadata } from '../types';
 import { useWallet } from './wallet_context';
@@ -30,6 +31,7 @@ const ProfileContext = React.createContext<Maybe<IProfileContext>>(null);
 export const ProfileProvider = ({ children = null as any }) => {
   const { library } = useWeb3React();
   const { account } = useWallet();
+  const { chainId } = useActiveWeb3React();
 
   const [username, setUsername] = useState<string>('User');
   const [selNft, setSelNft] = useState<NFTMetadata | undefined>(undefined);
@@ -56,12 +58,12 @@ export const ProfileProvider = ({ children = null as any }) => {
 
   useEffect(() => {
     updateTotalInfo();
-  }, [account]);
+  }, [account, chainId]);
 
   const updateUserNftList = useCallback(async () => {
-    if (account) {
+    if (account && chainId) {
       try {
-        const res = await alchemy.nft.getNftsForOwner(account);
+        const res = await alchemy[chainId].nft.getNftsForOwner(account);
         setUserNfts(res.ownedNfts);
         return res.ownedNfts;
       } catch (e) {
@@ -71,14 +73,14 @@ export const ProfileProvider = ({ children = null as any }) => {
 
     setUserNfts([]);
     return [] as NFTMetadata[];
-  }, [account]);
+  }, [account, chainId]);
 
   const getProfileInfo = useCallback(
     async (nfts: NFTMetadata[]) => {
       if (account) {
         try {
-          const res = await getProfile(account);
-          if (res.data.data) {
+          const res = await getProfile(chainId, account);
+          if (res && res.data.data) {
             setUsername(res.data.data.username);
             setWinnerRank(res.data.data.winnerRank);
             setAbpRank(res.data.data.abpRank);
@@ -105,30 +107,33 @@ export const ProfileProvider = ({ children = null as any }) => {
         setSelNft(undefined);
       }
     },
-    [account]
+    [account, chainId]
   );
 
   const updateProfile = async (name: string, metadata: NFTMetadata | undefined) => {
     try {
-      const {
-        data: { data: nonce },
-      } = await getNonce(account || '');
+      const res = await getNonce(chainId, account || '');
+      if (res) {
+        const {
+          data: { data: nonce },
+        } = res;
 
-      const signer = library.getSigner();
-      const signature = await signer.signMessage(ethers.utils.toUtf8Bytes(`Nonce: ${nonce}`));
+        const signer = library.getSigner();
+        const signature = await signer.signMessage(ethers.utils.toUtf8Bytes(`Nonce: ${nonce}`));
 
-      await updateProfileInfo(account || '', {
-        username: name,
-        contract: metadata?.contract.address.toLowerCase(),
-        tokenId: metadata?.tokenId,
-        image: metadata?.rawMetadata?.image,
-        signature,
-      });
+        await updateProfileInfo(chainId, account || '', {
+          username: name,
+          contract: metadata?.contract.address.toLowerCase(),
+          tokenId: metadata?.tokenId,
+          image: metadata?.rawMetadata?.image,
+          signature,
+        });
 
-      setUsername(name);
-      setSelNft(metadata);
+        setUsername(name);
+        setSelNft(metadata);
 
-      return true;
+        return true;
+      }
     } catch (e: any) {
       toast.error(e.message);
     }

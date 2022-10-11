@@ -1,33 +1,53 @@
 /* eslint-disable import/prefer-default-export */
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const http = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_API_URI,
-  headers: {
-    'Content-type': 'application/json',
-  },
-});
+import { BACKEND_URI } from '../constants';
+import { SupportedChainId } from '../constants/chains';
 
-export const getTwitterFeeds = (keyword: string) => http.get(`/v1/twitter/get?keyword=${keyword}`);
+const http: { [chainId: number]: AxiosInstance } = {
+  [SupportedChainId.MAINNET]: axios.create({
+    baseURL: BACKEND_URI[SupportedChainId.MAINNET],
+    headers: {
+      'Content-type': 'application/json',
+    },
+  }),
+  [SupportedChainId.GOERLI]: axios.create({
+    baseURL: BACKEND_URI[SupportedChainId.GOERLI],
+    headers: {
+      'Content-type': 'application/json',
+    },
+  }),
+};
 
-export const getActiveBattleIds = () => http.get(`/v1/battles/get_active_battle_ids`);
+export const getTwitterFeeds = (chainId: number | undefined, keyword: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/twitter/get?keyword=${keyword}`);
 
-export const getBattleHistory = () => http.get(`/v1/battles/get_battle_histories`);
+export const getActiveBattleIds = (chainId: number | undefined) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_active_battle_ids`);
 
-export const getBattleById = (battleId: string) => http.get(`/v1/battles/get_battle_by_id/${battleId}`);
+export const getBattleHistory = (chainId: number | undefined) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_battle_histories`);
 
-export const getNftStakedStatus = (tokenIds: number[], side: boolean, battleId: string) =>
-  http.post(`/v1/battles/get_nft_staked_status`, { tokenIds, side, battleId });
+export const getBattleById = (chainId: number | undefined, battleId: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_battle_by_id/${battleId}`);
 
-export const getActiveTotalNftStakedAmount = (battleId: string) =>
-  http.get(`/v1/battles/get_active_total_nft_staked_amount/${battleId}`);
+export const getNftStakedStatus = (chainId: number | undefined, tokenIds: number[], side: boolean, battleId: string) =>
+  chainId && http[chainId] && http[chainId].post(`/v1/battles/get_nft_staked_status`, { tokenIds, side, battleId });
 
-export const getLeaderboard = () => http.get(`/v1/battles/get_leaderboard`);
+export const getActiveTotalNftStakedAmount = (chainId: number | undefined, battleId: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_active_total_nft_staked_amount/${battleId}`);
 
-export const getBattleEventsById = (battleId: string) => http.get(`/v1/battles/get_battle_events/${battleId}`);
+export const getLeaderboard = (chainId: number | undefined) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_leaderboard`);
 
-export const getNonce = (account: string) => http.get(`/v1/users/get_nonce/${account}/nonce`);
+export const getBattleEventsById = (chainId: number | undefined, battleId: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/battles/get_battle_events/${battleId}`);
 
-export const getProfile = (account: string) => http.get(`/v1/users/get_profile/${account}`);
+export const getNonce = (chainId: number | undefined, account: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/users/get_nonce/${account}/nonce`);
 
-export const updateProfileInfo = (account: string, data: any) => http.post(`/v1/users/update_profile/${account}`, data);
+export const getProfile = (chainId: number | undefined, account: string) =>
+  chainId && http[chainId] && http[chainId].get(`/v1/users/get_profile/${account}`);
+
+export const updateProfileInfo = (chainId: number | undefined, account: string, data: any) =>
+  chainId && http[chainId] && http[chainId].post(`/v1/users/update_profile/${account}`, data);

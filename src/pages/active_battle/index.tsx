@@ -3,15 +3,17 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { getActiveBattleIds } from '../../services';
 
 const ActiveBattle = () => {
   const navigate = useNavigate();
+  const { chainId } = useActiveWeb3React();
 
   const getActiveBattle = async () => {
     try {
-      const res = await getActiveBattleIds();
-      if (res.data.data && res.data.data.length > 0) {
+      const res = await getActiveBattleIds(chainId);
+      if (res && res.data.data && res.data.data.length > 0) {
         navigate(`battle/${res.data.data[0]}`);
         return;
       }

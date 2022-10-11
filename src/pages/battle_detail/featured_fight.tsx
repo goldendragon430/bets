@@ -186,7 +186,11 @@ const FeaturedFight: React.FC<BattleDetailType> = (props) => {
         nftStaked={stakedAmount}
         onClose={() => setShowSuccessModal(false)}
         teamLogo={selectA ? battleInfo.projectL.logo : battleInfo.projectR.logo}
-        teamName={selectA ? battleInfo.projectL.displayName : battleInfo.projectR.displayName}
+        teamName={
+          selectA
+            ? battleInfo.projectL.displayName || battleInfo.projectL.subName
+            : battleInfo.projectR.displayName || battleInfo.projectR.subName
+        }
         visible={showSuccessModal}
       />
     </>

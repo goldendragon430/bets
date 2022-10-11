@@ -131,7 +131,7 @@ const Battles = () => {
 
   useEffect(() => {
     updateBattles();
-  }, []);
+  }, [chainId]);
 
   return (
     <Container>

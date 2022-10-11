@@ -131,7 +131,7 @@ const Leaderboard = () => {
 
   useEffect(() => {
     updateLeaderboardData();
-  }, []);
+  }, [chainId]);
 
   useEffect(() => {
     const newData = [...data].sort((a, b) => (sortByAbp ? b.abpAmount - a.abpAmount : b.ethAmount - a.ethAmount));

@@ -3,6 +3,9 @@
 /* eslint-disable no-console */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
+import { BET_CONTRACT_ADDRESS } from '../constants';
+import { DEFAULT_NETWORK } from '../constants/chains';
+import useActiveWeb3React from '../hooks/useActiveWeb3React';
 import { useBetContract } from '../hooks/useContract';
 import { getBattleInitInfo } from '../utils/battle';
 
@@ -14,7 +17,8 @@ export interface IBattleContext {
 const BattleContext = React.createContext<Maybe<IBattleContext>>(null);
 
 export const BattleProvider = ({ children = null as any }) => {
-  const betContract = useBetContract();
+  const { chainId } = useActiveWeb3React();
+  const betContract = useBetContract(BET_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK]);
 
   const [rakePercentage, setRakePercentage] = useState(0);
   const [nftStakersPercentage, setNftStakersPercentage] = useState(0);

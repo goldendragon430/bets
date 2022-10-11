@@ -44,8 +44,8 @@ const NumberText: React.FC<INumberText> = ({ winnerSet, winner, battleInfo, refu
             <span>
               {winnerSet
                 ? !winner
-                  ? `${battleInfo?.projectL.displayName} wins`
-                  : `${battleInfo?.projectR.displayName} wins`
+                  ? `${battleInfo?.projectL.displayName || battleInfo?.projectL.subName} wins`
+                  : `${battleInfo?.projectR.displayName || battleInfo?.projectR.subName} wins`
                 : 'Finalizing...'}
             </span>
           </Countdown>

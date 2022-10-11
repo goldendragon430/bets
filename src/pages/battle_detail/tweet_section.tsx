@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useEffect, useState } from 'react';
 
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { getTwitterFeeds } from '../../services';
 import { TwitterFeed } from '../../types';
 import TweetList from './tweet_list';
@@ -10,6 +12,8 @@ interface ITweetSection {
 }
 
 const TweetSection: React.FC<ITweetSection> = ({ color }) => {
+  const { chainId } = useActiveWeb3React();
+
   const [listA, setListA] = useState<TwitterFeed[]>([]);
 
   useEffect(() => {
@@ -18,7 +22,7 @@ const TweetSection: React.FC<ITweetSection> = ({ color }) => {
 
   const fetchTwitterA = async () => {
     try {
-      const res = await getTwitterFeeds('alphabets');
+      const res = await getTwitterFeeds(chainId, 'alphabets');
       if (res && res.data && res.data.data) {
         const { data, includes } = res.data.data;
         setListA(

@@ -44,7 +44,11 @@ export const getBattleInitInfo = async (betContract: ethers.Contract | null) => 
   };
 };
 
-export const getBattleBetInfo = async (betContract: ethers.Contract | null, battleInfo: BattleInfo | null) => {
+export const getBattleBetInfo = async (
+  betContract: ethers.Contract | null,
+  battleInfo: BattleInfo | null,
+  chainId: number | undefined
+) => {
   const getTotalBetAmountA = async () => {
     if (betContract && battleInfo) {
       try {
@@ -74,8 +78,8 @@ export const getBattleBetInfo = async (betContract: ethers.Contract | null, batt
   const getTotalNftStaked = async () => {
     if (battleInfo) {
       try {
-        const res = await getActiveTotalNftStakedAmount(battleInfo.id);
-        if (res.data.data) {
+        const res = await getActiveTotalNftStakedAmount(chainId, battleInfo.id);
+        if (res && res.data.data) {
           return {
             totalNftStakedA: Number(res.data.data.collectionA),
             totalNftStakedB: Number(res.data.data.collectionB),
@@ -186,25 +190,32 @@ export const getUserBetInfo = async (
   };
 };
 
-export const getUserNftList = async (account: Maybe<string>, battleInfo: BattleInfo | null) => {
+export const getUserNftList = async (
+  account: Maybe<string>,
+  battleInfo: BattleInfo | null,
+  chainId: number | undefined
+) => {
   const getStakedNfts = async (nfts: NFTMetadata[], side: boolean) => {
     let result = nfts;
     try {
       const res = await getNftStakedStatus(
+        chainId,
         nfts.map((item) => Number(item.tokenId)),
         side,
         battleInfo?.id || ''
       );
-      result = nfts.map((item, index) => ({ ...item, staked: res.data.data[index].status }));
+      if (res) {
+        result = nfts.map((item, index) => ({ ...item, staked: res.data.data[index].status }));
+      }
     } catch (err: any) {
       console.error(err);
     }
     return result;
   };
 
-  if (account && battleInfo) {
+  if (account && battleInfo && chainId) {
     try {
-      const nfts = await alchemy.nft.getNftsForOwner(account, {
+      const nfts = await alchemy[chainId].nft.getNftsForOwner(account, {
         contractAddresses: [battleInfo.projectL.contract, battleInfo.projectR.contract],
       });
       const nftsA = await getStakedNfts(

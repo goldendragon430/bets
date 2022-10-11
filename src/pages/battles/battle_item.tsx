@@ -11,7 +11,10 @@ import SocialIcon2 from '../../assets/images/social2.svg';
 import LinkButton from '../../components/common/link_button';
 import NumberText from '../../components/common/number_text';
 import { Typography, TypographyType } from '../../components/common/typography';
+import { BET_CONTRACT_ADDRESS } from '../../constants';
+import { DEFAULT_NETWORK } from '../../constants/chains';
 import { useTheme } from '../../contexts/theme_context';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { useBetContract } from '../../hooks/useContract';
 import { BattleInfo } from '../../types';
 import { getBattleBetInfo, getChanceValue } from '../../utils/battle';
@@ -82,7 +85,8 @@ interface IBattleItem {
 }
 
 const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
-  const betContract = useBetContract();
+  const { chainId } = useActiveWeb3React();
+  const betContract = useBetContract(BET_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK]);
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -97,7 +101,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
   const [chanceB, setChanceB] = useState(0);
 
   const updateBetInfo = useCallback(async () => {
-    const res = await getBattleBetInfo(betContract, battleInfo);
+    const res = await getBattleBetInfo(betContract, battleInfo, chainId);
 
     if (res.totalBetAmountA !== undefined) {
       setTotalBetAmountA(res.totalBetAmountA);
@@ -161,7 +165,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
       <Content>
         <TeamWrapper>
           <TeamName color={theme.colors.orange1} shadow type={TypographyType.BOLD_REGULAR}>
-            {battleInfo.projectL.displayName}
+            {battleInfo.projectL.displayName || battleInfo.projectL.subName}
           </TeamName>
           <SocialWrapper>
             <SocialButton href={battleInfo.projectL.twitterID}>
@@ -189,7 +193,7 @@ const BattleItem: React.FC<IBattleItem> = ({ battleInfo, upcoming }) => {
 
         <TeamWrapper>
           <TeamName color={theme.colors.blue1} shadow type={TypographyType.BOLD_REGULAR}>
-            {battleInfo.projectR.displayName}
+            {battleInfo.projectR.displayName || battleInfo.projectR.subName}
           </TeamName>
           <SocialWrapper>
             <SocialButton href={battleInfo.projectR.twitterID}>

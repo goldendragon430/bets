@@ -10,7 +10,10 @@ import EthIcon from '../../assets/images/eth_icon.svg';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import MyBetModal from '../../components/modals/my_bet_modal';
+import { BET_CONTRACT_ADDRESS } from '../../constants';
+import { DEFAULT_NETWORK } from '../../constants/chains';
 import { useWallet } from '../../contexts/wallet_context';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { useBetContract } from '../../hooks/useContract';
 import { BattleDetailType } from '../../types';
 import { getUserClaimInfo } from '../../utils/battle';
@@ -48,7 +51,8 @@ const BalanceImg = styled.img`
 const ClaimSection: React.FC<BattleDetailType> = (props) => {
   const { winnerSet, battleInfo, refundStatus, userBetAmountA, userBetAmountB } = props;
   const { balance, account, updateBalance } = useWallet();
-  const betContract = useBetContract();
+  const { chainId } = useActiveWeb3React();
+  const betContract = useBetContract(BET_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK]);
 
   const [claimAmount, setClaimAmount] = useState(0);
   const [claimABPAmount, setClaimABPAmount] = useState(0);

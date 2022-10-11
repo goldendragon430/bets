@@ -2,6 +2,8 @@
 /* eslint-disable class-methods-use-this */
 import mixpanel from 'mixpanel-browser';
 
+import { SupportedChainId } from '../constants/chains';
+
 export const MIXPANEL_EVENT_NAMES = {
   PLACE_BET: 'PLACE_BET',
   STAKE_NFT: 'STAKE_NFT',
@@ -10,17 +12,11 @@ export const MIXPANEL_EVENT_NAMES = {
 class MixpanelTracker {
   public mp: any;
 
-  constructor() {
-    if (this.isMixpanelEnabled()) {
-      this.mp = undefined;
-      mixpanel.init(process.env.REACT_APP_MIX_PANEL_TOKEN || '', { debug: true });
-      this.mp = mixpanel;
-    } else {
-      this.mp = undefined;
-    }
+  constructor(mixPanelToken: string) {
+    this.mp = undefined;
+    mixpanel.init(mixPanelToken, { debug: true });
+    this.mp = mixpanel;
   }
-
-  isMixpanelEnabled = () => process.env.REACT_APP_MIX_PANEL_TOKEN !== undefined;
 
   track = (eventName: keyof typeof MIXPANEL_EVENT_NAMES, payload: any) => {
     if (this.mp) {
@@ -29,4 +25,7 @@ class MixpanelTracker {
   };
 }
 
-export const mixpanelTracker = new MixpanelTracker();
+export const mixpanelTracker: { [chainId: number]: MixpanelTracker } = {
+  [SupportedChainId.MAINNET]: new MixpanelTracker(process.env.REACT_APP_MIX_PANEL_TOKEN_MAIN || ''),
+  [SupportedChainId.GOERLI]: new MixpanelTracker(process.env.REACT_APP_MIX_PANEL_TOKEN_GOERLI || ''),
+};

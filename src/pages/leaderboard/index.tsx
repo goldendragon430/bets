@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-console */
 import { useEffect, useMemo, useState } from 'react';
@@ -11,6 +12,7 @@ import Button from '../../components/common/button';
 import ProfileImage from '../../components/common/profile_image';
 import Table from '../../components/common/table';
 import { Typography, TypographyType } from '../../components/common/typography';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { getLeaderboard } from '../../services';
 import { getNftImageUrl, getShortWalletAddress } from '../../utils';
 
@@ -65,6 +67,8 @@ const UserProfile = styled(ProfileImage)`
 `;
 
 const Leaderboard = () => {
+  const { chainId } = useActiveWeb3React();
+
   const columns: Column[] = useMemo(
     () => [
       {
@@ -116,8 +120,8 @@ const Leaderboard = () => {
 
   const updateLeaderboardData = async () => {
     try {
-      const res = await getLeaderboard();
-      if (res.data.data) {
+      const res = await getLeaderboard(chainId);
+      if (res && res.data.data) {
         setData(res.data.data);
       }
     } catch (e) {

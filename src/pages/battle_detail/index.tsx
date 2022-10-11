@@ -5,14 +5,17 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { BigNumber, ethers } from 'ethers';
 
 import { mixpanelTracker } from '../../config/mixpanel';
+import { BET_CONTRACT_ADDRESS } from '../../constants';
+import { DEFAULT_NETWORK } from '../../constants/chains';
 import { useBattle } from '../../contexts/battle_context';
 import { useWallet } from '../../contexts/wallet_context';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { useBetContract } from '../../hooks/useContract';
 import { getBattleById, getBattleEventsById, getProfile } from '../../services';
 import { BattleEvent, BattleInfo, NFTMetadata } from '../../types';
@@ -21,8 +24,11 @@ import BattlePage from './battle';
 
 const BattleDetail: React.FC = () => {
   const { battleId } = useParams();
+  const navigate = useNavigate();
   const { account, updateBalance } = useWallet();
   const { rakePercentage, nftStakersPercentage } = useBattle();
+  const { chainId } = useActiveWeb3React();
+  const betContract = useBetContract(BET_CONTRACT_ADDRESS[chainId || DEFAULT_NETWORK]);
 
   const [battleInfo, setBattleInfo] = useState<BattleInfo | null>(null);
   const [totalBetAmountA, setTotalBetAmountA] = useState(0);
@@ -38,24 +44,26 @@ const BattleDetail: React.FC = () => {
   const [refundStatus, setRefundStatus] = useState(false);
   const [battleEvents, setBattleEvents] = useState<BattleEvent[]>([]);
 
-  const betContract = useBetContract();
-
   const updateTimer = useRef<NodeJS.Timeout | null>(null);
 
   const updateBattleInfo = useCallback(async () => {
     try {
       if (battleId) {
-        const info = await getBattleById(battleId);
-        setBattleInfo(info.data.data as BattleInfo);
+        const info = await getBattleById(chainId, battleId);
+        if (info && info.data.data) {
+          setBattleInfo(info.data.data as BattleInfo);
+        } else {
+          navigate('/events');
+        }
       }
     } catch (err: any) {
       console.error(err.message);
     }
-  }, [battleId]);
+  }, [battleId, chainId]);
 
   useEffect(() => {
     updateBattleInfo();
-  }, [battleId]);
+  }, [battleId, chainId]);
 
   const updateTotalInfo = () => {
     updateBalance();
@@ -72,7 +80,7 @@ const BattleDetail: React.FC = () => {
   };
 
   const updateBetInfo = useCallback(async () => {
-    const res = await getBattleBetInfo(betContract, battleInfo);
+    const res = await getBattleBetInfo(betContract, battleInfo, chainId);
 
     if (res.totalBetAmountA !== undefined) {
       setTotalBetAmountA(res.totalBetAmountA);
@@ -117,7 +125,7 @@ const BattleDetail: React.FC = () => {
   }, [account, betContract, battleInfo]);
 
   const updateUserNftList = useCallback(async () => {
-    const res = await getUserNftList(account, battleInfo);
+    const res = await getUserNftList(account, battleInfo, chainId);
 
     if (res.userNftListA !== undefined) {
       setUserNftListA(res.userNftListA);
@@ -158,11 +166,13 @@ const BattleDetail: React.FC = () => {
         });
         const receipt = await tx.wait();
         if (receipt.status) {
-          mixpanelTracker.track('PLACE_BET', {
-            battleId: battleInfo.id,
-            amount,
-            side,
-          });
+          if (mixpanelTracker[chainId || 0]) {
+            mixpanelTracker[chainId || 0].track('PLACE_BET', {
+              battleId: battleInfo.id,
+              amount,
+              side,
+            });
+          }
           updateTotalInfo();
           return true;
         }
@@ -181,11 +191,13 @@ const BattleDetail: React.FC = () => {
         const tx = await betContract.stakeNft(battleInfo.battleId, tokenIds, side);
         const receipt = await tx.wait();
         if (receipt.status) {
-          mixpanelTracker.track('STAKE_NFT', {
-            battleId: battleInfo.id,
-            amount: tokenIds.length,
-            side,
-          });
+          if (mixpanelTracker[chainId || 0]) {
+            mixpanelTracker[chainId || 0].track('STAKE_NFT', {
+              battleId: battleInfo.id,
+              amount: tokenIds.length,
+              side,
+            });
+          }
           updateTotalInfo();
           return true;
         }
@@ -203,8 +215,8 @@ const BattleDetail: React.FC = () => {
     }
 
     try {
-      const res = await getBattleEventsById(battleInfo.battleId);
-      if (res.data.data) {
+      const res = await getBattleEventsById(chainId, battleInfo.battleId);
+      if (res && res.data.data) {
         setBattleEvents(res.data.data);
       }
     } catch (err: any) {
@@ -228,8 +240,8 @@ const BattleDetail: React.FC = () => {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
             let userInfo;
-            const res = await getProfile(user);
-            if (res.data.data) {
+            const res = await getProfile(chainId, user);
+            if (res && res.data.data) {
               userInfo = { username: res.data.data.username };
             }
 
@@ -256,8 +268,8 @@ const BattleDetail: React.FC = () => {
           const txHash = detail.transactionHash.toLowerCase();
           if (battleEvents.findIndex((e) => e.txHash === txHash) === -1) {
             let userInfo;
-            const res = await getProfile(user);
-            if (res.data.data) {
+            const res = await getProfile(chainId, user);
+            if (res && res.data.data) {
               userInfo = { username: res.data.data.username };
             }
 

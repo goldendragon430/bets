@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 
@@ -6,6 +7,7 @@ import styled from 'styled-components';
 import Button from '../../components/common/button';
 import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { getBattleHistory } from '../../services';
 import { BattleInfo } from '../../types';
 import { isInProgress } from '../../utils';
@@ -101,6 +103,7 @@ enum BattleStatus {
 
 const Battles = () => {
   const { theme } = useTheme();
+  const { chainId } = useActiveWeb3React();
 
   const [tab, setTab] = useState<BattleStatus>(BattleStatus.ACTIVE);
   const [loading, setLoading] = useState(true);
@@ -111,8 +114,8 @@ const Battles = () => {
   const updateBattles = async () => {
     try {
       setLoading(true);
-      const res = await getBattleHistory();
-      if (res.data.data) {
+      const res = await getBattleHistory(chainId);
+      if (res && res.data.data) {
         const battles = res.data.data.reverse() as BattleInfo[];
         setOngoingBattles(
           battles.filter((battle) => isInProgress(new Date(battle.startDate), new Date(battle.endDate)))

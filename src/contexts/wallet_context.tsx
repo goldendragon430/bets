@@ -12,7 +12,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { BigNumber, ethers } from 'ethers';
 
 import { CHAIN_INFO } from '../constants/chain_info';
-import { DEFAULT_NETWORK, SupportedChainId } from '../constants/chains';
+import { ALL_SUPPORTED_CHAIN_IDS, DEFAULT_NETWORK, SupportedChainId } from '../constants/chains';
 import { SUPPORTED_WALLETS } from '../constants/wallet';
 import { useLocalStorageState } from '../hooks';
 import { getRpcUrls } from '../utils/get_rpc_urls';
@@ -177,7 +177,7 @@ export const WalletProvider = ({ children = null as any }) => {
 
   useEffect(() => {
     if (active && chainId) {
-      if (chainId !== DEFAULT_NETWORK) {
+      if (ALL_SUPPORTED_CHAIN_IDS.findIndex((v) => v === chainId) === -1) {
         switchChain(DEFAULT_NETWORK);
       }
     }

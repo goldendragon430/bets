@@ -180,7 +180,7 @@ const TeamSection: React.FC<ITeamSection> = ({
         </ButtonWrapper>
       </TeamImageWrapper>
 
-      <TeamName color={color} shadow type={TypographyType.BOLD_REGULAR}>
+      <TeamName color={color} firstTeam={firstTeam} shadow type={TypographyType.BOLD_REGULAR}>
         {project.displayName || project.subName}
       </TeamName>
 

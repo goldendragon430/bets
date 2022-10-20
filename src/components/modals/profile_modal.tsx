@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import EditIcon from '../../assets/images/edit.svg';
 import EthIcon from '../../assets/images/eth_icon.svg';
+import SaveIcon from '../../assets/images/save.svg';
 import { useProfile } from '../../contexts/profile_context';
 import { useTheme } from '../../contexts/theme_context';
 import { useWallet } from '../../contexts/wallet_context';
@@ -165,6 +166,12 @@ const NftActionButton = styled(Button)`
   margin-top: 1rem;
 `;
 
+const WalletAddress = styled(Typography)`
+  font-size: 1rem;
+  font-style: italic;
+  color: grey;
+`;
+
 interface IProfileModal {
   visible: boolean;
   onClose: () => void;
@@ -210,10 +217,13 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
   };
 
   const handleSaveName = async () => {
-    const res = await updateProfile(name, selNft);
-    if (res) {
-      setEdit(false);
+    if (name !== username) {
+      const res = await updateProfile(name, selNft);
+      if (!res) {
+        setName(username);
+      }
     }
+    setEdit(false);
   };
 
   const handleSaveNft = async () => {
@@ -264,16 +274,23 @@ const ProfileModal: React.FC<IProfileModal> = ({ visible, onClose }) => {
                   userImg={selNft && getNftImageUrl(selNft.rawMetadata?.image || '')}
                 />
                 <div>
-                  <ProfileInput
-                    onBlur={handleSaveName}
-                    onChange={(e) => setName(e.target.value)}
-                    readOnly={!isEdit}
-                    ref={inputRef}
-                    value={name}
-                  />
-                  <Typography type={TypographyType.REGULAR}>{getShortWalletAddress(account || '')}</Typography>
+                  <Flex>
+                    <ProfileInput
+                      onChange={(e) => setName(e.target.value)}
+                      readOnly={!isEdit}
+                      ref={inputRef}
+                      value={name}
+                    />
+                    {!isEdit ? (
+                      <EditButton alt="" onClick={handleEditName} src={EditIcon} />
+                    ) : (
+                      <EditButton alt="" onClick={handleSaveName} src={SaveIcon} />
+                    )}
+                  </Flex>
+                  <div>
+                    <WalletAddress type={TypographyType.REGULAR}>{getShortWalletAddress(account || '')}</WalletAddress>
+                  </div>
                 </div>
-                {!isEdit && <EditButton alt="" onClick={handleEditName} src={EditIcon} />}
               </ProfileNameWrapper>
             </Row>
             <Row>

@@ -122,6 +122,10 @@ const Battles = () => {
         );
         setUpcomingBattles(battles.filter((battle) => new Date(battle.startDate) > new Date()));
         setCompletedBattles(battles.filter((battle) => new Date(battle.endDate) < new Date()));
+      } else {
+        setOngoingBattles([]);
+        setUpcomingBattles([]);
+        setCompletedBattles([]);
       }
     } catch (err: any) {
       console.error(err.message);

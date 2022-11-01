@@ -9,7 +9,7 @@ import { Typography, TypographyType } from '../../components/common/typography';
 import { useTheme } from '../../contexts/theme_context';
 import useActiveWeb3React from '../../hooks/useActiveWeb3React';
 import { getBattleHistory } from '../../services';
-import { BattleInfo } from '../../types';
+import { BattleInfo, BattleStatus } from '../../types';
 import { isInProgress } from '../../utils';
 import BattleItem from './battle_item';
 
@@ -95,7 +95,7 @@ const BattleList: React.FC<IBattleList> = ({ loading, visible, battles, upcoming
   );
 };
 
-enum BattleStatus {
+enum BattleStat {
   ACTIVE,
   UPCOMING,
   PAST,
@@ -105,7 +105,7 @@ const Battles = () => {
   const { theme } = useTheme();
   const { chainId } = useActiveWeb3React();
 
-  const [tab, setTab] = useState<BattleStatus>(BattleStatus.ACTIVE);
+  const [tab, setTab] = useState<BattleStat>(BattleStat.ACTIVE);
   const [loading, setLoading] = useState(true);
   const [ongoingBattles, setOngoingBattles] = useState<BattleInfo[]>([]);
   const [upcomingBattles, setUpcomingBattles] = useState<BattleInfo[]>([]);
@@ -118,10 +118,20 @@ const Battles = () => {
       if (res && res.data.data) {
         const battles = res.data.data.reverse() as BattleInfo[];
         setOngoingBattles(
-          battles.filter((battle) => isInProgress(new Date(battle.startDate), new Date(battle.endDate)))
+          battles.filter(
+            (battle) =>
+              isInProgress(new Date(battle.startDate), new Date(battle.endDate)) &&
+              battle.status !== BattleStatus.RefundSet
+          )
         );
-        setUpcomingBattles(battles.filter((battle) => new Date(battle.startDate) > new Date()));
-        setCompletedBattles(battles.filter((battle) => new Date(battle.endDate) < new Date()));
+        setUpcomingBattles(
+          battles.filter(
+            (battle) => new Date(battle.startDate) > new Date() && battle.status !== BattleStatus.RefundSet
+          )
+        );
+        setCompletedBattles(
+          battles.filter((battle) => new Date(battle.endDate) < new Date() || battle.status === BattleStatus.RefundSet)
+        );
       } else {
         setOngoingBattles([]);
         setUpcomingBattles([]);
@@ -140,27 +150,27 @@ const Battles = () => {
   return (
     <Container>
       <ButtonWrapper>
-        <TabButton onClick={() => setTab(BattleStatus.ACTIVE)} shadow visible={tab === BattleStatus.ACTIVE}>
+        <TabButton onClick={() => setTab(BattleStat.ACTIVE)} shadow visible={tab === BattleStat.ACTIVE}>
           Active
         </TabButton>
         <Splitter color={theme.colors.grey2} type={TypographyType.BOLD_SUBTITLE}>
           |
         </Splitter>
-        <TabButton onClick={() => setTab(BattleStatus.UPCOMING)} shadow visible={tab === BattleStatus.UPCOMING}>
+        <TabButton onClick={() => setTab(BattleStat.UPCOMING)} shadow visible={tab === BattleStat.UPCOMING}>
           Upcoming
         </TabButton>
         <Splitter color={theme.colors.grey2} type={TypographyType.BOLD_SUBTITLE}>
           |
         </Splitter>
-        <TabButton onClick={() => setTab(BattleStatus.PAST)} shadow visible={tab === BattleStatus.PAST}>
+        <TabButton onClick={() => setTab(BattleStat.PAST)} shadow visible={tab === BattleStat.PAST}>
           PAST
         </TabButton>
       </ButtonWrapper>
 
       <>
-        <BattleList battles={ongoingBattles} loading={loading} visible={tab === BattleStatus.ACTIVE} />
-        <BattleList battles={upcomingBattles} loading={loading} upcoming visible={tab === BattleStatus.UPCOMING} />
-        <BattleList battles={completedBattles} loading={loading} visible={tab === BattleStatus.PAST} />
+        <BattleList battles={ongoingBattles} loading={loading} visible={tab === BattleStat.ACTIVE} />
+        <BattleList battles={upcomingBattles} loading={loading} upcoming visible={tab === BattleStat.UPCOMING} />
+        <BattleList battles={completedBattles} loading={loading} visible={tab === BattleStat.PAST} />
       </>
     </Container>
   );

@@ -56,6 +56,15 @@ export interface ProjectInfo {
   floor_price: number;
 }
 
+export enum BattleStatus {
+  Created = 'Created',
+  RequestRandomWords = 'RequestRandomWords',
+  Fulfilled = 'Fulfilled',
+  Finalized = 'Finalized',
+  RefundSet = 'Refund',
+  Determine = 'Determine',
+}
+
 export interface BattleInfo {
   id: string;
   battleId: string;
@@ -63,6 +72,7 @@ export interface BattleInfo {
   projectR: ProjectInfo;
   startDate: string;
   endDate: string;
+  status: BattleStatus;
 }
 
 export interface BattleDetailType {

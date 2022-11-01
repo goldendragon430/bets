@@ -18,6 +18,7 @@ const ActiveBattle = () => {
       const res = await getBattleHistory(chainId);
       if (res && res.data.data) {
         const battles = res.data.data as BattleInfo[];
+        console.log(battles);
         for (let i = 0; i < battles.length; i++) {
           if (
             isInProgress(new Date(battles[i].startDate), new Date(battles[i].endDate)) &&
@@ -35,6 +36,7 @@ const ActiveBattle = () => {
         }
         if (battles.length > 0) {
           navigate(`battle/${battles[battles.length - 1].id}`);
+          return;
         }
       }
     } catch (err: any) {
